@@ -20,7 +20,7 @@
                     console.error("Erro ao verificar autenticação:", error);
                 });
             }
-
+            
         // Executa a função quando a página é carregada
         document.addEventListener("DOMContentLoaded", verificarLogin);
     </script>
@@ -28,9 +28,9 @@
 <body>
     <div class="Fundo">
         <div class="Conteudo">
-           <div class="Usuario">
-                <a href="Frontend/Pagina do Usuario/HTML/PaginaUsuario.html" class="search-link" style="text-decoration: none;">
-                    <img src="Frontend/Home Page/Imagens/Usuario.png" alt="Perfil" class="perfil-imagem" style="width: 75px; height: 70px; margin-right: -283px; margin-top: 15px;">
+           <div id="Usuario">
+                <a href="Frontend/Pagina do Usuario/HTML/PaginaUsuario.html" style="text-decoration: none;">
+                    <img src="Frontend/Home Page/Imagens/Usuario.png">
                 </a>
            </div>
             <!-- Seletor de data adicionado aqui -->
@@ -39,32 +39,46 @@
                 </div>
                     <div class="container">
                         <div class="coluna">
-                            <button class="Relatorios" onclick="window.location.href='Frontend/Relatorios/relatorios.html'" style="height: 90px; width: 155px; border-radius: 8px; background: linear-gradient(to top, #cccccc, #666666);">Relatórios</button>
+                            <button id="relatorios" onclick="window.location.href='Frontend/Relatorios/relatorios.html'">
+                                <img src="Frontend/Home Page/Imagens/relatorios.png">Relatórios
+                            </button>
                             
                             <a href="Frontend/Entrada de Produtos/HTML/Entrada.html" class="search-link" style="text-decoration: none;">
-                                <button class="Relatorios"style="height: 90px; width: 155px; border-radius: 8px; background: linear-gradient(to top, #cccccc, #666666);">Entrada Produtos</button>
+                                <button id="entrada_produtos">
+                                   <img src="Frontend/Home Page/Imagens/entrada_produtos.png">Entrada Produtos
+                                </button>
                             </a>
 
                             <a href="Frontend/Cadastro local de Destino/Cadastro.html" class="search-link" style="text-decoration: none;">
-                                <button class="Relatorios" style="height: 90px; width: 155px; border-radius: 8px; background: linear-gradient(to top, #cccccc, #666666);">Cadastro Local de Destino</button>
+                                <button id="local_destino">
+                                    <img src="Frontend/Home Page/Imagens/local_destino.png">Cadastro Local de Destino
+                                </button>
                             </a>
                             
                             <a href="Frontend/Cadastro de Usuario/HTML/Cadastro.html" class="search-link" style="text-decoration: none;">
-                                <button class="Relatorios" style="height: 90px; width: 155px; border-radius: 8px; background: linear-gradient(to top, #cccccc, #666666);">Cadastro Usuario</button>
+                                <button id="cadastro_usuario">
+                                    <img src="Frontend/Home Page/Imagens/cadastro_usuarios.png"> Cadastro Usuario
+                                </button>
                             </a>
                           
                         </div>
                         <div class="coluna">
                             <a href="Frontend/Saída Produtos/HTML/Saida.html" class="search-link" style="text-decoration: none;">
-                                <button class="Relatorios" style="height: 90px; width: 155px; border-radius: 8px; background: linear-gradient(to top, #cccccc, #666666);">Saída Produtos</button>
+                                <button id="saida_produtos">
+                                    <img src="Frontend/Home Page/Imagens/saida_produtos.png"> Saída Produtos
+                                </button>
                             </a>
 
                             <a href="Frontend/Cadastro Produto/HTML/Cadastro.html" class="search-link" style="text-decoration: none;">
-                                <button class="Relatorios"style="height: 90px; width: 155px; border-radius: 8px; background: linear-gradient(to top, #cccccc, #666666);">Cadastro Produtos</button>
+                                <button id="produtos">
+                                    <img src="Frontend/Home Page/Imagens/produtos.png">Cadastro Produto
+                                </button>
                             </a>
                             
                             <a href="Frontend/Cadastro de Fornecedores/HTML/Cadastro.html" class="search-link" style="text-decoration: none;">
-                                <button class="Relatorios" style="height: 90px; width: 155px; border-radius: 8px; background: linear-gradient(to top, #cccccc, #666666);">Cadastros Fornecedores</button>
+                                <button id="fornecedor">
+                                    <img src="Frontend/Home Page/Imagens/fornecedor.png">Cadastro Fornecedor
+                                </button>
                             </a>
                         </div>
                     </div>

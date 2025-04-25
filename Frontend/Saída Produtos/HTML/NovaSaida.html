@@ -237,10 +237,8 @@
 
         function salvarProdutos() {
             // Elemento de carregamento
-            const loadingSpinner = document.getElementById('loadingSpinner');
-             // Exibe o spinner antes de iniciar o carregamento
-            loadingSpinner.style.display = 'block';
-
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            
             fetch('../../../Backend/SaidaProdutos/novasaida.php', {
                 method: 'POST',
                 headers: {
@@ -267,7 +265,7 @@
             })
             .finally(() => {
                 // Oculta o spinner ao finalizar o carregamento
-                loadingSpinner.style.display = 'none';
+                document.getElementById('loadingOverlay').style.display = 'none';
             });
         }
 
@@ -451,7 +449,9 @@
     </div>
     <p id="mensagemSucesso" style="font-size: 18px; background-color: green; color: whitesmoke;"></p>
     <p id="mensagemErro" style="font-size: 18px; background-color: red; color: whitesmoke;"></p>
-    <div id="loadingSpinner" style="display: none;"></div>
+    <div id="loadingOverlay" style="display: none;">
+        <div id="loadingSpinner"></div>
+    </div>
 
     <div class="footer">
         <div class="search-link">

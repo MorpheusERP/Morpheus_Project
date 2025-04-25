@@ -39,17 +39,18 @@ $stmtLote->close();
 
 if ($id_Lote) {
     // Insere cada produto na tabela `saida_produtos` usando o `id_Lote` gerado
-    $stmtProdutos = $mysqli->prepare("INSERT INTO saida_produtos (imagem, cod_Produto, nome_Produto, preco_Custo, id_Local, nome_Local, tipo_Local, qtd_Saida, observacao, id_Lote) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmtProdutos = $mysqli->prepare("INSERT INTO saida_produtos (imagem, cod_Produto, nome_Produto, preco_Custo, id_Local, nome_Local, tipo_Local, qtd_Saida, grupo, sub_Grupo, observacao, id_Lote) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
     foreach ($formData as $produtos) {
 
         // Busca o preço de custo para cada produto
-        $stmtBusca = $mysqli->prepare("SELECT preco_Custo FROM produto WHERE cod_Produto = ?");
+        $stmtBusca = $mysqli->prepare("SELECT preco_Custo, grupo, sub_Grupo FROM produto WHERE cod_Produto = ?");
         $stmtBusca->bind_param("i", $produtos['cod_Produto']);
         $stmtBusca->execute();
-        $stmtBusca->bind_result($preco_Custo);
+        $stmtBusca->bind_result($preco_Custo, $grupo, $sub_Grupo);
         $stmtBusca->fetch();
         $stmtBusca->close();
+
         // Verifica se a imagem foi enviada
         $caminhoImagem = null; // Caminho padrão se a imagem não for enviada
         if (!empty($produtos['imagem'])) {
@@ -67,10 +68,9 @@ if ($id_Lote) {
             file_put_contents($caminhoImagem, $imagemBinaria);
         }
       
-        // Certifique-se de que está passando o binário corretamente
         $stmtProdutos->bind_param(
-            "sisdissdsi", // b para blob
-            $caminhoImagem, // Dados da imagem em binário
+            "sisdissdsssi",
+            $caminhoImagem,
             $produtos['cod_Produto'],
             $produtos['nome_Produto'],
             $preco_Custo,
@@ -78,12 +78,12 @@ if ($id_Lote) {
             $produtos['nome_Local'],
             $produtos['tipo_Local'],
             $produtos['quantidade'],
+            $grupo,
+            $sub_Grupo,
             $produtos['observacao'],
             $id_Lote
         );
         $stmtProdutos->execute();
-
-        //var_dump($imagemBinaria);  // Verifique o valor da imagem
     }
 
     $stmtProdutos->close();

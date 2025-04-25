@@ -46,6 +46,9 @@
                 <div class="table-container"></div>
             </form>
             <p id="mensagemErro" style="font-size: 18px; background-color: red;color: whitesmoke"></p>
+            <div id="loadingOverlay" style="display: none;">
+                <div id="loadingSpinner"></div>
+            </div>
         </div>
     </div>
 
@@ -78,6 +81,9 @@
             sub_Grupo: subgrupo
         };
 
+        // Elemento de carregamento
+        document.getElementById('loadingOverlay').style.display = 'flex';
+
         // Envia os dados para o arquivo PHP usando fetch
         fetch('../../../Backend/CadastroProdutos/consultaprodutos.php', {
             method: 'POST',
@@ -97,7 +103,11 @@
                 document.getElementById('mensagemErro').innerText = data.mensagem;
             }
         })
-        .catch(error => console.error(error));
+        .catch(error => console.error(error))
+        .finally(() => {
+            // Oculta o spinner ao finalizar o carregamento
+            document.getElementById('loadingOverlay').style.display = 'none';
+        });
     }
     
     // Função para exibir a tabela com os resultados

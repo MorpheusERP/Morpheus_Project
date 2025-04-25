@@ -302,3 +302,36 @@ input:disabled:focus {
         width: 100%;
     }
 }
+
+#loadingSpinner {
+    position: fixed;
+    top: auto;
+    left: auto;
+    width: 70px;
+    height: 70px;
+    border: 8px solid rgb(255 255 255 / 62%);
+    border-top-color: #ffffff;
+    border-radius: 100%;
+    animation: spin 0.5s linear infinite;
+    z-index: 1001; /* Coloca o spinner acima do overlay */
+}
+
+/* Overlay de fundo */
+#loadingOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro e semitransparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Coloca o overlay acima do conteúdo */
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

@@ -29,6 +29,9 @@
             const id_Lote = urlParams.get("id_Lote");
             
             if (id_Lote) {
+                // Elemento de carregamento
+                document.getElementById('loadingOverlay').style.display = 'flex';
+
                 fetch('../../../Backend/SaidaProdutos/buscasaida.php', {
                     method: 'POST',
                     headers: {
@@ -46,6 +49,10 @@
                 })
                 .catch(error => {
                     console.error('Erro ao buscar saidas:', error);
+                })
+                .finally(() => {
+                    // Oculta o spinner ao finalizar o carregamento
+                    document.getElementById('loadingOverlay').style.display = 'none';
                 });
             } else {
                 console.warn("ID do Lote não especificado na URL.");
@@ -150,6 +157,9 @@
                 <button type="button" onclick="limparTabela()" id="clear" style="display: none;">
                     <img src="../Fotos/delete-svgrepo-com(2).png">Limpar Tabela
                 </button>
+                <div id="loadingOverlay" style="display: none;">
+                    <div id="loadingSpinner"></div>
+                </div>
             </div>
         </div>
 

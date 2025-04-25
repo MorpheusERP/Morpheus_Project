@@ -19,9 +19,9 @@ try {
     $grupo = $_POST['grupo'];
     $sub_Grupo = $_POST['subgrupo'] ?? null;
     $observacao = $_POST['observacoes'] ?? null;
-
-    // Processamento da imagem
-    $imagem = $_FILES['imagem'];
+// Processamento da imagem (verifica se a imagem foi enviada)
+$imagem = $_FILES['imagem'] ?? null;
+if ($imagem && $imagem['tmp_name']) {
     $imagemNome = $imagem['name'];
     $imagemTemp = $imagem['tmp_name'];
     $imagemDestino = "imagens/" . uniqid() . '_' . $imagemNome;
@@ -30,7 +30,10 @@ try {
     if (!move_uploaded_file($imagemTemp, $imagemDestino)) {
         throw new Exception("Erro ao salvar imagem.");
     }
-
+} else {
+    // Define um valor padrão para o campo imagem (pode ser NULL ou uma imagem padrão)
+    $imagemDestino = 'imagens/defaultimg.png';
+}
     // Verifica se o Produto já existe
     $sqlCheck = "SELECT * FROM produto WHERE cod_Produto = ?";
     $stmtCheck = $mysqli->prepare($sqlCheck);

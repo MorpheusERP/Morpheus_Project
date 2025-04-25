@@ -1,0 +1,187 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos Globais */
+body {
+    width: 100%;
+    background: radial-gradient(50% 50% at 50% 50%, #4200FF 0%, #280099 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #FFF;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: 2.36px;
+    overflow-x: hidden;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.header {
+    color: white;
+    text-align: center;
+    padding: 15px;
+
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.form input, .form textarea {
+    width: 100%;
+    padding: 16px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 7px;
+    font-size: 13px;
+}
+
+textarea {
+    resize: none;
+    height: 60px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
+.buttons button {
+    background-color: #ffcc00;
+    color: black;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    flex-grow: 1;
+    margin: 0 5px;
+    width: 100px;
+    height: 40px;
+    font-size: 14px;
+}
+
+.buttons button:hover {
+    background-color: #e6b800;
+}
+
+.table-container {
+    padding: 5px;
+    overflow-x: auto; /* Permite rolar horizontalmente se a tabela for grande */
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    
+}
+
+table th, table td {
+    border: 3px solid #ccc;
+    padding: 10px;
+    text-align: center;
+    background-color: #ccc;
+    border-color: black;
+    border-radius: 5px;
+    width: 150px;
+    color: black;
+}
+
+.buttons-footer {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15px;
+    margin-right: auto;
+    margin-left: 20px;
+    
+}
+.buttons-footer button {
+    background-color: #ffcc00;
+    color: black;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    flex-grow: 1;
+    margin: 0 5px;
+    width: 100px;
+    height: 40px;
+    font-size: 14px;
+}
+
+.buttons-footer button:hover {
+    background-color: #e6b800;
+}
+
+.logo{
+    display: flex;
+    justify-content: center;
+}
+.logo img {
+    width: 100%; /* A imagem ocupa 100% da largura disponível */
+    height: auto; /* Mantém a proporção da imagem */
+    max-width: 238px; /* Limita a largura máxima */
+    margin-bottom: 50px; /* Espaço menor para telas pequenas */
+}
+
+@media (min-width: 600px) {
+    .logo img {
+        margin-bottom: 75px; /* Ajusta o espaçamento para telas médias */
+    }
+}
+
+@media (min-width: 1024px) {
+    .logo img {
+        margin-bottom: 100px; /* Mantém o espaçamento original em telas grandes */
+    }
+}
+#loadingSpinner {
+    position: fixed;
+    top: auto;
+    left: auto;
+    width: 70px;
+    height: 70px;
+    border: 8px solid rgb(255 255 255 / 62%);
+    border-top-color: #ffffff;
+    border-radius: 100%;
+    animation: spin 0.5s linear infinite;
+    z-index: 1001; /* Coloca o spinner acima do overlay */
+}
+
+/* Overlay de fundo */
+#loadingOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro e semitransparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Coloca o overlay acima do conteúdo */
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+

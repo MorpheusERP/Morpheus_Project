@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Busca por Usuario</title>
+    <link rel="stylesheet" href="CSS/Usuarios.css">
+    <script>
+        //Função para verificar se o usuário está logado
+    function verificarLogin() {
+            fetch('../../../Backend/verificalogin.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.logado) {
+                        // Redireciona para a página de login se não estiver logado
+                        window.location.href = '../../../index.html';
+                    }
+                })
+                .catch(error => {
+                    console.error("Erro ao verificar autenticação:", error);
+                });
+            }
+
+        // Executa a função quando a página é carregada
+        document.addEventListener("DOMContentLoaded", verificarLogin);
+    </script>
+    <!-- jsPDF versão 1.5.3 diretamente compatível com o navegador -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- jsPDF-AutoTable versão compatível com a versão do jsPDF acima -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+    <div class="header">
+        <h1>Usuarios</h1>
+    </div>
+    <div class="container">
+        <div class="form">
+            <form id="consultaForm">
+                <input type="number" id="cod" placeholder="Código do Usuário">
+                <input type="text" id="nome" placeholder="Nome">
+                <input type="text" id="sobrenome" placeholder="Sobrenome">
+                <input type="text" id="funcao" placeholder="Função">
+
+                <div class="buttons">
+                    <button type="button" class="buttons" onclick="consultarUsuario()">Buscar</button>
+                </div>
+                <div class="table-container"></div>
+            </form>
+            <p id="mensagemErro" style="font-size: 18px0; background-color: red;color: whitesmoke"></p>
+        </div>
+    </div>
+
+<!-- Tabela para exibir os resultados -->
+<table id="resultadoTabela" border="1" style="display:none; font-size: 11px;">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Sobrenome</th>
+            <th>Função</th>
+        </tr>
+    </thead>
+    <tbody id="resultadoCorpo"></tbody>
+</table>
+
+<div class="buttons-footer">
+    <a href="../relatorios.html" class="search-link">
+        <button class="exit">Voltar</button>
+    </a>
+</div>
+<button id="gerarpdf" class="buttonPDF">
+    <img src="Fotos/download-pdf.png">Gerar PDF
+</button>
+
+<div class="logo">
+    <img src="Fotos/Emporio maxx s-fundo.png" alt="Empório Maxx Logo">
+</div>
+
+<script>
+    // Função para consultar o usuário
+    function consultarUsuario() {
+        const id_Usuario = document.getElementById('cod').value;
+        const nome_Usuario = document.getElementById('nome').value;
+        const sobrenome = document.getElementById('sobrenome').value;
+        const funcao = document.getElementById('funcao').value;
+
+        // Cria um objeto com os dados do usuário
+        const dados = {
+            id_Usuario: id_Usuario,
+            nome_Usuario: nome_Usuario,
+            sobrenome: sobrenome,
+            funcao: funcao,
+        };
+
+        // Envia os dados para o arquivo PHP usando fetch
+        fetch('../../../Backend/CadastroUsuario/consultausuario.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dados)
+        })
+
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "sucesso") {
+                exibirTabela(data.resultados);
+                // Adiciona o evento ao botão de gerar PDF
+                document.getElementById("gerarpdf").addEventListener("click", function() {
+                    gerarPDF(data.resultados); // Passa 'data.resultados' como argumentos
+                });
+            } else if (data.status === 'erro'){
+                document.getElementById('mensagemErro').innerText = data.mensagem;
+            }
+        })
+    }
+    
+    // Função para exibir a tabela com os resultados
+    function exibirTabela(resultados) {
+        const tabela = document.getElementById('resultadoTabela');
+        const corpoTabela = document.getElementById('resultadoCorpo');
+    
+        // Limpa resultados anteriores
+        corpoTabela.innerHTML = '';
+    
+        // Adiciona as novas linhas com os resultados
+        resultados.forEach(usuario => {
+            const linha = document.createElement('tr');
+            
+            linha.innerHTML = `
+                <td>${usuario.id_Usuario}</td>
+                <td>${usuario.nome_Usuario}</td>
+                <td>${usuario.sobrenome}</td>
+                <td>${usuario.funcao}</td>
+            `;
+            
+            corpoTabela.appendChild(linha);
+        });
+    
+        // Exibe a tabela
+        tabela.style.display = 'table';
+    }
+
+    const { jsPDF } = window.jspdf; // jsPDF a partir da versão 2.x
+    window.jspdf = window.jspdf || {}; // Se não estiver carregado ainda
+    
+    // Função para gerar o PDF
+    function gerarPDF(resultados) {
+        if (!resultados) {
+            console.error("Dados faltando: Usuarios não definidos.");
+            return;
+        }
+    
+        const doc = new jsPDF();
+    
+        // Título do documento
+        doc.setFontSize(18);
+        doc.text("Usuarios", 14, 15);
+    
+        // Configuração da tabela
+        const colunas = [
+            "ID Usuario",
+            "Nivel Usuario",
+            "Nome",
+            "Sobrenome",
+            "Função",
+            "Login"
+        ];
+    
+        const linhas = resultados.map(usuario => [
+            usuario.id_Usuario,
+            usuario.nivel_Usuario,
+            usuario.nome_Usuario,
+            usuario.sobrenome,
+            usuario.funcao,
+            usuario.login
+        ]);
+    
+        // Adiciona a tabela ao PDF
+        doc.autoTable({
+            startY: 25,
+            head: [colunas],
+            body: linhas,
+            theme: 'grid'
+        });
+    
+        // Salva o PDF
+        doc.save("Usuarios.pdf");
+    }    
+    </script>
+</body>
+</html>

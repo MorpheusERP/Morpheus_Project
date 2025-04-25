@@ -24,6 +24,11 @@
                 });
         }
     </script>
+    <!-- jsPDF versão 1.5.3 diretamente compatível com o navegador -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- jsPDF-AutoTable versão compatível com a versão do jsPDF acima -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
+    
 </head>
 <body>
     <div class="container">
@@ -99,6 +104,9 @@
                 </div>
             </div>
             <p id="mensagemErro" style="font-size: 18px; background-color: red;color: whitesmoke"></p>
+            <div id="loadingOverlay" style="display: none;">
+                <div id="loadingSpinner"></div>
+            </div>
             
             <div class="buttons" style="width: 40%; margin-left: 30%;">
                 <button id="add" onclick="consultarEntradas()">
@@ -141,8 +149,8 @@
                 <input id="modalTotal" disabled>
             <br>
 
-            <button onclick="gerarPDF(entradas, data_Entrada)" class="excluirModal">
-                <img src="Fotos/delete-svgrepo-com(2).png">Gerar PDF
+            <button id="gerarpdf" class="PDFModal">
+                <img src="Fotos/download-pdf.png">Gerar PDF
             </button>
         </div>
     </div>
@@ -226,6 +234,8 @@
             sub_Grupo: subgrupo
         };
 
+        // Elemento de carregamento
+        document.getElementById('loadingOverlay').style.display = 'flex';
         // Envia os dados para o arquivo PHP usando fetch
         fetch('../../../Backend/EntradaProdutos/consultarentradas.php', {
             method: 'POST',
@@ -248,7 +258,11 @@
                 document.getElementById('mensagemErro').innerHTML = data.mensagem;
             }
         })
-        .catch(error => console.error(error));
+        .catch(error => console.error(error))
+        .finally(() => {
+            // Oculta o spinner ao finalizar o carregamento
+            document.getElementById('loadingOverlay').style.display = 'none';
+        });
     }
     
     // Função para exibir a tabela com os resultados
@@ -269,41 +283,89 @@
     
         });
     }
-
     let produtoIdSelecionado;
-    //Função para abrir o modal e mostrar os dados do produto
-    function abrirModal(entradas){
-        produtoIdSelecionado = entradas.id;
 
+    // Função para abrir o modal e mostrar os dados do produto
+    function abrirModal(entradas) {
+        produtoIdSelecionado = entradas.id;
+    
         document.getElementById("modalCod").value = entradas.id_Lote;
         document.getElementById("modalData").value = entradas.data_Entrada;
         document.getElementById("modalTotal").value = entradas.valor_Lote;
-        
+    
         // Exibe o modal
         document.getElementById("produtoModal").style.display = "block";
+    
+        // Elemento de carregamento
+        document.getElementById('loadingOverlay').style.display = 'flex';
+    
+        const dados = {
+            id_Lote: entradas.id_Lote,
+        };
+    
+        // Envia os dados para o arquivo PHP usando fetch
+        fetch('../../../Backend/Relatorios/consultarentradas.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dados)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data); // Exibe a resposta no console para verificar seu conteúdo
+            if (data.status === "sucesso") {
+                // Adiciona o evento ao botão de gerar PDF
+                document.getElementById("gerarpdf").addEventListener("click", function() {
+                    gerarPDF(data.produtos, data.lote); // Passa 'data.produtos' e 'data.lote' como argumentos
+                });
+            } else if (data.status === 'erro') {
+                document.getElementById('mensagemErro').innerText = data.mensagem;
+            } else if (data.status === 'errodata') {
+                document.getElementById('mensagemErro').innerHTML = data.mensagem;
+            }
+        })
+        .catch(error => console.error(error))
+        .finally(() => {
+            // Oculta o spinner ao finalizar o carregamento
+            document.getElementById('loadingOverlay').style.display = 'none';
+        });
     }
-
-    function fecharModal(){
+    
+    function fecharModal() {
         document.getElementById("produtoModal").style.display = "none";
+        location.reload();
     }
-
-    function limpardados(id){
+    
+    function limpardados(id) {
         const campo = document.getElementById(id);
         campo.value = ""; // Limpa o valor do campo
         localStorage.removeItem(id); // Remove o item correspondente do localStorage
     }
 
-    function gerarPDF(entradas, data_Entrada) {
-        const { jsPDF } = window.jspdf;
+    const { jsPDF } = window.jspdf; // jsPDF a partir da versão 2.x
+    window.jspdf = window.jspdf || {}; // Se não estiver carregado ainda
+    
+    // Função para gerar o PDF
+    function gerarPDF(produtos, lote) {
+        if (!produtos || !lote) {
+            console.error("Dados faltando: produtos ou lote não definidos.");
+            return;
+        }
+    
         const doc = new jsPDF();
     
         // Título do documento
         doc.setFontSize(18);
         doc.text("Entradas de Produtos", 14, 15);
     
-        // Período
+        // Informações do lote
         doc.setFontSize(12);
-        doc.text(`Período: ${data_Entrada}`, 14, 25);
+        doc.text(`ID Entrada: ${lote.id_Lote}`, 14, 25);
+        doc.text(`Data de Entrada: ${lote.data_Entrada}`, 14, 30);
+        doc.text(`Valor da Entrada: ${(lote.valor_Lote)}`, 14, 35);
+        doc.text(`ID Usuário: ${(lote.id_Usuario)}`, 14, 40);
+        doc.text(`Usuario: ${lote.nome_Usuario}`, 14, 45);
     
         // Configuração da tabela
         const colunas = [
@@ -313,26 +375,28 @@
             "Código Produto",
             "Nome Produto",
             "Quantidade Entrada",
-            "Preço Custo",
+            "Tipo Produto",
+            "Preço Custo R$",
             "Grupo",
             "Sub Grupo"
         ];
     
-        const linhas = entradas.map(entrada => [
-            entrada.id_Lote,
-            entrada.id_Fornecedor,
-            entrada.razao_Social,
-            entrada.cod_Produto,
-            entrada.nome_Produto,
-            entrada.qtd_Entrada,
-            entrada.preco_Custo.toFixed(2), // Formato com duas casas decimais
-            entrada.grupo,
-            entrada.sub_Grupo
+        const linhas = produtos.map(produto => [
+            produto.id_Lote,
+            produto.id_Fornecedor,
+            produto.razao_Social,
+            produto.cod_Produto,
+            produto.nome_Produto,
+            produto.qtd_Entrada,
+            produto.tipo_Produto,
+            parseFloat(produto.preco_Custo).toFixed(2), // Formato com duas casas decimais
+            produto.grupo,
+            produto.sub_Grupo
         ]);
     
         // Adiciona a tabela ao PDF
         doc.autoTable({
-            startY: 35,
+            startY: 50,
             head: [colunas],
             body: linhas,
             theme: 'grid'

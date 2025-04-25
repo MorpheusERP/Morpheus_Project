@@ -51,24 +51,6 @@ body {
     gap: 45px; /* Espaço entre os botões */
 }
 
-.Relatorios {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 18px; /* Tamanho da fonte */
-    font-weight: 700;
-    padding: 15px; /* Aumenta o padding para mais espaço interno */
-    background-color: #edeff2; /* Cor de fundo */
-    border: none; /* Remove a borda */
-    border-radius: 5px; /* Arredonda os cantos */
-    cursor: pointer; /* Muda o cursor para indicar que é clicável */
-    transition: background-color 0.3s; /* Transição suave para mudança de cor */
-}
-
-.Relatorios:hover {
-    background-color: #4200FF; /* Cor ao passar o mouse */
-}
-
 input[type="date"] {
     padding: 10px;                     /* Espaçamento interno */
     font-size: 32px;                   /* Tamanho da fonte */
@@ -131,4 +113,126 @@ input[type="date"]:focus {
         flex-direction: row;
         justify-content: space-around;
     }
+}
+
+#Usuario{
+    margin-left: 250px;
+}
+
+#Usuario img{
+    width: 90px;
+    height: 90px
+}
+
+#fornecedor{
+    background: none;
+    border: none;
+    color: white;
+    font-size: 15px;
+    font-weight:bold;
+    margin-top: -25px;
+    margin-left: -8px;
+}
+
+#fornecedor img{
+    height: 100px;
+    width: 100px;
+    margin-left: 10px;
+}
+
+#produtos{
+  background: none;
+  border: none;
+  color: white;
+  font-size: 15px;
+  font-weight:bold;
+  margin-top: -45px;
+  margin-left: -8px;
+}
+
+#produtos img{
+  height: 150px;
+  width: 150px;
+  margin-bottom: -30px;
+}
+
+#local_destino{
+    background: none;
+  border: none;
+  color: white;
+  font-size: 15px;
+  font-weight:bold;
+  margin-top: -45px;
+  margin-left: -8px;
+}
+
+#local_destino img{
+  height: 150px;
+  width: 150px;
+  margin-bottom: -30px;
+}
+
+#entrada_produtos{
+    background: none;
+  border: none;
+  color: white;
+  font-size: 15px;
+  font-weight:bold;
+  margin-top: -45px;
+  margin-left: -8px;
+}
+
+#entrada_produtos img{
+  height: 150px;
+  width: 150px;
+  margin-bottom: -30px;
+}
+
+#saida_produtos{
+    background: none;
+  border: none;
+  color: white;
+  font-size: 15px;
+  font-weight:bold;
+  margin-top: -42px;
+  margin-left: -8px;
+}
+
+#saida_produtos img{
+  height: 160px;
+  width: 160px;
+  margin-bottom: -33px;
+}
+
+#cadastro_usuario{
+    background: none;
+  border: none;
+  color: white;
+  font-size: 15px;
+  font-weight:bold;
+  margin-top: -10px;
+  margin-left: -8px;
+}
+
+#cadastro_usuario img{
+  height: 90px;
+  width: 90px;
+  margin-left: 2px;
+}
+
+#relatorios{
+    background: none;
+  border: none;
+  color: white;
+  font-size: 15px;
+  font-weight:bold;
+  margin-top: -5px;
+  margin-left: -8px;
+}
+
+#relatorios img{
+  height: 80px;
+  width: 80px;
+  margin-bottom: 10px;
+  margin-left: 8px;
 }

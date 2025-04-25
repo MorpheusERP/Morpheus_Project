@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Busca por Fornecedor</title>
-    <link rel="stylesheet" href="../CSS/Fornecedor.css">
+    <link rel="stylesheet" href="../CSS/grupos.css">
     <script>
         //Função para verificar se o usuário está logado
     function verificarLogin() {
@@ -27,7 +27,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>Busca Fornecedor</h1>
+        <h1>Busca Grupo subgrupo</h1>
     </div>
     <div class="container">
         <div class="form">
@@ -41,6 +41,9 @@
                 <div class="table-container"></div>
             </form>
             <p id="mensagemErro" style="font-size: 18px0; background-color: red;color: whitesmoke"></p>
+            <div id="loadingOverlay" style="display: none;">
+                <div id="loadingSpinner"></div>
+            </div>
         </div>
     </div>
 
@@ -67,6 +70,9 @@
             sub_Grupo: subgrupo,
         };
 
+         // Elemento de carregamento
+         document.getElementById('loadingOverlay').style.display = 'flex';
+
         // Envia os dados para o arquivo PHP usando fetch
         fetch('../../../Backend/CadastroProdutos/consultagrupo.php', {
             method: 'POST',
@@ -84,6 +90,10 @@
                 document.getElementById('mensagemErro').innerText = data.mensagem;
             }
         })
+        .finally(() => {
+            // Oculta o spinner ao finalizar o carregamento
+            document.getElementById('loadingOverlay').style.display = 'none';
+        });
     }
     
     // Função para exibir a tabela com os resultados

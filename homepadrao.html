@@ -28,9 +28,10 @@
 <body>
     <div class="Fundo">
         <div class="Conteudo">
-           <div class="Usuario">
-            <a href="Frontend/Pagina do Usuario/HTML/PaginaUsuario.html" class="search-link" style="text-decoration: none;">
-                <img src="Frontend/Home Page/Imagens/Usuario.png" alt="Perfil" class="perfil-imagem" style="width: 75px; height: 70px; margin-right: -283px; margin-top: 15px;">
+           <div id="Usuario">
+            <a href="Frontend/Pagina do Usuario/HTML/PaginaUsuario.html" style="text-decoration: none;">
+                <img src="Frontend/Home Page/Imagens/Usuario.png">
+            </a>
            </a>
            </div>
             <!-- Seletor de data adicionado aqui -->
@@ -38,17 +39,18 @@
                     <input type="date" id="datePicker" text="Selecione uma Data" />
                 </div>
                     <div class="container">
-                        <div class="coluna">
+                        <div class="coluna">                      
+                            <a href="Frontend/Entrada de Produtos/HTML/Entrada.html" class="search-link" style="text-decoration: none;">
+                                <button id="entrada_produtos">
+                                   <img src="Frontend/Home Page/Imagens/entrada_produtos.png">Entrada Produtos
+                                </button>
+                            </a>  
 
-                            <a href="Frontend/Saída Produtos/HTML/Saida.html" class="search-link">
-                                <button class="Relatorios"style="text-decoration: none ;height: 125px; width: 315px; border-radius: 25px; background: linear-gradient(to top, #cccccc, #666666);">Saida de Produto</button>
-                            </a>
-                            
-                            <a href="Frontend/Entrada de Produtos/HTML/Entrada.html" class="search-link">
-                                <button class="Relatorios" style="text-decoration: none;height: 125px; width: 315px; border-radius: 25px; background: linear-gradient(to top, #cccccc, #666666);">Entrada Produtos</button>
-                            </a>
-                            
-                            <button class="Relatorios" onclick="window.location.href='Frontend/Relatorios/relatorios.html'" style="height: 125px; width: 315px; border-radius: 25px; background: linear-gradient(to top, #cccccc, #666666);">Relatórios</button>
+                            <a href="Frontend/Saída Produtos/HTML/Saida.html" class="search-link" style="text-decoration: none;">
+                                <button id="saida_produtos">
+                                    <img src="Frontend/Home Page/Imagens/saida_produtos.png"> Saída Produtos
+                                </button>
+                            </a>                        
                         </div>
                     </div>
             <div class="Emporio">

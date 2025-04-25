@@ -141,3 +141,45 @@ input[type="date"]:focus {
         justify-content: space-around;
     }
 }
+
+#Usuario{
+    margin-left: 250px;
+}
+
+#Usuario img{
+    width: 90px;
+    height: 90px
+}
+
+#saida_produtos{
+    background: none;
+  border: none;
+  color: white;
+  font-size: 15px;
+  font-weight:bold;
+  margin-top: -42px;
+  margin-left: -20px;
+}
+
+#saida_produtos img{
+  height: 300px;
+  width: 300px;
+  margin-bottom: -70px;
+}
+
+
+#entrada_produtos{
+    background: none;
+  border: none;
+  color: white;
+  font-size: 15px;
+  font-weight:bold;
+  margin-top: -45px;
+  margin-left: 5px;
+}
+
+#entrada_produtos img{
+  height: 300px;
+  width: 300px;
+  margin-bottom: -70px;
+}

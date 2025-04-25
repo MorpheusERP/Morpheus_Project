@@ -1,0 +1,416 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+        width: 100%;
+        background: radial-gradient(50% 50% at 50% 50%, #4200FF 0%, #280099 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: #FFF;
+        text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        font-size: 14px;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: 2.36px;
+        overflow-x: hidden;
+        min-height: 100vh;
+        padding: 20px;
+}
+
+.container {
+    max-width: 400px;
+    width: 100%; /* Garante que o container ocupe 100% da largura em telas menores */
+    margin: 20px auto;
+    border-radius: 2px;
+    overflow: hidden;
+    padding: 20px;
+    border-color: black;
+}
+
+.header {
+    color: white;
+    text-align: center;
+    padding: 15px;
+}
+
+/* Formulários */
+.form-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.form label {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.form input, .form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    border-color: black;
+}
+
+input[type="date"],
+input[type="number"] {
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 5px;
+    border: none;
+    background-color: #f2f2f2;
+    width: 100%; /* Ajusta a largura para dispositivos menores */
+    display: block;
+}
+
+/* Layout de datas (Calendario) */
+.Calendario {
+    display: flex;
+    flex-wrap: wrap; /* Permite quebrar em telas menores */
+    gap: 20px;
+    margin-bottom: -11px;
+}
+
+label {
+    margin-left: 0;
+    margin-bottom: 5px;
+    display: block;
+    font-weight: bold;
+    color: #f2f2f2;
+}
+
+/* Layout de grupo/subgrupo */
+.GrupoSubGrupo {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 20px; /* Espaçamento entre os grupos */
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column; /* Coloca o label em cima do input */
+    flex: 1; /* Faz com que cada grupo ocupe o mesmo espaço */
+}
+
+.input-group label {
+    margin-bottom: 5px;
+    font-weight: bold; /* Opcional */
+}
+
+.input-group input {
+    padding: 8px;
+    border-radius: 5px;
+    border: 2px solid #ccc;
+    border-color: black;
+}
+
+/* Botões */
+.buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 15px;
+}
+
+#add {
+    background-color: #ffcc00;
+    color: black;
+    border: none;
+    padding: 10px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+    flex-grow: 1;
+    margin: 0 5px;
+    display: flex; /* Usando flexbox para alinhar o conteúdo */
+    justify-content: center; /* Alinha horizontalmente o conteúdo */
+    align-items: center; /* Alinha verticalmente o conteúdo */
+}
+
+#add img {
+    height: 20px;
+    margin-right: 10px;
+    margin-top: 2px;
+}
+
+
+
+.buttons button:hover {
+    background-color: #e6b800;
+}
+
+/* Tabelas */
+.table-container {
+    padding: 5px;
+    overflow-x: auto; /* Permite rolar horizontalmente se a tabela for grande */
+}
+
+/* Faz a tabela ocupar 100% da largura */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    color:black;
+  }
+
+td{
+    border: 1px solid black; 
+    padding: 10px;
+    text-align: center;
+}
+  th {
+    border: 2px solid black; 
+    padding: 10px;
+    text-align: center;
+  }
+
+  th {
+    background-color: #D9D9D9;
+    font-weight: bold;
+  }
+tr {
+    background-color:#D9D9D9; 
+}
+
+/* Rodapé */
+.footer {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+.footer .logo img {
+    max-width: 100px;
+    margin-right: 15px;
+    margin-left: 25px;
+    flex-shrink: 0;
+}
+
+/* Estilizando os campos de input com a lupa dentro */
+.input-container {
+    position: relative; /* Para permitir posicionamento absoluto do ícone */
+    width: 100%;
+}
+
+.input-container input {
+    width: 100%;
+    height: 50px;
+    padding-left: 35px;
+    padding-right: 35px; /* Espaço suficiente para o ícone */
+    box-sizing: border-box;
+    align-items: center;
+}
+
+input:disabled {
+    background-color: white;
+    color: black;
+    border: 2px solid #000; 
+    opacity: 1; 
+    cursor: not-allowed;
+}
+        
+input:disabled:focus {
+    outline: none; 
+    border-color: #4A90E2;
+}
+
+#back{
+    height: 40px;
+    width: 90px;
+    background-color: #ffcc00;
+    color: black;
+    border: none;
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 30px;
+    font-weight: bold;
+    display: flex; /* Usando flexbox para alinhar o conteúdo */
+    justify-content: center; /* Alinha horizontalmente o conteúdo */
+    align-items: center; /* Alinha verticalmente o conteúdo */
+}
+
+#back img {
+    width: 110px; /* Tamanho da seta */
+    height: 25px;
+    margin-right: 5px; /* Espaçamento entre o texto e a seta */
+}
+
+.search-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #666; /* Cor da lupa */
+}
+
+.search-icon:hover {
+    color: #000; /* Mudança de cor ao passar o mouse */
+}
+
+.buttons-clear{
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    background-color: #ffffff00;
+    transform: translateY(-50%);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.buttons-clear img {
+    height: 20px;
+    margin-right: px;
+}
+/* Ajustes para telas pequenas */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 15px;
+    }
+
+    .footer .logo img {
+        width: 100px;
+    }
+
+    .buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .buttons button {
+        width: 100%;
+    }
+}
+.modal-Produto {
+    display: none; /* Inicialmente o modal está escondido */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4); /* Fundo transparente */
+    padding-top: 60px;
+}
+
+.modal-content-Produto {
+    background: radial-gradient(50% 50% at 50% 50%, #4200FF 0%, #280099 100%);
+    margin: 30% auto;
+    padding: 10px;
+    border-radius: 10px;
+    border: 4px solid #000000;
+    width: 80%;
+    max-width: 600px;
+    height: 60%;
+    max-height: 1000px;
+    text-align: center;
+}
+
+#modalSaida{
+    height: 90%;
+}
+
+.modal-content-Produto label{
+    font-size: 15px;
+    color: white;
+    margin-top: 5px;
+}
+.modal-content-Produto input{
+    height: 25px;
+    width: 200px;
+    text-align: center;
+    font-size: large;
+}
+.PDFModal{
+    height: 40px;
+    width: 120px;
+    font-size: 13px;
+    background-color: #ffcc00;
+    color: #000000;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 30px;
+    font-weight: bold;
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    margin-left: 75px;
+}
+
+.PDFModal img {
+    height: 30px;
+    margin-right: 5px;
+    border: none;
+}  
+.close {
+    color: #ff0000;
+    font-size: 70px;
+    font-weight: bold;
+    position: absolute;
+    right: 20px;
+    top: 0;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#loadingSpinner {
+    position: fixed;
+    top: auto;
+    left: auto;
+    width: 70px;
+    height: 70px;
+    border: 8px solid rgb(255 255 255 / 62%);
+    border-top-color: #ffffff;
+    border-radius: 100%;
+    animation: spin 0.5s linear infinite;
+    z-index: 1001; /* Coloca o spinner acima do overlay */
+}
+
+/* Overlay de fundo */
+#loadingOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro e semitransparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Coloca o overlay acima do conteúdo */
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

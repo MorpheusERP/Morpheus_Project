@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saida de Produtos</title>
+    <link rel="stylesheet" href="CSS/Saidas.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            verificarLogin();
+            preencherCamposComURL();
+            carregarCamposDoLocalStorage();
+        });
+        function verificarLogin() {
+            fetch('../../../Backend/verificalogin.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.logado) {
+                        window.location.href = '../../../index.html';
+                    }
+                })
+                .catch(error => {
+                    console.error("Erro ao verificar autenticação:", error);
+                });
+        }
+    </script>
+    <!-- jsPDF versão 1.5.3 diretamente compatível com o navegador -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- jsPDF-AutoTable versão compatível com a versão do jsPDF acima -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Saída de Produtos</h1>
+        </div>
+
+        <div class="form-container">
+            <label for="periodo">Período</label>
+            <div class="Calendario">
+                <div class="input-group">
+                    <label for="start-date"></label>
+                    <input type="date" id="start-date" name="start-date" required>
+                </div>
+            
+                <div class="input-group">
+                    <label for="end-date"></label>
+                    <input type="date" id="end-date" name="end-date" required>
+                </div>
+            </div>
+            <div class="form">
+                <div class="input-with-button">
+
+                       <!-- Produto -->
+                       <label for="produto">Produto:</label>
+                       <div class="input-container">
+                           <input type="text" id="produto" name="produto" placeholder="Produto" disabled>
+                               <button class="search-icon" onclick="window.location.href='produto_pesquisa.html'">&#128269;</button>
+                               <button id="clear-produto"  class="buttons-clear" onclick="limpardados('produto')">
+                                    <img src="Fotos/delete-stop-svgrepo-com(1).png">
+                               </button>
+                           </a>
+                       </div>
+
+                    <!-- Fornecedor -->
+                    <label for="localDestino">Local de Destino:</label>
+                    <div class="input-container">
+                        <input type="text" id="localDestino" placeholder="Local de Destino" disabled>
+                            <button id="clear-localDestino" class="buttons-clear" onclick="limpardados('localDestino')">
+                                <img src="Fotos/delete-stop-svgrepo-com(1).png">
+                            </button>
+                            <button class="search-icon" onclick="window.location.href='local_destino_pesquisa.html'">&#128269;</button>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Grupo e SubGrupo com botões de pesquisa -->
+                <div class="GrupoSubGrupo">
+                    <div class="input-group">
+                        <label for="grupo">Grupo:</label>
+                        <div class="input-container">
+                            <input type="text" id="grupo" name="grupo" placeholder="Grupo" disabled>
+                                <button class="search-icon" onclick="window.location.href='grupo-subgrupo_pesquisa.html'">&#128269;</button>
+                                <button id="clear-grupo" class="buttons-clear" onclick="limpardados('grupo')">
+                                    <img src="Fotos/delete-stop-svgrepo-com(1).png">
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="subgrupo">SubGrupo:</label>
+                        <div class="input-container">
+                            <input type="text" id="subgrupo" name="subgrupo" placeholder="SubGrupo" disabled>
+                                <button class="search-icon" onclick="window.location.href='grupo-subgrupo_pesquisa.html'">&#128269;</button>
+                                <button id="clear-subgrupo" class="buttons-clear" onclick="limpardados('subgrupo')">
+                                    <img src="Fotos/delete-stop-svgrepo-com(1).png">
+                                </button>
+                            </a>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p id="mensagemErro" style="font-size: 18px; background-color: red;color: whitesmoke"></p>
+            <div id="loadingOverlay" style="display: none;">
+                <div id="loadingSpinner"></div>
+            </div>
+            
+            <div class="buttons" style="width: 40%; margin-left: 30%;">
+                <button id="add" onclick="consultarSaidas()">
+                    <img src="Fotos/keyboard-return-solid-svgrepo-com.png">Buscar
+                </button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <!-- Tabela para exibir os resultados -->
+            <table id="resultadoTabela" border="1" style="display:none;">
+                <thead>
+                    <tr>
+                        <th>Código:</th>
+                        <th>Data:</th>
+                        <th>Valor Total:</th>
+                    </tr>
+                </thead>
+                <tbody id="resultadoCorpo"></tbody>
+            </table>
+        </div> 
+    </div>
+
+<!--Modal para exibir os dados do produto e a opção de remover da tabela-->
+ <div id="produtoModal" class="modal-Produto">
+    <div class="modal-content-Produto">
+        <span class="close" onclick="fecharModal()">&times;</span>
+        <h2>Detalhes do Produto</h2>
+        <br><br>
+        <div>
+            <label>Código da Saída:</label>
+                <input id="modalCod" disabled>
+            <br>
+
+            <label>Data da Saida:</label>
+                <input id="modalData" disabled>
+            <br>
+
+            <label>Valor Total:</label>
+                <input id="modalTotal" disabled>
+            <br>
+
+            <button id="gerarpdf" class="PDFModal">
+                <img src="Fotos/download-pdf.png">Gerar PDF
+            </button>
+        </div>
+    </div>
+</div>
+
+    <div class="footer">
+            <button id="back" onclick="window.location.href='../relatorios.html'">
+                <img src="Fotos/corner-down-left-svgrepo-com.png">Voltar
+            </button>
+        </a>
+        <div class="logo">
+            <img src="Fotos/Emporio maxx s-fundo.png" alt="Empório Maxx Logo">
+        </div>
+    </div>
+<script>
+    
+    function preencherCamposComURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+
+        const grupo = urlParams.get("grupo");
+        const nome_Produto = urlParams.get("nome_Produto");
+        const sub_Grupo = urlParams.get("sub_Grupo");
+        const razao_Social = urlParams.get("razao_Social");
+        const tipo_Local= urlParams.get("tipo_Local");
+        const nome_Local = urlParams.get("nome_Local");
+
+
+
+        if (grupo) document.getElementById("grupo").value = grupo;
+        if (nome_Produto) document.getElementById("produto").value = nome_Produto;
+        if (sub_Grupo) document.getElementById("subgrupo").value = sub_Grupo;
+        if (razao_Social) document.getElementById("local").value = razao_Social;
+        if (nome_Local) document.getElementById("localDestino").value = nome_Local;
+
+        
+        // Limpa os parâmetros da URL
+        window.history.replaceState({}, document.title, window.location.pathname);
+        salvarCamposNoLocalStorage();
+    }
+
+    function salvarCamposNoLocalStorage() {
+        const nome_Produto = document.getElementById("produto").value;
+        const razao_Social = document.getElementById("localDestino").value;
+        const grupo = document.getElementById("grupo").value;
+        const sub_Grupo = document.getElementById("subgrupo").value;
+        const nome_Local = document.getElementById("localDestino").value;
+
+        // Salva apenas se houver um valor preenchido em cada campo
+        if (nome_Produto) localStorage.setItem("produto", nome_Produto);
+        if (razao_Social) localStorage.setItem("localDestino", razao_Social);
+        if (grupo) localStorage.setItem("grupo", grupo);
+        if (sub_Grupo) localStorage.setItem("subgrupo", sub_Grupo);
+        if (nome_Local) localStorage.setItem("nomeLocal", nome_Local);
+    }
+
+    function carregarCamposDoLocalStorage() {
+        if (localStorage.getItem("produto")) {
+            document.getElementById("produto").value = localStorage.getItem("produto");
+        }
+        if (localStorage.getItem("nomeLocal")) {
+            document.getElementById("localDestino").value = localStorage.getItem("nomeLocal");
+        }
+        if (localStorage.getItem("grupo")) {
+            document.getElementById("grupo").value = localStorage.getItem("grupo");
+        }
+        if (localStorage.getItem("subgrupo")) {
+            document.getElementById("subgrupo").value = localStorage.getItem("subgrupo");
+        }
+    }
+
+    // Função para consultar o Produto
+    function consultarSaidas() {
+        document.getElementById('mensagemErro').innerHTML = '';
+        const start_date = document.getElementById('start-date').value;
+        const end_date = document.getElementById('end-date').value;
+        const nome_Produto = document.getElementById('produto').value;
+        const nome_Local = document.getElementById('localDestino').value;
+        const grupo = document.getElementById('grupo').value;
+        const subgrupo = document.getElementById('subgrupo').value;
+
+        // Cria um objeto com os dados do Produto
+        const dados = {
+            start_date: start_date,
+            end_date: end_date,
+            nome_Produto: nome_Produto,
+            nome_Local: nome_Local,
+            grupo: grupo,
+            sub_Grupo: subgrupo
+        };
+
+        // Elemento de carregamento
+        document.getElementById('loadingOverlay').style.display = 'flex';
+
+        // Envia os dados para o arquivo PHP usando fetch
+        fetch('../../../Backend/SaidaProdutos/consultarsaidas.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dados)
+        })
+
+        .then(response => response.json())
+        .then(data => {
+            console.log(data); // Exibe a resposta no console para verificar seu conteúdo
+
+            if (data.status === "sucesso") {
+                exibirTabela(data.saidas);
+            } else if (data.status === 'erro'){
+                document.getElementById('mensagemErro').innerText = data.mensagem;
+            }
+            else if (data.status === 'errodata'){
+                document.getElementById('mensagemErro').innerHTML = data.mensagem;
+            }
+        })
+        .catch(error => console.error(error))
+        .finally(() => {
+            // Oculta o spinner ao finalizar o carregamento
+            document.getElementById('loadingOverlay').style.display = 'none';
+        });
+    }
+    
+    // Função para exibir a tabela com os resultados
+    function exibirTabela(saidas) {
+        const tabela = document.getElementById('resultadoTabela');
+        const corpoTabela = document.getElementById('resultadoCorpo');
+    
+        // Limpa resultados anteriores
+        corpoTabela.innerHTML = '';
+    
+        // Adiciona as novas linhas com os resultados
+        saidas.forEach(saidas => {
+            const linha = document.createElement('tr');
+            
+            // Configura a linha para redirecionar ao clicar
+            linha.onclick = function() {
+                abrirModal(saidas)
+            };
+            
+            linha.innerHTML = `
+                <td>${saidas.id_Lote}</td>
+                <td>${saidas.data_Saida}</td>
+                <td>${saidas.valor_Lote}</td>
+            `;
+            
+            corpoTabela.appendChild(linha);
+        });
+    
+        // Exibe a tabela
+        tabela.style.display = 'table';
+    }
+
+    let produtoIdSelecionado;
+
+    // Função para abrir o modal e mostrar os dados do produto
+    function abrirModal(saidas) {
+        produtoIdSelecionado = saidas.id;
+    
+        document.getElementById("modalCod").value = saidas.id_Lote;
+<<<<<<< HEAD
+        document.getElementById("modalData").value = saidas.data_Saida;
+=======
+        document.getElementById("modalData").value = saidas.data_Entrada;
+>>>>>>> 955d445b74cea8f96959bf094d7d6d19ca362c21
+        document.getElementById("modalTotal").value = saidas.valor_Lote;
+    
+        // Exibe o modal
+        document.getElementById("produtoModal").style.display = "block";
+    
+        // Elemento de carregamento
+        document.getElementById('loadingOverlay').style.display = 'flex';
+    
+        const dados = {
+            id_Lote: saidas.id_Lote,
+        };
+    
+        // Envia os dados para o arquivo PHP usando fetch
+        fetch('../../../Backend/Relatorios/consultarsaidas.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dados)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data); // Exibe a resposta no console para verificar seu conteúdo
+            if (data.status === "sucesso") {
+                // Adiciona o evento ao botão de gerar PDF
+                document.getElementById("gerarpdf").addEventListener("click", function() {
+                    gerarPDF(data.produtos, data.lote); // Passa 'data.produtos' e 'data.lote' como argumentos
+                });
+            } else if (data.status === 'erro') {
+                document.getElementById('mensagemErro').innerText = data.mensagem;
+            } else if (data.status === 'errodata') {
+                document.getElementById('mensagemErro').innerHTML = data.mensagem;
+            }
+        })
+        .catch(error => console.error(error))
+        .finally(() => {
+            // Oculta o spinner ao finalizar o carregamento
+            document.getElementById('loadingOverlay').style.display = 'none';
+        });
+    }
+
+    function fecharModal() {
+        document.getElementById("produtoModal").style.display = "none";
+        location.reload();
+    }
+
+    const { jsPDF } = window.jspdf; // jsPDF a partir da versão 2.x
+    window.jspdf = window.jspdf || {}; // Se não estiver carregado ainda
+    
+    // Função para gerar o PDF
+    function gerarPDF(produtos, lote) {
+        if (!produtos || !lote) {
+            console.error("Dados faltando: produtos ou lote não definidos.");
+            return;
+        }
+    
+        const doc = new jsPDF();
+    
+        // Título do documento
+        doc.setFontSize(20);
+        doc.text("Saidas de Produtos", 14, 15);
+    
+        // Informações do lote
+        doc.setFontSize(14);
+        doc.text(`ID Saida: ${lote.id_Lote}`, 14, 25);
+        doc.text(`Data da Saída: ${lote.data_Saida}`, 14, 30);
+        doc.text(`Valor da Saida: ${(lote.valor_Lote)}`, 14, 35);
+        doc.text(`ID Usuário: ${(lote.id_Usuario)}`, 14, 40);
+        doc.text(`Usuario: ${lote.nome_Usuario}`, 14, 45);
+    
+        // Configuração da tabela
+        const colunas = [
+            "ID Lote",
+            "Código Local Destino",
+            "Local de Destino",
+            "Tipo do Local",
+            "Código Produto",
+            "Nome Produto",
+            "Quantidade Saida",
+            "Tipo Produto",
+            "Preço Custo R$",
+            "Grupo",
+            "Sub Grupo"
+        ];
+    
+        const linhas = produtos.map(produto => [
+            produto.id_Lote,
+            produto.id_Local,
+            produto.nome_Local,
+            produto.tipo_Local,
+            produto.cod_Produto,
+            produto.nome_Produto,
+            produto.qtd_saida,
+            produto.tipo_Produto,
+            parseFloat(produto.preco_Custo).toFixed(2), // Formato com duas casas decimais
+            produto.grupo,
+            produto.sub_Grupo
+        ]);
+    
+        // Adiciona a tabela ao PDF
+        doc.autoTable({
+            startY: 50,
+            head: [colunas],
+            body: linhas,
+            theme: 'grid',
+            styles: {
+                fontSize: 8 // Define o tamanho da fonte para as células da tabela
+            },
+            headStyles: {
+                fontSize: 10 // Define o tamanho da fonte para o cabeçalho
+            }
+        });
+    
+        // Salva o PDF
+        doc.save("Saidas_de_Produtos.pdf");
+    }  
+
+    function limpardados(id){
+        const campo = document.getElementById(id);
+        campo.value = ""; // Limpa o valor do campo
+        localStorage.removeItem(id); // Remove o item correspondente do localStorage
+    }
+    </script>
+</body>
+</html>

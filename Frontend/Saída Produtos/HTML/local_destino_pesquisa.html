@@ -41,6 +41,9 @@
                 <div class="table-container"></div>
             </form>
             <p id="mensagemErro" style="font-size: 18px0; background-color: red;color: whitesmoke"></p>
+            <div id="loadingOverlay" style="display: none;">
+                <div id="loadingSpinner"></div>
+            </div>
         </div>
     </div>
 
@@ -66,7 +69,9 @@
             nome_Local: nome,
             tipo_Local: tipo,
         };
-
+        
+        // Elemento de carregamento
+        document.getElementById('loadingOverlay').style.display = 'flex';
         // Envia os dados para o arquivo PHP usando fetch
         fetch('../../../Backend/CadastroLocal/consultalocal.php', {
             method: 'POST',
@@ -84,6 +89,10 @@
                 document.getElementById('mensagemErro').innerText = data.mensagem;
             }
         })
+        .finally(() => {
+            // Oculta o spinner ao finalizar o carregamento
+            document.getElementById('loadingOverlay').style.display = 'none';
+        });
     }
     
     // Função para exibir a tabela com os resultados

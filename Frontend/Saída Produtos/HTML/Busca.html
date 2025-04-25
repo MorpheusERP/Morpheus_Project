@@ -62,7 +62,7 @@
                     <label for="localDestino">Local de Destino:</label>
                     <div class="input-container">
                         <input type="text" id="localDestino" placeholder="Local de Destino" disabled>
-                            <button id="clear-localDestino" class="buttons-clear" onclick="limpardados('local')">
+                            <button id="clear-localDestino" class="buttons-clear" onclick="limpardados('localDestino')">
                                 <img src="../Fotos/delete-stop-svgrepo-com(1).png">
                             </button>
                             <button class="search-icon" onclick="window.location.href='local_destino_pesquisa.html'">&#128269;</button>
@@ -99,6 +99,9 @@
                 </div>
             </div>
             <p id="mensagemErro" style="font-size: 18px; background-color: red;color: whitesmoke"></p>
+            <div id="loadingOverlay" style="display: none;">
+                <div id="loadingSpinner"></div>
+            </div>
             
             <div class="buttons" style="width: 40%; margin-left: 30%;">
                 <button id="add" onclick="consultarSaidas()">
@@ -206,6 +209,9 @@
             sub_Grupo: subgrupo
         };
 
+        // Elemento de carregamento
+        document.getElementById('loadingOverlay').style.display = 'flex';
+
         // Envia os dados para o arquivo PHP usando fetch
         fetch('../../../Backend/SaidaProdutos/consultarsaidas.php', {
             method: 'POST',
@@ -228,7 +234,11 @@
                 document.getElementById('mensagemErro').innerHTML = data.mensagem;
             }
         })
-        .catch(error => console.error(error));
+        .catch(error => console.error(error))
+        .finally(() => {
+            // Oculta o spinner ao finalizar o carregamento
+            document.getElementById('loadingOverlay').style.display = 'none';
+        });
     }
     
     // Função para exibir a tabela com os resultados
