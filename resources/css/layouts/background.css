@@ -1,0 +1,84 @@
+/* Estilos de Background para todas as telas */
+:root {
+    --primary-color: #4200FF;
+    --primary-dark: #280099;
+    --accent-color: #FFEF0D;
+    --text-light: #FFFFFF;
+    --text-dark: #333333;
+    --shadow-color: rgba(0, 0, 0, 0.2);
+    --input-bg: rgba(255, 255, 255, 0.15);
+    --input-text: #FFFFFF;
+}
+
+body {
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-light);
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-x: hidden;
+    touch-action: manipulation;
+    padding: 0;
+}
+
+.Fundo {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    background: url('../../../public/images/pattern.svg'), linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    background-size: cover;
+    position: relative;
+    padding: 15px;
+    padding-bottom: 70px;
+}
+
+.floating-shape {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 239, 13, 0.1);
+    animation: float 8s infinite ease-in-out;
+    z-index: 0;
+}
+
+.shape1 {
+    width: 80px;
+    height: 80px;
+    top: 10%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.shape2 {
+    width: 120px;
+    height: 120px;
+    bottom: 10%;
+    right: 15%;
+    animation-delay: 2s;
+}
+
+.shape3 {
+    width: 50px;
+    height: 50px;
+    top: 20%;
+    right: 20%;
+    animation-delay: 1s;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}

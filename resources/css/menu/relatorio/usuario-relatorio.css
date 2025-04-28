@@ -1,0 +1,323 @@
+/* CSS for usuario-relatorio page matching the site design pattern */
+:root {
+    --primary-color: #4200FF;
+    --primary-dark: #280099;
+    --accent-color: #FFEF0D;
+    --text-light: #FFFFFF;
+    --text-dark: #333333;
+    --shadow-color: rgba(0, 0, 0, 0.2);
+    --input-bg: rgba(255, 255, 255, 0.15);
+    --input-text: #FFFFFF;
+}
+
+.header {
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--accent-color);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.container {
+    width: 90%;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.form {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.Conteudo {
+    width: 100%;
+    padding: 20px 15px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    margin-top: 10px;
+}
+
+/* Buttons */
+.buttons-footer {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.buttons-search {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.new {
+    background-color: var(--accent-color);
+    color: var(--text-dark);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.search, .back {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: all 0.6s;
+}
+
+button:hover::before {
+    left: 100%;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Form fields */
+#consultaForm {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+select, .input-field {
+    width: 100%;
+    height: 50px;
+    background: var(--input-bg);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    padding: 0 20px;
+    font-size: 15px;
+    color: var(--input-text);
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+/* Correction to improve visibility of select options */
+select option {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    padding: 10px;
+}
+
+select:focus, .input-field:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(255, 239, 13, 0.3);
+    outline: none;
+}
+
+select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23FFEF0D' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+}
+
+::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Messages */
+#mensagemSucesso, #mensagemErro {
+    padding: 12px 20px;
+    border-radius: 12px;
+    margin: 15px 0;
+    font-size: 14px;
+    width: 100%;
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Footer */
+footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 70px; /* Space for bottom nav */
+}
+
+.BotoesFooter {
+    width: 90%;
+    max-width: 480px;
+}
+
+/* Logo */
+.logo {
+    margin-top: 20px;
+    margin-bottom: 70px;
+    opacity: 0.9;
+    text-align: center;
+}
+
+.logo img {
+    max-width: 160px;
+    height: auto;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+}
+
+/* Table styles */
+.resultado-container {
+    width: 100%;
+    margin-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 15px;
+    transition: opacity 0.3s ease;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    overflow: hidden;
+    animation: fadeIn 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+thead {
+    background: rgba(66, 0, 255, 0.3);
+}
+
+th {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+td {
+    padding: 10px 15px;
+    font-size: 14px;
+    color: var(--text-light);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+/* Media queries */
+@media (max-width: 480px) {
+    .header h1 {
+        font-size: 20px;
+    }
+    
+    button {
+        padding: 8px 15px;
+        font-size: 13px;
+    }
+    
+    select, .input-field {
+        height: 45px;
+        font-size: 14px;
+    }
+    
+    .logo img {
+        max-width: 140px;
+    }
+    
+    th {
+        padding: 10px;
+        font-size: 12px;
+    }
+    
+    td {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        max-width: 600px;
+    }
+    
+    .header h1 {
+        font-size: 28px;
+    }
+    
+    button {
+        padding: 12px 25px;
+        font-size: 15px;
+    }
+    
+    .logo {
+        margin-top: 30px;
+    }
+    
+    .logo img {
+        max-width: 180px;
+    }
+    
+    th {
+        padding: 15px;
+        font-size: 15px;
+    }
+    
+    td {
+        padding: 12px 15px;
+        font-size: 15px;
+    }
+}

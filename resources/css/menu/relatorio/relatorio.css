@@ -1,0 +1,195 @@
+/* CSS para a página de relatórios - estilo similar à home */
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 20px 15px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+    position: relative;
+    z-index: 1;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    max-width: 480px;
+    margin: 20px auto;
+}
+
+.main-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px 0;
+    margin-top: 10px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 15px;
+    width: 100%;
+    padding: 0 5px;
+}
+
+.grid-container button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    color: white;
+    font-size: 13px;
+    font-weight: 500;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+}
+
+.grid-container button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: all 0.6s;
+}
+
+.grid-container button:hover::before, 
+.grid-container button:active::before {
+    left: 100%;
+}
+
+.grid-container button:active {
+    transform: scale(0.98);
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.grid-container button img {
+    width: auto;
+    height: 80px; /* Aumentado de 60px para 80px */
+    margin-bottom: 8px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.grid-container button:hover img,
+.grid-container button:active img {
+    transform: scale(1.1);
+}
+
+header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+header h1 {
+    color: white;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+    padding: 10px 0;
+}
+
+footer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.logo {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+.logo img {
+    max-width: 160px;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+}
+
+.logo:hover {
+    opacity: 1;
+}
+
+.back-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 10px;
+}
+
+.back-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.back-button img {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+}
+
+/* Small phones optimization */
+@media (max-width: 320px) {
+    .grid-container button {
+        height: 110px;
+    }
+    
+    .grid-container button img {
+        height: 65px; /* Aumentado de 50px para 65px */
+    }
+    
+    .logo img {
+        max-width: 140px;
+    }
+}
+
+/* Optimize for larger screens */
+@media (min-width: 768px) {
+    .container {
+        max-width: 600px;
+        padding: 30px 20px;
+    }
+    
+    .grid-container {
+        grid-gap: 20px;
+        max-width: 550px;
+    }
+    
+    .grid-container button {
+        height: 160px;
+    }
+    
+    .grid-container button img {
+        height: 90px; /* Aumentado de 70px para 90px */
+    }
+    
+    .logo img {
+        max-width: 180px;
+    }
+}
