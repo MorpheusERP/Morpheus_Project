@@ -1,0 +1,470 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: 'Poppins', sans-serif;
+}
+
+:root {
+    --primary-color: #4200FF;
+    --primary-dark: #280099;
+    --accent-color: #FFEF0D;
+    --text-light: #FFFFFF;
+    --text-dark: #333333;
+    --shadow-color: rgba(0, 0, 0, 0.2);
+    --input-bg: rgba(255, 255, 255, 0.15);
+    --input-text: #FFFFFF;
+}
+
+body {
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-light);
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-x: hidden;
+    touch-action: manipulation;
+}
+
+/* Main container */
+.FundoLogin {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: url('../../../public/images/pattern.svg'), linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    background-size: cover;
+    position: relative;
+}
+
+.Conteudo {
+    width: 90%;
+    max-width: 360px;
+    padding: 30px 20px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Profile section */
+.perfil {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.perfil::after {
+    content: '';
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    filter: blur(20px);
+    opacity: 0.6;
+}
+
+.perfil img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid var(--accent-color);
+    padding: 3px;
+    background: var(--primary-dark);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Form styles */
+form {
+    width: 100%;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+    width: 100%;
+}
+
+.label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent-color);
+}
+
+.bordalogin, .bordasenha {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.bordalogin:focus-within, .bordasenha:focus-within {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(255, 239, 13, 0.3);
+}
+
+.inputField {
+    width: 100%;
+    height: 50px;
+    background: var(--input-bg);
+    border: none;
+    border-radius: 12px;
+    padding: 0 20px;
+    font-size: 15px;
+    color: var(--input-text);
+    letter-spacing: 0.5px;
+}
+
+.inputField::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.inputField:focus {
+    outline: none;
+}
+
+.input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent-color);
+    font-size: 16px;
+}
+
+.input-container {
+    position: relative;
+    width: 100%;
+}
+
+.toggle-visibility {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--accent-color);
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 10;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Forgot password */
+.EsqueciSenha {
+    text-align: right;
+    margin-bottom: 25px;
+    width: 100%;
+}
+
+.link {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s;
+    opacity: 0.8;
+}
+
+.link:hover, .link:focus {
+    opacity: 1;
+    text-shadow: 0 0 5px rgba(255, 239, 13, 0.5);
+}
+
+/* Button */
+.botaoDiv {
+    width: 100%;
+    margin-top: 10px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--accent-color);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.botaoDiv::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: all 0.6s;
+}
+
+.botaoDiv:hover::before {
+    left: 100%;
+}
+
+.botao {
+    width: 100%;
+    height: 54px;
+    background: transparent;
+    border: none;
+    color: var(--text-dark);
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Logo */
+.Emporio {
+    margin-top: 30px;
+    opacity: 0.9;
+}
+
+.Emporio img {
+    max-width: 160px;
+    height: auto;
+}
+
+/* Animation and decoration */
+.floating-shape {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 239, 13, 0.1);
+    animation: float 8s infinite ease-in-out;
+}
+
+.shape1 {
+    width: 80px;
+    height: 80px;
+    top: 10%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.shape2 {
+    width: 120px;
+    height: 120px;
+    bottom: 10%;
+    right: 15%;
+    animation-delay: 2s;
+}
+
+.shape3 {
+    width: 50px;
+    height: 50px;
+    top: 20%;
+    right: 20%;
+    animation-delay: 1s;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+/* Error message */
+#mensagemErro {
+    background-color: rgba(220, 53, 69, 0.8);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 12px;
+    margin: 15px 0;
+    font-size: 14px;
+    width: 100%;
+    text-align: center;
+    display: none;
+    animation: slideIn 0.3s ease forwards;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Loading spinner */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(40, 0, 153, 0.8);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+}
+
+.loading-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.spinner {
+    position: relative;
+    width: 60px;
+    height: 60px;
+}
+
+.spinner:before,
+.spinner:after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+}
+
+.spinner:before {
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(90deg, var(--accent-color) 0%, #ffcf40 100%);
+    animation: spin 0.5s infinite linear;
+}
+
+.spinner:after {
+    width: 75%;
+    height: 75%;
+    background-color: var(--primary-dark);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Media queries */
+@media (max-width: 480px) {
+    .Conteudo {
+        padding: 20px 15px;
+    }
+    
+    .perfil img {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .botao {
+        height: 50px;
+        font-size: 15px;
+    }
+}
+
+/* Desktop optimization for smaller form */
+@media (min-width: 768px) {
+    .Conteudo {
+        max-width: 320px;
+        padding: 25px 20px;
+    }
+    
+    .perfil img {
+        width: 85px;
+        height: 85px;
+    }
+    
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    .inputField {
+        height: 45px;
+    }
+    
+    .botao {
+        height: 45px;
+        font-size: 14px;
+    }
+    
+    /* Specific rules for nova senha page */
+    body.nova-senha .Conteudo {
+        max-width: 260px;
+        padding: 20px 15px;
+    }
+    
+    body.nova-senha .perfil img {
+        width: 70px;
+        height: 70px;
+    }
+    
+    body.nova-senha .form-group {
+        margin-bottom: 12px;
+    }
+    
+    body.nova-senha .inputField {
+        height: 40px;
+        font-size: 14px;
+    }
+    
+    body.nova-senha .botao {
+        height: 40px;
+        font-size: 13px;
+    }
+    
+    body.nova-senha .Emporio img {
+        max-width: 140px;
+    }
+}
+
+@media (min-height: 700px) {
+    .Conteudo {
+        margin-top: -50px;
+    }
+}
+
+.input-with-icon {
+    position: relative;
+}
+
+.input-with-icon .inputField {
+    padding-left: 45px;
+}
+
+.input-with-icon .input-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 18px;
+}
