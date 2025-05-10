@@ -1,0 +1,235 @@
+/* CSS específico para a página home */
+.Conteudo {
+    width: 100%;
+    max-width: 480px;
+    padding: 20px 15px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 5px 0;
+    margin-top: 10px;
+}
+
+.button-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 15px;
+    width: 100%;
+    padding: 0 5px;
+}
+
+.grid-button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    color: white;
+    font-size: 13px;
+    font-weight: 500;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+}
+
+.grid-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: all 0.6s;
+}
+
+.grid-button:hover::before, 
+.grid-button:active::before {
+    left: 100%;
+}
+
+.grid-button:active {
+    transform: scale(0.98);
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.grid-button img {
+    width: auto;
+    height: 60px;
+    margin-bottom: 8px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.grid-button:hover img,
+.grid-button:active img {
+    transform: scale(1.1);
+}
+
+.grid-button span {
+    font-size: 12px;
+    font-weight: 500;
+    text-align: center;
+    line-height: 1.2;
+}
+
+input[type="date"] {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    background: var(--input-bg);
+    color: var(--text-light);
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 220px;
+    height: 50px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    outline: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+input[type="date"]:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(255, 239, 13, 0.3);
+}
+
+.date-selector {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+#Usuario {
+    margin-bottom: 15px;
+}
+
+#Usuario img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 3px solid var(--accent-color);
+    padding: 3px;
+    background: var(--primary-dark);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+#Usuario a {
+    display: block;
+    position: relative;
+}
+
+#Usuario a::after {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
+    filter: blur(20px);
+    opacity: 0.6;
+}
+
+.Emporio {
+    margin-top: 20px;
+    margin-bottom: 15px;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+}
+
+.Emporio:hover {
+    opacity: 1;
+}
+
+.Emporio img {
+    max-width: 160px;
+    height: auto;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+}
+
+/* Small phones optimization */
+@media (max-width: 320px) {
+    .grid-button {
+        height: 110px;
+    }
+    
+    .grid-button img {
+        height: 50px;
+    }
+    
+    input[type="date"] {
+        max-width: 180px;
+        height: 45px;
+        font-size: 14px;
+    }
+    
+    .Emporio img {
+        max-width: 140px;
+    }
+    
+    #Usuario img {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+/* Optimize for larger screens */
+@media (min-width: 768px) {
+    .Conteudo {
+        max-width: 600px;
+        padding: 30px 20px;
+    }
+    
+    .button-grid {
+        grid-gap: 20px;
+        max-width: 550px;
+    }
+    
+    .grid-button {
+        height: 160px;
+    }
+    
+    .grid-button img {
+        height: 70px;
+    }
+    
+    .grid-button span {
+        font-size: 14px;
+    }
+}
+
+/* Handle tall mobile displays better */
+@media (min-height: 700px) {
+    .Conteudo {
+        margin-top: -20px;
+    }
+}
