@@ -105,6 +105,7 @@
                         <th>Fornecedor</th>
                         <th>QTD</th>
                         <th>Data</th>
+                        <th>Valor Total</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -216,7 +217,7 @@
             
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             
-            fetch('/home/entrada-produtos/search', {
+            fetch('/entrada-produtos/search', {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': token,
@@ -275,6 +276,10 @@
                 const dataCell = row.insertCell(4);
                 const dataFormatada = formatarData(entrada.data_Entrada);
                 dataCell.textContent = dataFormatada;
+                
+                const valorTotalCell = row.insertCell(5);
+                const valorTotal = entrada.qtd_Entrada * entrada.preco_Custo;
+                valorTotalCell.textContent = formatarDinheiro(valorTotal);
                 
                 row.addEventListener('click', () => abrirModal(entrada));
             });

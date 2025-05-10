@@ -76,6 +76,11 @@ class EntradaProdutoController extends Controller
             }
 
             $valorTotal = $validated['preco_Custo'] * $validated['qtd_Entrada'];
+            
+            // Se o preço de venda não foi enviado, usar o preço de venda atual do produto
+            if (empty($validated['preco_Venda']) && $produto->preco_Venda) {
+                $validated['preco_Venda'] = $produto->preco_Venda;
+            }
 
             DB::beginTransaction();
             try {
@@ -89,7 +94,7 @@ class EntradaProdutoController extends Controller
                     'id_Estoque' => $estoque->id_Estoque,
                     'qtd_Entrada' => $validated['qtd_Entrada'],
                     'preco_Custo' => $validated['preco_Custo'],
-                    'preco_Venda' => $validated['preco_Venda'] ?? null,
+                    'preco_Venda' => $validated['preco_Venda'],
                     'valor_Total' => $valorTotal,
                     'data_Entrada' => $validated['data_Entrada'],
                     'created_at' => now(),
@@ -103,15 +108,19 @@ class EntradaProdutoController extends Controller
                         'updated_at' => now()
                     ]);
 
+                // Atualiza apenas o preço de custo e de venda do produto se foram informados
+                $dadosAtualizacao = [
+                    'preco_Custo' => $validated['preco_Custo'],
+                    'updated_at' => now()
+                ];
+                
+                if (!empty($validated['preco_Venda'])) {
+                    $dadosAtualizacao['preco_Venda'] = $validated['preco_Venda'];
+                }
+
                 DB::table('produtos')
                     ->where('cod_Produto', $produto->cod_Produto)
-                    ->update([
-                        'preco_Custo' => $validated['preco_Custo'],
-                        'preco_Venda' => $validated['preco_Venda'] ?? $produto->preco_Venda,
-                        'preco_Custo' => $validated['preco_Custo'],
-                        'preco_Venda' => $validated['preco_Venda'] ?? $produto->preco_Venda,
-                        'updated_at' => now()
-                    ]);
+                    ->update($dadosAtualizacao);
 
                 DB::commit();
 
@@ -258,6 +267,7 @@ class EntradaProdutoController extends Controller
                     ->first();
 
                 if (!$entrada) {
+                    \Log::error('Entrada não encontrada com ID: ' . $id);
                     return response()->json([
                         'status' => 'erro',
                         'mensagem' => 'Entrada de produto não encontrada.'
@@ -309,6 +319,7 @@ class EntradaProdutoController extends Controller
                 ]);
             }
             else {
+                \Log::error('Parâmetro de busca não fornecido no request: ' . json_encode($request->all()));
                 return response()->json([
                     'status' => 'erro',
                     'mensagem' => 'Parâmetro de busca não fornecido.'
@@ -316,7 +327,10 @@ class EntradaProdutoController extends Controller
             }
 
         } catch (\Exception $e) {
-            \Log::error('Erro ao buscar detalhes da entrada de produto: ' . $e->getMessage());
+            \Log::error('Erro ao buscar detalhes da entrada de produto: ' . $e->getMessage(), [
+                'request' => $request->all(),
+                'trace' => $e->getTraceAsString()
+            ]);
             
             return response()->json([
                 'status' => 'erro',
@@ -438,18 +452,79 @@ class EntradaProdutoController extends Controller
         }
     }
 
-    // Adicionando método para buscar fornecedores cadastrados
-    public function getFornecedores()
+    public function getProdutos(Request $request)
     {
         try {
-            $fornecedores = DB::table('fornecedores')->select('id_Fornecedor', 'razao_Social')->get();
+            $termo = $request->input('termo', '');
+            
+            $query = DB::table('produtos')
+                ->leftJoin('estoques', 'produtos.cod_Produto', '=', 'estoques.cod_Produto')
+                ->select('produtos.cod_Produto', 'produtos.nome_Produto', 'produtos.preco_Custo', 
+                         'produtos.preco_Venda', 'produtos.grupo', 'produtos.sub_Grupo', 
+                         'estoques.qtd_Estoque', DB::raw('IFNULL(estoques.qtd_Estoque, 0) as estoque_atual'))
+                ->orderBy('produtos.nome_Produto');
+                
+            if (!empty($termo)) {
+                $query->where(function($q) use ($termo) {
+                    $q->where('produtos.cod_Produto', 'like', '%' . $termo . '%')
+                      ->orWhere('produtos.nome_Produto', 'like', '%' . $termo . '%')
+                      ->orWhere('produtos.grupo', 'like', '%' . $termo . '%')
+                      ->orWhere('produtos.sub_Grupo', 'like', '%' . $termo . '%');
+                });
+            }
+            
+            $produtos = $query->get();
+            
+            // Formatar os dados para exibição
+            foreach ($produtos as $produto) {
+                // Converter números para formato adequado para apresentação
+                $produto->preco_Custo = number_format($produto->preco_Custo, 2, ',', '.');
+                if ($produto->preco_Venda) {
+                    $produto->preco_Venda = number_format($produto->preco_Venda, 2, ',', '.');
+                }
+                $produto->estoque_atual = number_format($produto->estoque_atual, 2, ',', '.');
+            }
+
+            return response()->json([
+                'status' => 'sucesso',
+                'produtos' => $produtos
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Erro ao buscar produtos: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => 'erro',
+                'mensagem' => 'Erro ao buscar produtos: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+    // Adicionando método para buscar fornecedores cadastrados
+    public function getFornecedores(Request $request)
+    {
+        try {
+            $termo = $request->input('termo', '');
+            
+            $query = DB::table('fornecedores')
+                ->select('id_Fornecedor', 'razao_Social', 'nome_Fantasia', 'grupo', 'sub_Grupo');
+                
+            if (!empty($termo)) {
+                $query->where(function($q) use ($termo) {
+                    $q->where('razao_Social', 'like', '%' . $termo . '%')
+                      ->orWhere('nome_Fantasia', 'like', '%' . $termo . '%')
+                      ->orWhere('grupo', 'like', '%' . $termo . '%')
+                      ->orWhere('sub_Grupo', 'like', '%' . $termo . '%');
+                });
+            }
+            
+            $fornecedores = $query->orderBy('razao_Social')->get();
 
             return response()->json([
                 'status' => 'sucesso',
                 'fornecedores' => $fornecedores
             ]);
         } catch (\Exception $e) {
-            Log::error('Erro ao buscar fornecedores: ' . $e->getMessage());
+            \Log::error('Erro ao buscar fornecedores: ' . $e->getMessage());
 
             return response()->json([
                 'status' => 'erro',

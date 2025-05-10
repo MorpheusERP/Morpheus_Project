@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Menu;
 
 use App\Http\Controllers\Controller;
+use App\Models\Menu\SaidaProduto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -89,7 +90,7 @@ class SaidaProdutoController extends Controller
             // Registrar saída
             DB::beginTransaction();
             try {
-                $idSaida = DB::table('saida_produtos')->insertGetId([
+                $saida = SaidaProduto::create([
                     'imagem' => $produto->imagem,
                     'id_Usuario' => $userId,
                     'nome_Usuario' => $userName,
@@ -103,8 +104,6 @@ class SaidaProdutoController extends Controller
                     'valor_Total' => $valorTotal,
                     'observacao' => $validated['observacao'],
                     'data_Saida' => $validated['data_Saida'],
-                    'created_at' => now(),
-                    'updated_at' => now()
                 ]);
 
                 // Atualizar estoque
@@ -120,7 +119,7 @@ class SaidaProdutoController extends Controller
                 return response()->json([
                     'status' => 'sucesso',
                     'mensagem' => 'Saída de produto registrada com sucesso.',
-                    'id_Saida' => $idSaida
+                    'id_Saida' => $saida->id_Saida
                 ]);
             } catch (\Exception $e) {
                 DB::rollBack();
@@ -252,11 +251,23 @@ class SaidaProdutoController extends Controller
                 ]);
             }
 
-            $saida = DB::table('saida_produtos')
-                ->leftJoin('local_destinos', 'saida_produtos.id_Local', '=', 'local_destinos.id_Local')
+            $saida = SaidaProduto::leftJoin('local_destinos', 'saida_produtos.id_Local', '=', 'local_destinos.id_Local')
                 ->where('saida_produtos.id_Saida', $id)
                 ->select(
-                    'saida_produtos.*',
+                    'saida_produtos.id_Saida',
+                    'saida_produtos.imagem',
+                    'saida_produtos.id_Usuario',
+                    'saida_produtos.nome_Usuario',
+                    'saida_produtos.cod_Produto',
+                    'saida_produtos.nome_Produto',
+                    'saida_produtos.preco_Custo',
+                    'saida_produtos.id_Local',
+                    'saida_produtos.nome_Local',
+                    'saida_produtos.id_Estoque',
+                    'saida_produtos.qtd_saida',
+                    'saida_produtos.valor_Total',
+                    'saida_produtos.observacao',
+                    'saida_produtos.data_Saida',
                     'local_destinos.tipo_Local'
                 )
                 ->first();
@@ -272,6 +283,10 @@ class SaidaProdutoController extends Controller
             if ($saida->imagem) {
                 $saida->imagem = base64_encode($saida->imagem);
             }
+
+            // Garantir que qtd_saida e valor_Total são numéricos
+            $saida->qtd_saida = (float) $saida->qtd_saida;
+            $saida->valor_Total = (float) $saida->valor_Total;
 
             return response()->json([
                 'status' => 'sucesso',
@@ -336,7 +351,7 @@ class SaidaProdutoController extends Controller
             }
             
             // Calcular a diferença de quantidade
-            $diferenca = $validated['qtd_Saida'] - $saida->qtd_Saida;
+            $diferenca = $validated['qtd_Saida'] - $saida->qtd_saida;
             
             // Verificar disponibilidade no estoque se a nova quantidade for maior
             if ($diferenca > 0 && $estoque->qtd_Estoque < $diferenca) {
@@ -358,7 +373,7 @@ class SaidaProdutoController extends Controller
                     ->update([
                         'id_Local' => $localDestino->id_Local,
                         'nome_Local' => $localDestino->nome_Local,
-                        'qtd_Saida' => $validated['qtd_Saida'],
+                        'qtd_saida' => $validated['qtd_Saida'],
                         'valor_Total' => $valorTotal,
                         'observacao' => $validated['observacao'],
                         'data_Saida' => $validated['data_Saida'],

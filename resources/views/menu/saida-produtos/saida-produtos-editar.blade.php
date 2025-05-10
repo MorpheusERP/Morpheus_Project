@@ -176,7 +176,7 @@
             
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             
-            fetch('/home/saida-produtos/find', {
+            fetch('/saida-produtos/find', {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': token,
@@ -208,7 +208,7 @@
             document.getElementById('localDestinoText').value = saida.nome_Local;
             document.getElementById('localDestino').value = saida.id_Local;
             document.getElementById('tipoLocal').value = saida.tipo_Local || '';
-            document.getElementById('quantidade').value = saida.qtd_Saida;
+            document.getElementById('quantidade').value = saida.qtd_saida;
             document.getElementById('observacao').value = saida.observacao || '';
             
             // Formatar a data para o formato esperado pelo input date
@@ -246,7 +246,7 @@
             
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             
-            fetch('/home/saida-produtos/update', {
+            fetch('/saida-produtos/update', {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': token,

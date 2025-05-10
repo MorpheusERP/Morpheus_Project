@@ -117,8 +117,8 @@
             const formData = new FormData();
             formData.append('id_Fornecedor', id);
 
-            // Envia a requisição para buscar os dados do fornecedor
-            fetch('{{ route("menu.fornecedor.search") }}', {
+            // Envia a requisição para buscar os dados do fornecedor pelo ID
+            fetch('{{ route("menu.fornecedor.find") }}', {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': csrfToken,
@@ -133,14 +133,12 @@
                 }
                 return response.json();
             })
-            .then(data => {
-                if (data.status === 'erro' || !data.resultados || data.resultados.length === 0) {
-                    mostrarErro(data.mensagem || 'Fornecedor não encontrado');
+            .then(fornecedor => {
+                if (fornecedor.status === 'erro' || !fornecedor.id_Fornecedor) {
+                    mostrarErro(fornecedor.mensagem || 'Fornecedor não encontrado');
                     return;
                 }
 
-                const fornecedor = data.resultados[0]; // Primeiro resultado
-                
                 document.getElementById('razao').value = fornecedor.razao_Social || '';
                 document.getElementById('fantasia').value = fornecedor.nome_Fantasia || '';
                 document.getElementById('apelido').value = fornecedor.apelido || '';

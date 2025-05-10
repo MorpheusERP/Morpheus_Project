@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Models\Menu\Fornecedor;
 
 class FornecedorController extends Controller
 {
@@ -36,27 +37,14 @@ class FornecedorController extends Controller
                 'observacao' => 'nullable|string|max:150',
             ]);
 
-            $existingFornecedor = DB::table('fornecedores')
-                ->where('razao_Social', $validated['razao_Social'])
-                ->first();
-
-            if ($existingFornecedor) {
+            if (Fornecedor::where('razao_Social', $validated['razao_Social'])->exists()) {
                 return response()->json([
                     'status' => 'erro',
                     'mensagem' => 'Este fornecedor já está cadastrado no sistema.'
                 ]);
             }
 
-            DB::table('fornecedores')->insert([
-                'razao_Social' => $validated['razao_Social'],
-                'nome_Fantasia' => $validated['nome_Fantasia'] ?? null,
-                'apelido' => $validated['apelido'] ?? null,
-                'grupo' => $validated['grupo'],
-                'sub_Grupo' => $validated['sub_Grupo'] ?? null,
-                'observacao' => $validated['observacao'] ?? null,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
+            Fornecedor::create($validated);
 
             return response()->json([
                 'status' => 'sucesso',
@@ -64,8 +52,7 @@ class FornecedorController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Erro ao cadastrar fornecedor: ' . $e->getMessage());
-            
+            \Log::error('Erro ao cadastrar fornecedor: ' . $e->getMessage());
             return response()->json([
                 'status' => 'erro',
                 'mensagem' => 'Ocorreu um erro ao processar a solicitação: ' . $e->getMessage()
@@ -76,36 +63,35 @@ class FornecedorController extends Controller
     public function search(Request $request)
     {
         try {
-            $termo = $request->input('termo');
-
-            $query = DB::table('fornecedores')
-                ->select('id_Fornecedor', 'razao_Social', 'nome_Fantasia', 'grupo');
-
-            if (!empty($termo)) {
-                $query->where(function ($q) use ($termo) {
-                    $q->where('razao_Social', 'LIKE', '%' . $termo . '%')
-                      ->orWhere('nome_Fantasia', 'LIKE', '%' . $termo . '%')
-                      ->orWhere('grupo', 'LIKE', '%' . $termo . '%');
-                });
+            $query = Fornecedor::query();
+            if ($request->filled('razao_Social')) {
+                $query->where('razao_Social', 'like', '%' . $request->razao_Social . '%');
             }
-
-            $fornecedores = $query->get();
-
-            if ($fornecedores->isEmpty()) {
+            if ($request->filled('nome_Fantasia')) {
+                $query->where('nome_Fantasia', 'like', '%' . $request->nome_Fantasia . '%');
+            }
+            if ($request->filled('apelido')) {
+                $query->where('apelido', 'like', '%' . $request->apelido . '%');
+            }
+            if ($request->filled('grupo')) {
+                $query->where('grupo', 'like', '%' . $request->grupo . '%');
+            }
+            if ($request->filled('sub_Grupo')) {
+                $query->where('sub_Grupo', 'like', '%' . $request->sub_Grupo . '%');
+            }
+            $resultados = $query->get();
+            if ($resultados->isEmpty()) {
                 return response()->json([
                     'status' => 'erro',
                     'mensagem' => 'Nenhum fornecedor encontrado.'
                 ]);
             }
-
             return response()->json([
                 'status' => 'sucesso',
-                'fornecedores' => $fornecedores
+                'resultados' => $resultados
             ]);
-
         } catch (\Exception $e) {
-            Log::error('Erro ao buscar fornecedores: ' . $e->getMessage());
-
+            \Log::error('Erro ao buscar fornecedores: ' . $e->getMessage());
             return response()->json([
                 'status' => 'erro',
                 'mensagem' => 'Erro ao buscar fornecedores: ' . $e->getMessage()
@@ -117,23 +103,16 @@ class FornecedorController extends Controller
     {
         try {
             $id = $request->id_Fornecedor;
-            
-            $fornecedor = DB::table('fornecedores')
-                ->where('id_Fornecedor', $id)
-                ->first();
-
+            $fornecedor = Fornecedor::find($id);
             if (!$fornecedor) {
                 return response()->json([
                     'status' => 'erro',
                     'mensagem' => 'Fornecedor não encontrado.'
                 ]);
             }
-
             return response()->json($fornecedor);
-
         } catch (\Exception $e) {
-            Log::error('Erro ao buscar fornecedor por ID: ' . $e->getMessage());
-            
+            \Log::error('Erro ao buscar fornecedor por ID: ' . $e->getMessage());
             return response()->json([
                 'status' => 'erro',
                 'mensagem' => 'Ocorreu um erro ao buscar o fornecedor: ' . $e->getMessage()
@@ -153,52 +132,30 @@ class FornecedorController extends Controller
                 'sub_Grupo' => 'nullable|string|max:50',
                 'observacao' => 'nullable|string|max:150',
             ]);
-
-            $fornecedor = DB::table('fornecedores')
-                ->where('id_Fornecedor', $validated['id_Fornecedor'])
-                ->first();
-
+            $fornecedor = Fornecedor::find($validated['id_Fornecedor']);
             if (!$fornecedor) {
                 return response()->json([
                     'status' => 'erro',
                     'mensagem' => 'Fornecedor não encontrado.'
                 ]);
             }
-
             if ($fornecedor->razao_Social !== $validated['razao_Social']) {
-                $duplicate = DB::table('fornecedores')
-                    ->where('razao_Social', $validated['razao_Social'])
+                if (Fornecedor::where('razao_Social', $validated['razao_Social'])
                     ->where('id_Fornecedor', '!=', $validated['id_Fornecedor'])
-                    ->first();
-
-                if ($duplicate) {
+                    ->exists()) {
                     return response()->json([
                         'status' => 'erro',
                         'mensagem' => 'Já existe outro fornecedor com esta Razão Social.'
                     ]);
                 }
             }
-
-            DB::table('fornecedores')
-                ->where('id_Fornecedor', $validated['id_Fornecedor'])
-                ->update([
-                    'razao_Social' => $validated['razao_Social'],
-                    'nome_Fantasia' => $validated['nome_Fantasia'] ?? null,
-                    'apelido' => $validated['apelido'] ?? null,
-                    'grupo' => $validated['grupo'],
-                    'sub_Grupo' => $validated['sub_Grupo'] ?? null,
-                    'observacao' => $validated['observacao'] ?? null,
-                    'updated_at' => now()
-                ]);
-
+            $fornecedor->update($validated);
             return response()->json([
                 'status' => 'sucesso',
                 'mensagem' => 'Fornecedor atualizado com sucesso!'
             ]);
-
         } catch (\Exception $e) {
-            Log::error('Erro ao atualizar fornecedor: ' . $e->getMessage());
-            
+            \Log::error('Erro ao atualizar fornecedor: ' . $e->getMessage());
             return response()->json([
                 'status' => 'erro',
                 'mensagem' => 'Ocorreu um erro ao processar a atualização: ' . $e->getMessage()
@@ -209,29 +166,20 @@ class FornecedorController extends Controller
     public function destroy($id)
     {
         try {
-            $fornecedor = DB::table('fornecedores')
-                ->where('id_Fornecedor', $id)
-                ->first();
-
+            $fornecedor = Fornecedor::find($id);
             if (!$fornecedor) {
                 return response()->json([
                     'status' => 'erro',
                     'mensagem' => 'Fornecedor não encontrado.'
                 ]);
             }
-
-            DB::table('fornecedores')
-                ->where('id_Fornecedor', $id)
-                ->delete();
-
+            $fornecedor->delete();
             return response()->json([
                 'status' => 'sucesso',
                 'mensagem' => 'Fornecedor excluído com sucesso!'
             ]);
-
         } catch (\Exception $e) {
-            Log::error('Erro ao excluir fornecedor: ' . $e->getMessage());
-            
+            \Log::error('Erro ao excluir fornecedor: ' . $e->getMessage());
             return response()->json([
                 'status' => 'erro',
                 'mensagem' => 'Ocorreu um erro ao excluir o fornecedor: ' . $e->getMessage()

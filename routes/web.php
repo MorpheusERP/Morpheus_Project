@@ -62,8 +62,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/search', [FornecedorController::class, 'search'])->name('menu.fornecedor.search');
         Route::get('/editar', [FornecedorController::class, 'showEditar'])->name('menu.fornecedor.fornecedor-editar');
         Route::post('/update', [FornecedorController::class, 'update'])->name('menu.fornecedor.fornecedor-update');
+        Route::post('/find', [FornecedorController::class, 'find'])->name('menu.fornecedor.find');
     });
-    
+
     // Local de Destino
     Route::prefix('local-destino')->group(function () {
         Route::get('/', [LocalDestinoController::class, 'index'])->name('menu.local-destino.local-destino');
@@ -102,13 +103,15 @@ Route::middleware(['auth'])->group(function () {
     // Entrada de Produtos
     Route::prefix('entrada-produtos')->group(function () {
         Route::get('/', [EntradaProdutoController::class, 'index'])->name('menu.entrada-produtos.entrada-produtos');
-        Route::post('/store', [EntradaProdutoController::class, 'store'])->name('entrada-produto.store');
+        Route::post('/store', [EntradaProdutoController::class, 'store'])->name('entrada-produtos.store');
         Route::get('/buscar', [EntradaProdutoController::class, 'showBuscar'])->name('menu.entrada-produtos.entrada-produtos-buscar');
-        Route::post('/search', [EntradaProdutoController::class, 'search'])->name('entrada-produto.search');
-        Route::post('/find', [EntradaProdutoController::class, 'find'])->name('entrada-produto.find');
+        Route::post('/search', [EntradaProdutoController::class, 'search'])->name('entrada-produtos.search');
+        Route::post('/find', [EntradaProdutoController::class, 'find'])->name('entrada-produtos.find');
         Route::get('/editar', [EntradaProdutoController::class, 'showEditar'])->name('menu.entrada-produtos.entrada-produtos-editar');
-        Route::post('/update', [EntradaProdutoController::class, 'update'])->name('entrada-produto.update');
-        Route::post('/destroy', [EntradaProdutoController::class, 'destroy'])->name('entrada-produto.destroy');
+        Route::post('/update', [EntradaProdutoController::class, 'update'])->name('entrada-produtos.update');
+        Route::post('/destroy', [EntradaProdutoController::class, 'destroy'])->name('entrada-produtos.destroy');
+        Route::post('/fornecedores', [EntradaProdutoController::class, 'getFornecedores'])->name('entrada-produtos.fornecedores');
+        Route::post('/produtos', [EntradaProdutoController::class, 'getProdutos'])->name('entrada-produtos.produtos');
     });
     
     // Relatórios
