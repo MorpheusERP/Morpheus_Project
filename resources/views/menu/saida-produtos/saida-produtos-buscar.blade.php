@@ -260,7 +260,7 @@
             
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             
-            fetch('/home/saida-produtos/search', {
+            fetch('/saida-produtos/search', {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': token,
@@ -284,8 +284,12 @@
                 }
             })
             .catch(error => {
-                console.error("Erro:", error);
-                mostrarErro("Ocorreu um erro na busca. Tente novamente mais tarde.");
+                if (error && error.message) {
+                    mostrarErro("Erro ao buscar saídas: " + error.message);
+                } else {
+                    mostrarErro("Ocorreu um erro na busca. Tente novamente mais tarde.");
+                }
+                console.error("Erro ao buscar saídas:", error);
             })
             .finally(() => {
                 document.getElementById('loadingOverlay').style.display = 'none';
@@ -314,7 +318,7 @@
                 
                 row.insertCell(1).textContent = saida.nome_Produto || 'Não informado';
                 row.insertCell(2).textContent = saida.nome_Local || 'Não informado';
-                row.insertCell(3).textContent = saida.qtd_Saida || '0';
+                row.insertCell(3).textContent = saida.qtd_saida || '0';
                 
                 const dataCell = row.insertCell(4);
                 const dataFormatada = formatarData(saida.data_Saida);
@@ -341,7 +345,7 @@
             document.getElementById("modalProduto").value = saida.nome_Produto || '';
             document.getElementById("modalLocalDestino").value = saida.nome_Local || '';
             document.getElementById("modalTipoLocal").value = saida.tipo_Local || '';
-            document.getElementById("modalQuantidade").value = saida.qtd_Saida || '';
+            document.getElementById("modalQuantidade").value = saida.qtd_saida || '';
             document.getElementById("modalData").value = formatarData(saida.data_Saida);
             document.getElementById("modalObservacao").value = saida.observacao || '';
             

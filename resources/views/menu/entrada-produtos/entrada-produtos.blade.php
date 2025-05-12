@@ -410,12 +410,14 @@
             
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             
-            fetch(`/produtos/search?termo=${encodeURIComponent(termo)}`, {
-                method: 'GET',
+            fetch('{{ route("entrada-produtos.produtos") }}', {
+                method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': token,
+                    'Content-Type': 'application/json',
                     'Accept': 'application/json'
-                }
+                },
+                body: JSON.stringify({ termo: termo })
             })
             .then(response => {
                 if (!response.ok) {
@@ -431,7 +433,7 @@
                 } else {
                     document.querySelector('#produtosTable tbody').innerHTML = '';
                     document.getElementById('searchProductMessage').style.display = 'block';
-                    document.getElementById('searchProductMessage').textContent = 'Nenhum produto encontrado.';
+                    document.getElementById('searchProductMessage').textContent = data.mensagem || 'Nenhum produto encontrado.';
                 }
             })
             .catch(error => {
@@ -454,6 +456,15 @@
                 return;
             }
             
+            const thead = document.querySelector('#produtosTable thead tr');
+            if (thead.children.length === 3) {
+                const thPrecoCusto = document.createElement('th');
+                thPrecoCusto.textContent = 'Preço Custo';
+                thead.appendChild(thPrecoCusto);
+            } else if (thead.children.length > 3) {
+                thead.children[3].textContent = 'Preço Custo';
+            }
+            
             produtos.forEach(produto => {
                 const row = tbody.insertRow();
                 
@@ -466,6 +477,9 @@
                 const cellGrupo = row.insertCell(2);
                 cellGrupo.textContent = produto.grupo || 'N/D';
                 
+                const cellPrecoCusto = row.insertCell(3);
+                cellPrecoCusto.textContent = produto.preco_Custo ? `R$ ${produto.preco_Custo}` : 'N/A';
+                
                 row.style.cursor = 'pointer';
                 row.addEventListener('click', () => {
                     selecionarProduto(produto);
@@ -476,8 +490,17 @@
         function selecionarProduto(produto) {
             document.getElementById('codigo').value = produto.cod_Produto;
             document.getElementById('produto').value = produto.nome_Produto;
-            document.getElementById('precoCusto').value = produto.preco_Custo || '';
-            document.getElementById('precoVenda').value = produto.preco_Venda || '';
+            
+            // Converter valores de formato brasileiro para formato de input (troca vírgula por ponto)
+            if (produto.preco_Custo) {
+                let precoCusto = produto.preco_Custo.replace(/\./g, '').replace(',', '.');
+                document.getElementById('precoCusto').value = precoCusto;
+            }
+            
+            if (produto.preco_Venda) {
+                let precoVenda = produto.preco_Venda.replace(/\./g, '').replace(',', '.');
+                document.getElementById('precoVenda').value = precoVenda;
+            }
             
             if (produto.imagem) {
                 document.getElementById('preview').src = `data:image/jpeg;base64,${produto.imagem}`;
@@ -498,7 +521,6 @@
             document.getElementById('searchFornecedorModal').style.display = 'block';
             document.getElementById('fornecedorSearch').focus();
             
-            // Carregar todos os fornecedores automaticamente ao abrir o modal
             buscarFornecedores('');
         });
         
@@ -523,7 +545,7 @@
             
             console.log('Enviando busca de fornecedores com termo:', termo);
             
-            fetch(`/fornecedor/search`, {
+            fetch('{{ route("entrada-produtos.fornecedores") }}', {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': token,
@@ -614,7 +636,7 @@
             const quantidade = document.getElementById('quantidade').value.trim();
             const precoCusto = document.getElementById('precoCusto').value.trim();
             const precoVenda = document.getElementById('precoVenda').value.trim();
-            const dataEntrada = document
+            const dataEntrada = document.getElementById('dataEntrada').value.trim();
 
             if (!codigo || !produto || !idFornecedor || !quantidade || !precoCusto) {
                 mostrarErro('Por favor, preencha todos os campos obrigatórios.');
@@ -636,7 +658,7 @@
             formData.append('preco_Venda', precoVenda);
             formData.append('data_Entrada', dataEntrada || new Date().toISOString().split('T')[0]);
     
-            fetch('/home/entrada-produtos/store', {
+            fetch('/entrada-produtos/store', {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': token,

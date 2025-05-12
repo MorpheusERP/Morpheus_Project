@@ -48,14 +48,29 @@ class Usuario extends Model
         'senha',
     ];
 
+    protected $casts = [
+        'id_Usuario' => 'integer',
+        'nome_Usuario' => 'string',
+        'email' => 'string',
+        'tipo_Usuario' => 'string',
+        'senha' => 'string',
+        'nivel_Usuario' => 'string',
+        'sobrenome' => 'string',
+        'funcao' => 'string',
+    ];
+
     /**
-     * Hash the password before saving.
+     * Hash the password before saving, only if not already hashed.
      *
      * @param string $value
      * @return void
      */
     public function setSenhaAttribute($value)
     {
-        $this->attributes['senha'] = Hash::make($value);
+        if (!empty($value) && !Hash::needsRehash($value)) {
+            $this->attributes['senha'] = Hash::make($value);
+        } else {
+            $this->attributes['senha'] = $value;
+        }
     }
 }

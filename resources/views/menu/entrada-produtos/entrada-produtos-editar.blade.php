@@ -36,6 +36,20 @@
             font-weight: 600;
             transition: all 0.3s ease;
         }
+        
+        /* Estilo para o layout responsivo em duas colunas */
+        .container2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            width: 100%;
+        }
+        
+        @media (max-width: 480px) {
+            .container2 {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -63,24 +77,23 @@
                     <input type="text" id="produto" class="input-field" placeholder="Produto" disabled>
                     
                     <div class="container2">
-                        <div class="coluna1">
-                            <div class="search-container">
-                                <input type="text" id="fornecedorText" class="input-field" placeholder="* Fornecedor" required>
-                                <input type="hidden" id="fornecedor" required>
-                                <button type="button" class="search-button" id="search-fornecedor-button">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                            
-                            <input type="text" id="razaoSocial" class="input-field" placeholder="Razão Social" disabled>
-                            <input type="number" id="quantidade" step="1" min="0" class="input-field" placeholder="* Quantidade" required>
+                        <div class="search-container">
+                            <input type="text" id="fornecedorText" class="input-field" placeholder="* Fornecedor" required>
+                            <input type="hidden" id="fornecedor" required>
+                            <button type="button" class="search-button" id="search-fornecedor-button">
+                                <i class="fas fa-search"></i>
+                            </button>
                         </div>
                         
-                        <div class="coluna2">
-                            <input type="number" id="precoCusto" step="0.01" min="0.01" class="input-field" placeholder="* Preço de Custo" required>
-                            <input type="number" id="precoVenda" step="0.01" min="0.01" class="input-field" placeholder="Preço de Venda">
-                            <input type="date" id="dataEntrada" class="input-field" required>
-                        </div>
+                        <input type="text" id="razaoSocial" class="input-field" placeholder="Razão Social" disabled>
+                        
+                        <input type="number" id="quantidade" step="0.01" min="0" class="input-field" placeholder="* Quantidade" required>
+                        
+                        <input type="number" id="precoCusto" step="0.01" min="0.01" class="input-field" placeholder="* Preço de Custo" required>
+                        
+                        <input type="number" id="precoVenda" step="0.01" min="0" class="input-field" placeholder="Preço de Venda">
+                        
+                        <input type="date" id="dataEntrada" class="input-field" required>
                     </div>
                     
                     <div class="buttons-edit">
@@ -176,15 +189,21 @@
             
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             
-            fetch('/home/entrada-produtos/find', {
+            fetch('/entrada-produtos/find', {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': token,
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
                 body: JSON.stringify({ id_Entrada: id })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro na requisição: ' + response.status);
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.status === 'sucesso') {
                     preencherFormulario(data.entrada);
@@ -194,7 +213,7 @@
             })
             .catch(error => {
                 console.error('Erro:', error);
-                mostrarErro('Erro ao comunicar com o servidor.');
+                mostrarErro('Erro ao comunicar com o servidor. Verifique se os endpoints estão corretos.');
             })
             .finally(() => {
                 document.getElementById('loadingOverlay').style.display = 'none';
@@ -208,9 +227,26 @@
             document.getElementById('fornecedorText').value = entrada.nome_Fantasia || entrada.razao_Social;
             document.getElementById('fornecedor').value = entrada.id_Fornecedor;
             document.getElementById('razaoSocial').value = entrada.razao_Social || '';
-            document.getElementById('quantidade').value = entrada.qtd_Entrada;
-            document.getElementById('precoCusto').value = entrada.preco_Custo || '';
-            document.getElementById('precoVenda').value = entrada.preco_Venda || '';
+            
+            // Certifique-se de que os valores numéricos são preenchidos corretamente
+            document.getElementById('quantidade').value = parseFloat(entrada.qtd_Entrada) || '';
+            
+            // Tratar preços de custo e venda - removendo formatação e convertendo para números
+            if (typeof entrada.preco_Custo === 'string') {
+                document.getElementById('precoCusto').value = entrada.preco_Custo.replace(/[^\d,.-]/g, '').replace(',', '.');
+            } else {
+                document.getElementById('precoCusto').value = entrada.preco_Custo || '';
+            }
+            
+            if (entrada.preco_Venda) {
+                if (typeof entrada.preco_Venda === 'string') {
+                    document.getElementById('precoVenda').value = entrada.preco_Venda.replace(/[^\d,.-]/g, '').replace(',', '.');
+                } else {
+                    document.getElementById('precoVenda').value = entrada.preco_Venda;
+                }
+            } else {
+                document.getElementById('precoVenda').value = '';
+            }
             
             // Formatar a data para o formato esperado pelo input date
             if (entrada.data_Entrada) {
@@ -248,7 +284,7 @@
             
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             
-            fetch('/home/entrada-produtos/update', {
+            fetch('/entrada-produtos/update', {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': token,
@@ -304,11 +340,12 @@
             
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             
-            fetch('/home/fornecedor/search', {
+            fetch('{{ route("entrada-produtos.fornecedores") }}', {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': token,
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
                 body: JSON.stringify({ termo: termo })
             })
