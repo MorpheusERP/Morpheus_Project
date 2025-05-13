@@ -12,6 +12,11 @@
     
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @vite(['resources/css/auth/login.css'])
+
+    
+    <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
+    <meta name="theme-color" content="#4CAF50">
+    <link rel="icon" href="{{ asset('icons/icon-192.png') }}" type="image/png">
 </head>
 <body>
     <!-- Decorative elements -->
@@ -193,6 +198,18 @@
                 shape.style.transform = `translate(${randomX}px, ${randomY}px)`;
             });
         });
+    </script>
+
+     <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('{{ asset('sw.js') }}')
+                .then(function(registration) {
+                    console.log('Service Worker registrado com sucesso:', registration);
+                })
+                .catch(function(error) {
+                    console.log('Falha ao registrar o Service Worker:', error);
+                });
+        }
     </script>
 </body>
 </html>
