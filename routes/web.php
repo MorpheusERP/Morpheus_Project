@@ -13,7 +13,6 @@ use App\Http\Controllers\Menu\EntradaProdutoController;
 use App\Http\Controllers\Menu\RelatorioController;
 use App\Http\Controllers\Menu\PerfilController;
 use App\Http\Controllers\Relatorio\RelatorioUsuarioController;
-use App\Http\Controllers\Relatorio\RelatorioSaidaController;
 
 // Rota inicial redirecionando para o home
 Route::get('/', function () {
@@ -140,9 +139,9 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/entradas/detalhes', [RelatorioController::class, 'detalhesEntrada'])->name('menu.relatorio.entradas.detalhes');
         
         // Relatório de saídas
-        Route::get('/saidas', [RelatorioSaidaController::class, 'index'])->name('menu.relatorio.saidas-relatorio');
-        Route::post('/saidas/search', [RelatorioSaidaController::class, 'search'])->name('menu.relatorio.saidas.search');
-        Route::post('/saidas/detalhes', [RelatorioSaidaController::class, 'detalhes'])->name('menu.relatorio.saidas.detalhes');
+        Route::get('/saidas', [RelatorioController::class, 'saidasRelatorio'])->name('menu.relatorio.saidas-relatorio');
+        Route::post('/saidas/search', [RelatorioController::class, 'searchSaidas'])->name('menu.relatorio.saidas.search');
+        Route::post('/saidas/detalhes', [RelatorioController::class, 'detalhesSaidas'])->name('menu.relatorio.saidas.detalhes');
     });
 });
 
