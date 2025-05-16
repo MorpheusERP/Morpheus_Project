@@ -1,55 +1,6 @@
+@import '../../base.css';
+
 /* CSS for usuarios page matching the site design pattern */
-:root {
-    --primary-color: #4200FF;
-    --primary-dark: #280099;
-    --accent-color: #FFEF0D;
-    --text-light: #FFFFFF;
-    --text-dark: #333333;
-    --shadow-color: rgba(0, 0, 0, 0.2);
-    --input-bg: rgba(255, 255, 255, 0.15);
-    --input-text: #FFFFFF;
-}
-
-.header {
-    width: 100%;
-    padding: 20px;
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-.header h1 {
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--accent-color);
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.container {
-    width: 90%;
-    max-width: 480px;
-    margin: 0 auto;
-}
-
-.form {
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-.Conteudo {
-    width: 100%;
-    padding: 20px 15px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    z-index: 1;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    margin-top: 10px;
-}
 
 /* Buttons */
 .buttons, .buttons-edit, #new-button {
@@ -431,6 +382,71 @@ footer {
     margin-bottom: 15px;
 }
 
+/* Estilos específicos para a tabela de relatório e busca de usuários */
+.search-fields {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.search-fields .input-containe {
+    flex: 1;
+}
+
+@media (max-width: 480px) {
+    .search-fields {
+        flex-direction: column;
+    }
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    overflow: hidden;
+    animation: fadeIn 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+thead {
+    background: rgba(66, 0, 255, 0.3);
+}
+
+th {
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--accent-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+td {
+    padding: 10px 15px;
+    font-size: 14px;
+    color: var(--text-light);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.buttons-container .new {
+    background-color: var(--accent-color);
+    color: var(--text-dark);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
 /* Media queries */
 @media (max-width: 480px) {
     .header h1 {
@@ -500,4 +516,9 @@ footer {
         width: 45px;
         height: 45px;
     }
+}
+
+.Conteudo {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
 }

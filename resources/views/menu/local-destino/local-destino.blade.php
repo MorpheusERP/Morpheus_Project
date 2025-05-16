@@ -1,104 +1,61 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>MorpheusERP - Cadastro de Local de Destino</title>
-    <link rel="shortcut icon" href="{{ asset('images/logo.png') }}" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+@extends('layouts.app')
 
-    @include('layouts.nav_bottom')
-    @include('layouts.background')
-    
+@section('title', 'Cadastro de Local de Destino')
+
+@section('header-title', 'Cadastro de Local de Destino')
+
+@push('styles')
     @vite(['resources/css/menu/local-destino/local-destino.css'])
+@endpush
 
-    <script>
-        //Função para verificar se o usuário está logado
-        function verificarLogin() {
-            fetch('../../../Backend/verificalogin.php')
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.logado) {
-                        // Redireciona para a página de login se não estiver logado
-                        window.location.href = '../../../index.html';
-                    }
-                })
-                .catch(error => {
-                    console.error("Erro ao verificar autenticação:", error);
-                });
-        }
-
-        // Executa a função quando a página é carregada
-        document.addEventListener("DOMContentLoaded", verificarLogin);
-    </script>
-</head>
-<body>
-    <div class="header">
-        <h1>Cadastro de Local de Destino</h1>
-    </div>
-    
-    <div class="container">
-        <div class="form">
-            <div class="buttons" id="default-buttons">
-                <button class="new" onclick="novo()">
-                    <i class="fas fa-plus-circle"></i> Novo
-                </button>
-                <button class="search" onclick="window.location.href='{{ route('menu.local-destino.local-destino-buscar') }}'">
-                    <i class="fas fa-search"></i> Buscar
+@section('content')
+    <div class="form">
+        <div class="buttons" id="default-buttons">
+            <button class="new" onclick="novo()">
+                <i class="fas fa-plus-circle"></i> Novo
+            </button>
+            <button class="search" onclick="window.location.href='{{ route('menu.local-destino.local-destino-buscar') }}'">
+                <i class="fas fa-search"></i> Buscar
+            </button>
+        </div>
+        <div class="Conteudo">
+            <div class="buttons" id="new-button" style="display: none;">
+                <button class="back" onclick="voltar(); recarregarPagina()">
+                    <i class="fas fa-arrow-left"></i> Voltar
                 </button>
             </div>
-            
-            <div class="Conteudo">
-                <div class="buttons" id="new-button" style="display: none;">
-                    <button class="back" onclick="voltar(); recarregarPagina()">
-                        <i class="fas fa-arrow-left"></i> Voltar
+            <form id="cadastroForm" autocomplete="off">
+                <select id="tipo" class="input-field" required disabled>
+                    <option value="" disabled selected>* Tipo de Local</option>
+                    <option value="Descarte">Descarte</option>
+                    <option value="Reaproveitamento">Reaproveitamento</option>
+                </select>
+                <input type="text" id="nome" class="input-field" maxlength="34" placeholder="* Nome do local:" required disabled>
+                <input type="text" id="observacao" class="input-field" maxlength="34" placeholder="Observações:" disabled>
+                <div class="buttons-edit" id="edit-buttons" style="display: none;">
+                    <button class="edit" type="submit">
+                        <i class="fas fa-save"></i> Salvar
                     </button>
                 </div>
-                
-                <form id="cadastroForm" autocomplete="off">
-                    <select id="tipo" class="input-field" required disabled>
-                        <option value="" disabled selected>* Tipo de Local</option>
-                        <option value="Descarte">Descarte</option>
-                        <option value="Reaproveitamento">Reaproveitamento</option>
-                    </select>
-                    <input type="text" id="nome" class="input-field" maxlength="34" placeholder="* Nome do local:" required disabled>
-                    <input type="text" id="observacao" class="input-field" maxlength="34" placeholder="Observações:" disabled>
-
-                    <div class="buttons-edit" id="edit-buttons" style="display: none;">
-                        <button class="edit" type="submit">
-                            <i class="fas fa-save"></i> Salvar
-                        </button>
-                    </div>
-                </form>
-                
-                <div id="mensagemSucesso" style="display: none;"></div>
-                <div id="mensagemErro" style="display: none;"></div>
-            </div>
+            </form>
+            <div id="mensagemSucesso" style="display: none;"></div>
+            <div id="mensagemErro" style="display: none;"></div>
         </div>
     </div>
-
-    <footer>
-        <div class="BotoesFooter">
-            <div class="buttons-search">
-                <a href="{{ route('home') }}">
-                   <button class="search">
-                        <i class="fas fa-home"></i> Voltar para Home
-                   </button>
-                </a>
-            </div>
+@endsection
+@section('footer')
+    <div class="BotoesFooter">
+        <div class="buttons-search">
+            <a href="{{ route('home') }}">
+                <button class="search">
+                    <i class="fas fa-home"></i> Voltar para Home
+                </button>
+            </a>
         </div>
-    </footer>
-    
-    <div class="logo">
-        <img src="{{ asset('images/Emporio maxx s-fundo.png') }}" alt="Empório Maxx Logo">
     </div>
-
-    <!-- Scripts -->
-    <script> 
+@endsection
+@push('scripts')
+<script> 
         function novo() {
             document.getElementById('default-buttons').style.display = 'none';
             document.getElementById('new-button').style.display = 'flex';
@@ -225,5 +182,4 @@
             });
         });
     </script>
-</body>
-</html>
+@endpush
