@@ -1,73 +1,50 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, maximum-scale=1.0, user-scalable=no">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>MorpheusERP - Busca de Local de Destino</title>
-    <link rel="shortcut icon" href="{{ asset('images/logo.png') }}" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+@extends('layouts.app')
 
-    @include('layouts.nav_bottom')
-    @include('layouts.background')
-    
+@section('title', 'Busca de Local de Destino')
+
+@section('header-title', 'Busca de Local de Destino')
+
+@push('styles')
     @vite(['resources/css/menu/local-destino/local-destino.css'])
+@endpush
 
-</head>
-<body>
-    <div class="header">
-        <h1>Busca de Local de Destino</h1>
-    </div>
-    
-    <div class="container">
-        <div class="form">
-            <div class="Conteudo">
-                <form id="consultaForm" autocomplete="off">
-                    <div class="input-containe search-container">
-                        <input type="text" id="nome" class="input-field" maxlength="34" placeholder="Nome do Local">
-                        <button type="button" class="search-button" onclick="consultarLocal()">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                    <select id="tipo" class="input-field">
-                        <option value="" selected>Todos os Tipos</option>
-                        <option value="Descarte">Descarte</option>
-                        <option value="Reaproveitamento">Reaproveitamento</option>
-                    </select>
-                </form>
-                
-                <div id="mensagemErro" style="display: none;"></div>
-                
-                <!-- Resultados da busca -->
-                <div class="resultado-container" id="resultadoContainer" style="display: none;">
-                    <div class="resultado-titulo">Resultados da Busca</div>
-                    <div class="lista-usuarios" id="listaLocais"></div>
+@section('content')
+    <div class="form">
+        <div class="Conteudo">
+            <form id="consultaForm" autocomplete="off">
+                <div class="input-containe search-container">
+                    <input type="text" id="nome" class="input-field" maxlength="34" placeholder="Nome do Local">
+                    <button type="button" class="search-button" onclick="consultarLocal()">
+                        <i class="fas fa-search"></i>
+                    </button>
                 </div>
+                <select id="tipo" class="input-field">
+                    <option value="" selected>Todos os Tipos</option>
+                    <option value="Descarte">Descarte</option>
+                    <option value="Reaproveitamento">Reaproveitamento</option>
+                </select>
+            </form>
+            <div id="mensagemErro" style="display: none;"></div>
+            <div class="resultado-container" id="resultadoContainer" style="display: none;">
+                <div class="resultado-titulo">Resultados da Busca</div>
+                <div class="lista-usuarios" id="listaLocais"></div>
             </div>
         </div>
     </div>
-
-    <footer>
-        <div class="BotoesFooter">
-            <div class="buttons-search">
-                <a href="{{ route('menu.local-destino.local-destino') }}">
-                   <button class="search">
-                        <i class="fas fa-arrow-left"></i> Voltar
-                   </button>
-                </a>
-            </div>
+@endsection
+@section('footer')
+    <div class="BotoesFooter">
+        <div class="buttons-search">
+            <a href="{{ route('menu.local-destino.local-destino') }}">
+                <button class="search">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </button>
+            </a>
         </div>
-    </footer>
-    
-    <div class="logo">
-        <img src="{{ asset('images/Emporio maxx s-fundo.png') }}" alt="Empório Maxx Logo">
     </div>
-
-    <!-- Scripts -->
-    <script>
+@endsection
+@push('scripts')
+<script>
         // Função para consultar o Local de Destino
         function consultarLocal() {
             const resultadoContainer = document.getElementById('resultadoContainer');
@@ -255,5 +232,4 @@
             }
         });
     </script>
-</body>
-</html>
+@endpush
