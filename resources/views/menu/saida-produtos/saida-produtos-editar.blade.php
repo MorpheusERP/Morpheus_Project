@@ -1,128 +1,66 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>MorpheusERP - Editar Saída de Produtos</title>
-    <link rel="shortcut icon" href="{{ asset('images/logo.png') }}" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+@extends('layouts.app')
 
-    @include('layouts.nav_bottom')
-    @include('layouts.background')
-    
+@section('title', 'Editar Saída de Produtos')
+
+@section('header-title', 'Editar Saída de Produtos')
+
+@push('styles')
     @vite(['resources/css/menu/saida-produtos/saida-produtos.css'])
+@endpush
 
-    <style>
-        /* Fix for edit button */
-        .buttons-edit {
-            width: 100%; 
-            display: flex;
-            justify-content: center;
-            margin-top: 15px;
-        }
-        
-        .buttons-edit button {
-            width: 100%;
-            max-width: 300px;
-            height: 50px;
-            background-color: var(--accent-color);
-            color: var(--text-dark);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <h1>Editar Saída de Produtos</h1>
-    </div>
-    
-    <div class="container">
-        <div class="form">
-            <div class="buttons">
-                <button class="back" onclick="window.location.href='{{ route('menu.saida-produtos.saida-produtos-buscar') }}'">
-                    <i class="fas fa-arrow-left"></i> Voltar
-                </button>
-            </div>
-            
-            <div class="Conteudo">
-                <form id="saidaForm" autocomplete="off">
-                    <input type="hidden" id="id_Saida">
-                    <input type="hidden" id="cod_Produto">
-                    
-                    <div class="image-placeholder">
-                        <img id="preview" src="{{ asset('images/defaultimg.png') }}" class="image-enabled">
-                    </div>
-                    
-                    <input type="text" id="produto" class="input-field" placeholder="Produto" disabled>
-                    
-                    <div class="container2">
-                        <div class="coluna1">
-                            <div class="search-container">
-                                <input type="text" id="localDestinoText" class="input-field" placeholder="* Local de Destino" required>
-                                <input type="hidden" id="localDestino" required>
-                                <button type="button" class="search-button" id="search-local-button">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                            
-                            <input type="text" id="tipoLocal" class="input-field" placeholder="Tipo de Local" disabled>
+@section('content')
+    <div class="form">
+        <div class="buttons">
+            <button class="back" onclick="window.location.href='{{ route('menu.saida-produtos.saida-produtos-buscar') }}'">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </button>
+        </div>
+        <div class="Conteudo">
+            <form id="saidaForm" autocomplete="off">
+                <input type="hidden" id="id_Saida">
+                <input type="hidden" id="cod_Produto">
+                <div class="image-placeholder">
+                    <img id="preview" src="{{ asset('images/defaultimg.png') }}" class="image-enabled">
+                </div>
+                <input type="text" id="produto" class="input-field" placeholder="Produto" disabled>
+                <div class="container2">
+                    <div class="coluna1">
+                        <div class="search-container">
+                            <input type="text" id="localDestinoText" class="input-field" placeholder="* Local de Destino" required>
+                            <input type="hidden" id="localDestino" required>
+                            <button type="button" class="search-button" id="search-local-button">
+                                <i class="fas fa-search"></i>
+                            </button>
                         </div>
-                        
-                        <div class="coluna2">
-                            <input type="number" id="quantidade" step="0.01" min="0.01" class="input-field" placeholder="* Quantidade" required>
-                            <input type="date" id="dataSaida" class="input-field" required>
-                        </div>
+                        <input type="text" id="tipoLocal" class="input-field" placeholder="Tipo de Local" disabled>
                     </div>
-                    
-                    <textarea id="observacao" maxlength="150" placeholder="Observações"></textarea>
-
-                    <div class="buttons-edit">
-                        <button type="submit" class="edit">
-                            <i class="fas fa-save"></i> Salvar Alterações
-                        </button>
+                    <div class="coluna2">
+                        <input type="number" id="quantidade" step="0.01" min="0.01" class="input-field" placeholder="* Quantidade" required>
+                        <input type="date" id="dataSaida" class="input-field" required>
                     </div>
-                </form>
-                
-                <div id="mensagemSucesso" style="display: none;"></div>
-                <div id="mensagemErro" style="display: none;"></div>
-            </div>
+                </div>
+                <textarea id="observacao" maxlength="150" placeholder="Observações"></textarea>
+                <div class="buttons-edit">
+                    <button type="submit" class="edit">
+                        <i class="fas fa-save"></i> Salvar Alterações
+                    </button>
+                </div>
+            </form>
+            <div id="mensagemSucesso" style="display: none;"></div>
+            <div id="mensagemErro" style="display: none;"></div>
         </div>
     </div>
-    
-    <footer>
-        <div class="BotoesFooter">
-            <div class="buttons-search">
-                <button class="exit" onclick="window.location.href='{{ route('home') }}'">
-                    <i class="fas fa-home"></i> Voltar para Home
-                </button>
-            </div>
-        </div>
-    </footer>
-    
-    <div class="logo">
-        <img src="{{ asset('images/Emporio maxx s-fundo.png') }}" alt="Empório Maxx Logo">
-    </div>
-    
     <!-- Modal Busca de Locais -->
     <div id="searchLocalModal" class="modal-Produto">
         <div class="modal-content-Produto">
             <span class="close" onclick="fecharModalBuscaLocal()">&times;</span>
             <h2>Buscar Local</h2>
-            
             <div class="search-container" style="margin-bottom: 20px;">
                 <input type="text" id="localSearch" class="input-field" placeholder="Digite para buscar...">
                 <button type="button" class="search-button" id="btn-search-local">
                     <i class="fas fa-search"></i>
                 </button>
             </div>
-            
             <div id="localSearchResults" style="max-height: 300px; overflow-y: auto;">
                 <table id="locaisTable" style="width: 100%; margin-top: 15px;">
                     <thead>
@@ -135,17 +73,27 @@
                     <tbody></tbody>
                 </table>
             </div>
-            
             <div id="searchLocalMessage" style="margin-top: 15px; text-align: center; display: none;">
                 Nenhum local encontrado.
             </div>
         </div>
     </div>
-    
     <div id="loadingOverlay" style="display: none;">
         <div id="loadingSpinner"></div>
     </div>
+@endsection
 
+@section('footer')
+    <div class="BotoesFooter">
+        <div class="buttons-search">
+            <button class="exit" onclick="window.location.href='{{ route('home') }}'">
+                <i class="fas fa-home"></i> Voltar para Home
+            </button>
+        </div>
+    </div>
+@endsection
+
+@push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Carregar dados da saída pelo ID na URL
@@ -403,5 +351,4 @@
             }
         }
     </script>
-</body>
-</html>
+@endpush
