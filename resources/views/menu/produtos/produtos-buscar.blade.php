@@ -1,82 +1,59 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, maximum-scale=1.0, user-scalable=no">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>MorpheusERP - Busca de Produtos</title>
-    <link rel="shortcut icon" href="{{ asset('images/logo.png') }}" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+@extends('layouts.app')
 
-    @include('layouts.nav_bottom')
-    @include('layouts.background')
-    
+@section('title', 'Busca de Produtos')
+
+@section('header-title', 'Busca de Produtos')
+
+@push('styles')
     @vite(['resources/css/menu/produtos/produtos.css'])
+@endpush
 
-</head>
-<body>
-    <div class="header">
-        <h1>Busca de Produtos</h1>
-    </div>
-    
-    <div class="container">
-        <div class="form">
-            <div class="Conteudo">
-                <form id="consultaForm" autocomplete="off">
-                    <div class="input-container search-container">
-                        <input type="number" id="codigo" class="input-field" placeholder="Código do Produto">
-                        <button type="button" class="search-button" onclick="consultarProdutos()">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                    <input type="text" id="produto" class="input-field" placeholder="Nome do Produto">
-                    <input type="text" id="grupo" class="input-field" placeholder="Grupo">
-                    <input type="text" id="subgrupo" class="input-field" placeholder="Sub. Grupo">
-                </form>
-                
-                <div id="mensagemErro" style="display: none;"></div>
-                
-                <!-- Resultados da busca -->
-                <div class="resultado-container" id="resultadoContainer" style="display: none;">
-                    <div class="resultado-titulo">Resultados da Busca</div>
-                    <table id="resultadoTabela" style="display:none;">
-                        <thead>
-                            <tr>
-                                <th>COD</th>
-                                <th>Nome</th>
-                                <th>P.Custo</th>
-                                <th>Grupo</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="resultadoCorpo"></tbody>
-                    </table>
+@section('content')
+    <div class="form">
+        <div class="Conteudo">
+            <form id="consultaForm" autocomplete="off">
+                <div class="input-container search-container">
+                    <input type="number" id="codigo" class="input-field" placeholder="Código do Produto">
+                    <button type="button" class="search-button" onclick="consultarProdutos()">
+                        <i class="fas fa-search"></i>
+                    </button>
                 </div>
+                <input type="text" id="produto" class="input-field" placeholder="Nome do Produto">
+                <input type="text" id="grupo" class="input-field" placeholder="Grupo">
+                <input type="text" id="subgrupo" class="input-field" placeholder="Sub. Grupo">
+            </form>
+            <div id="mensagemErro" style="display: none;"></div>
+            <div class="resultado-container" id="resultadoContainer" style="display: none;">
+                <div class="resultado-titulo">Resultados da Busca</div>
+                <table id="resultadoTabela" style="display:none;">
+                    <thead>
+                        <tr>
+                            <th>COD</th>
+                            <th>Nome</th>
+                            <th>P.Custo</th>
+                            <th>Grupo</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultadoCorpo"></tbody>
+                </table>
             </div>
         </div>
     </div>
-
-    <footer>
-        <div class="BotoesFooter">
-            <div class="buttons-search">
-                <a href="{{ route('menu.produtos.produtos') }}">
-                   <button class="search">
-                        <i class="fas fa-arrow-left"></i> Voltar
-                   </button>
-                </a>
-            </div>
+@endsection
+@section('footer')
+    <div class="BotoesFooter">
+        <div class="buttons-search">
+            <a href="{{ route('menu.produtos.produtos') }}">
+                <button class="search">
+                    <i class="fas fa-arrow-left"></i> Voltar
+                </button>
+            </a>
         </div>
-    </footer>
-    
-    <div class="logo">
-        <img src="{{ asset('images/Emporio maxx s-fundo.png') }}" alt="Empório Maxx Logo">
     </div>
-
-    <!-- Scripts -->
-    <script>
+@endsection
+@push('scripts')
+<script>
         // Função para consultar o Produto
         function consultarProdutos() {
             const resultadoContainer = document.getElementById('resultadoContainer');
@@ -227,5 +204,4 @@
             }
         });
     </script>
-</body>
-</html>
+@endpush

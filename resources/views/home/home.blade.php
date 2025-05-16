@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="shortcut icon" href="{{ asset('images/logo.png') }}" />
     <title>Morpheus ERP</title>
 
     @include('layouts.background')
@@ -21,7 +22,7 @@
             </div>
             
             <div class="date-selector">
-                <input type="date" id="datePicker" aria-label="Selecione uma Data" />
+                <input type="date" id="datePicker" aria-label="Selecione uma Data" disabled/>
             </div>
             
             <div class="container">

@@ -1,55 +1,6 @@
+@import '../../base.css';
+
 /* CSS for entrada-produtos page matching the site design pattern */
-:root {
-    --primary-color: #4200FF;
-    --primary-dark: #280099;
-    --accent-color: #FFEF0D;
-    --text-light: #FFFFFF;
-    --text-dark: #333333;
-    --shadow-color: rgba(0, 0, 0, 0.2);
-    --input-bg: rgba(255, 255, 255, 0.15);
-    --input-text: #FFFFFF;
-}
-
-.header {
-    width: 100%;
-    padding: 20px;
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-.header h1 {
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--accent-color);
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.container {
-    width: 90%;
-    max-width: 480px;
-    margin: 0 auto;
-}
-
-.form {
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-.Conteudo {
-    width: 100%;
-    padding: 20px 15px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    z-index: 1;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    margin-top: 10px;
-}
 
 /* Buttons */
 .buttons, .buttons-edit, #new-button, .change-button {
@@ -160,10 +111,10 @@ select {
 
 /* Container for product details */
 .container2 {
-    display: flex;
-    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 15px;
-    margin-bottom: 15px;
+    width: 100%;
 }
 
 .coluna1, .coluna2 {
@@ -259,25 +210,24 @@ select {
     right: 5px;
     top: 50%;
     transform: translateY(-50%);
-    background: var(--accent-color);
-    color: var(--text-dark);
-    border: none;
+    padding: 0;
     width: 40px;
     height: 40px;
-    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 10;
     cursor: pointer;
+    background: var(--accent-color);
+    color: var(--text-dark);
+    border: none;
+    border-radius: 50%;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
-    padding: 0;
-    z-index: 2;
 }
 
 .search-button:hover {
     transform: translateY(-50%) scale(1.05);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 .search-button:active {
@@ -393,6 +343,7 @@ footer {
 .modal-content-Produto {
     background: rgba(66, 0, 255, 0.8);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     margin: 10% auto;
     padding: 25px;
     border-radius: 20px;
@@ -456,8 +407,7 @@ footer {
     }
     
     .container2 {
-        flex-direction: column;
-        gap: 0;
+        grid-template-columns: 1fr;
     }
     
     .logo img {
@@ -502,4 +452,58 @@ footer {
         width: 180px;
         height: 180px;
     }
+}
+
+#produtosTable, #fornecedoresTable {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#produtosTable thead th, #fornecedoresTable thead th {
+    background-color: rgba(255, 239, 13, 0.2);
+    color: var(--accent-color);
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+#produtosTable tbody tr, #fornecedoresTable tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: background-color 0.2s;
+}
+
+#produtosTable tbody tr:hover, #fornecedoresTable tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+#produtosTable td, #fornecedoresTable td {
+    padding: 12px 15px;
+    color: var(--input-text);
+}
+
+#produtoSearchResults, #fornecedorSearchResults {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.buttons-edit {
+    width: 100%; 
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.buttons-edit button {
+    width: 100%;
+    max-width: 300px;
+    height: 50px;
+    background-color: var(--accent-color);
+    color: var(--text-dark);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    transition: all 0.3s ease;
 }

@@ -155,7 +155,7 @@ Para contribuir com o desenvolvimento do MorpheusERP:
 
 ## Segurança
 
-Se você descobrir alguma vulnerabilidade de segurança no MorpheusERP, por favor envie um e-mail para [iury0hilario@gmail.com](mailto:seu-email@exemplo.com).
+Se você descobrir alguma vulnerabilidade de segurança no MorpheusERP, por favor envie um e-mail para [rpmorfeus@gmail.com](mailto:seu-email@exemplo.com).
 
 ## Licença
 
