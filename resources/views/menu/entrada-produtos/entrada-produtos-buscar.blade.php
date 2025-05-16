@@ -1,138 +1,53 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>MorpheusERP - Buscar Entradas de Produtos</title>
-    <link rel="shortcut icon" href="{{ asset('images/logo.png') }}" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+@extends('layouts.app')
 
-    @include('layouts.nav_bottom')
-    @include('layouts.background')
-    
+@section('title', 'Buscar Entradas de Produtos')
+
+@section('header-title', 'Buscar Entradas de Produtos')
+
+@push('styles')
     @vite(['resources/css/menu/entrada-produtos/entrada-produtos.css'])
+@endpush
 
-    <style>
-        /* Responsive table styles */
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            margin-bottom: 15px;
-            border-radius: 12px;
-        }
-        
-        #resultadoTabela {
-            min-width: 500px; /* Ensure table has minimum width */
-        }
-        
-        #resultadoTabela th:nth-child(1), 
-        #resultadoTabela td:nth-child(1) {
-            width: 15%;
-        }
-        
-        #resultadoTabela th:nth-child(2), 
-        #resultadoTabela td:nth-child(2) {
-            width: 30%;
-        }
-        
-        #resultadoTabela th:nth-child(3), 
-        #resultadoTabela td:nth-child(3) {
-            width: 30%;
-        }
-        
-        #resultadoTabela th:nth-child(4), 
-        #resultadoTabela td:nth-child(4) {
-            width: 10%;
-        }
-        
-        #resultadoTabela th:nth-child(5), 
-        #resultadoTabela td:nth-child(5) {
-            width: 15%;
-        }
-        
-        @media (max-width: 768px) {
-            .modal-content-Produto {
-                width: 95%;
-                padding: 15px;
-                margin: 5% auto;
-            }
-            
-            #modalImagem {
-                max-width: 120px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <h1>Buscar Entradas de Produtos</h1>
-    </div>
-    
-    <div class="container">
-        <div class="form">
-            <div class="buttons" id="default-buttons">
-                <button class="back" onclick="window.location.href='{{ route('menu.entrada-produtos.entrada-produtos') }}'">
-                    <i class="fas fa-arrow-left"></i> Voltar
-                </button>
-            </div>
-            
-            <div class="Conteudo">
-                <form id="consultaForm" autocomplete="off">
-                    <div class="search-container">
-                        <input type="text" id="termoBusca" class="input-field" placeholder="Código, produto ou fornecedor...">
-                        <button type="button" class="search-button" id="search-button">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </form>
-                
-                <div id="mensagemSucesso" style="display: none;"></div>
-                <div id="mensagemErro" style="display: none;"></div>
-            </div>
-        </div>
-        
-        <div class="table-responsive">
-            <table id="resultadoTabela" style="display: none;">
-                <thead>
-                    <tr>
-                        <th>Foto</th>
-                        <th>Produto</th>
-                        <th>Fornecedor</th>
-                        <th>QTD</th>
-                        <th>Data</th>
-                        <th>Valor Total</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-        
-        <div class="buttons-search" id="clear-button" style="display: none; margin-top: 15px;">
-            <button class="clear" onclick="limparTabela()">
-                <i class="fas fa-trash-alt"></i> Limpar Resultados
+@section('content')
+    <div class="form">
+        <div class="buttons" id="default-buttons">
+            <button class="back" onclick="window.location.href='{{ route('menu.entrada-produtos.entrada-produtos') }}'">
+                <i class="fas fa-arrow-left"></i> Voltar
             </button>
         </div>
-    </div>
-
-    <footer>
-        <div class="BotoesFooter">
-            <div class="buttons-search">
-                <button class="exit" onclick="window.location.href='{{ route('home') }}'">
-                    <i class="fas fa-home"></i> Voltar para Home
-                </button>
-            </div>
+        <div class="Conteudo">
+            <form id="consultaForm" autocomplete="off">
+                <div class="search-container">
+                    <input type="text" id="termoBusca" class="input-field" placeholder="Código, produto ou fornecedor...">
+                    <button type="button" class="search-button" id="search-button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+            <div id="mensagemSucesso" style="display: none;"></div>
+            <div id="mensagemErro" style="display: none;"></div>
         </div>
-    </footer>
-    
-    <div class="logo">
-        <img src="{{ asset('images/Emporio maxx s-fundo.png') }}" alt="Empório Maxx Logo">
     </div>
-    
+    <div class="table-responsive">
+        <table id="resultadoTabela" style="display: none;">
+            <thead>
+                <tr>
+                    <th>Foto</th>
+                    <th>Produto</th>
+                    <th>Fornecedor</th>
+                    <th>QTD</th>
+                    <th>Data</th>
+                    <th>Valor Total</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div class="buttons-search" id="clear-button" style="display: none; margin-top: 15px;">
+        <button class="clear" onclick="limparTabela()">
+            <i class="fas fa-trash-alt"></i> Limpar Resultados
+        </button>
+    </div>
     <!-- Modal Detalhes do Produto -->
     <div id="produtoModal" class="modal-Produto">
         <div class="modal-content-Produto">
@@ -140,28 +55,20 @@
             <h2>Detalhes da Entrada</h2>
             <div>
                 <img id="modalImagem" src="" alt="Imagem do Produto" style="max-width: 150px; margin: 0 auto 20px; display: block; border-radius: 10px;">
-                
                 <label for="modalCodProduto">Código do Produto:</label>
                 <input id="modalCodProduto" disabled>
-                
                 <label for="modalProduto">Produto:</label>
                 <input id="modalProduto" disabled>
-                
                 <label for="modalFornecedor">Fornecedor:</label>
                 <input id="modalFornecedor" disabled>
-                
                 <label for="modalQuantidade">Quantidade:</label>
                 <input id="modalQuantidade" disabled>
-                
                 <label for="modalPrecoCusto">Preço de Custo:</label>
                 <input id="modalPrecoCusto" disabled>
-                
                 <label for="modalPrecoVenda">Preço de Venda:</label>
                 <input id="modalPrecoVenda" disabled>
-                
                 <label for="modalData">Data de Entrada:</label>
                 <input id="modalData" disabled>
-                
                 <div style="display: flex; justify-content: center; margin-top: 20px;">
                     <button class="edit" id="btnEditar" style="margin-right: 10px;">
                         <i class="fas fa-edit"></i> Editar
@@ -173,11 +80,22 @@
             </div>
         </div>
     </div>
-    
     <div id="loadingOverlay" style="display: none;">
         <div id="loadingSpinner"></div>
     </div>
+@endsection
 
+@section('footer')
+    <div class="BotoesFooter">
+        <div class="buttons-search">
+            <button class="exit" onclick="window.location.href='{{ route('home') }}'">
+                <i class="fas fa-home"></i> Voltar para Home
+            </button>
+        </div>
+    </div>
+@endsection
+
+@push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Evento de busca ao clicar no botão
@@ -402,5 +320,4 @@
             }
         }
     </script>
-</body>
-</html>
+@endpush
