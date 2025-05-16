@@ -1,246 +1,113 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>MorpheusERP - Entrada de Produtos</title>
-    <link rel="shortcut icon" href="{{ asset('images/logo.png') }}" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+@extends('layouts.app')
 
-    @include('layouts.nav_bottom')
-    @include('layouts.background')
-    
+@section('title', 'Entrada de Produtos')
+
+@section('header-title', 'Entrada de Produtos')
+
+@push('styles')
     @vite(['resources/css/menu/entrada-produtos/entrada-produtos.css'])
+@endpush
 
-    <style>
-        /* Fix for search button alignment */
-        .search-button {
-            position: absolute;
-            right: 5px;
-            top: 50%;
-            transform: translateY(-50%);
-            padding: 0;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-            cursor: pointer;
-        }
-        
-        .search-button:hover {
-            transform: translateY(-50%) scale(1.05);
-        }
-        
-        .search-button:active {
-            transform: translateY(-50%) scale(0.95);
-        }
-        
-        .search-button::before {
-            display: none;
-        }
-        
-        /* Improved layout for the form */
-        .container2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            width: 100%;
-        }
-        
-        @media (max-width: 480px) {
-            .container2 {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        /* Fix for product search results */
-        #produtosTable, #fornecedoresTable {
-            width: 100%;
-            border-collapse: collapse;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        #produtosTable thead th, #fornecedoresTable thead th {
-            background-color: rgba(255, 239, 13, 0.2);
-            color: var(--accent-color);
-            padding: 12px 15px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        
-        #produtosTable tbody tr, #fornecedoresTable tbody tr {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            transition: background-color 0.2s;
-        }
-        
-        #produtosTable tbody tr:hover, #fornecedoresTable tbody tr:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-        
-        #produtosTable td, #fornecedoresTable td {
-            padding: 12px 15px;
-            color: var(--input-text);
-        }
-        
-        #produtoSearchResults, #fornecedorSearchResults {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <h1>Entrada de Produtos</h1>
-    </div>
-    
-    <div class="container">
-        <div class="form">
-            <div class="buttons" id="default-buttons">
-                <button class="new" onclick="novo()">
-                    <i class="fas fa-plus-circle"></i> Novo
-                </button>
-                <button class="search" onclick="window.location.href='{{ route('menu.entrada-produtos.entrada-produtos-buscar') }}'">
-                    <i class="fas fa-search"></i> Buscar
+@section('content')
+    <div class="form">
+        <div class="buttons" id="default-buttons">
+            <button class="new" onclick="novo()">
+                <i class="fas fa-plus-circle"></i> Novo
+            </button>
+            <button class="search" onclick="window.location.href='{{ route('menu.entrada-produtos.entrada-produtos-buscar') }}'">
+                <i class="fas fa-search"></i> Buscar
+            </button>
+        </div>
+        <div class="Conteudo">
+            <div class="buttons" id="new-button" style="display: none;">
+                <button class="back" onclick="voltar(); recarregarPagina()">
+                    <i class="fas fa-arrow-left"></i> Voltar
                 </button>
             </div>
-            
-            <div class="Conteudo">
-                <div class="buttons" id="new-button" style="display: none;">
-                    <button class="back" onclick="voltar(); recarregarPagina()">
-                        <i class="fas fa-arrow-left"></i> Voltar
+            <form id="entradaForm" autocomplete="off" enctype="multipart/form-data">
+                <div class="image-placeholder">
+                    <img id="preview" src="{{ asset('images/defaultimg.png') }}" class="image-disabled">
+                </div>
+                <div class="search-container">
+                    <input type="text" id="codigo" class="input-field" placeholder="* Código do Produto" required disabled readonly>
+                    <button type="button" class="search-button" id="search-product-button" disabled>
+                        <i class="fas fa-search"></i>
                     </button>
                 </div>
-                
-                <form id="entradaForm" autocomplete="off" enctype="multipart/form-data">
-                    <div class="image-placeholder">
-                        <img id="preview" src="{{ asset('images/defaultimg.png') }}" class="image-disabled">
-                    </div>
-
+                <input type="text" id="produto" class="input-field" placeholder="* Produto" required disabled readonly>
+                <div class="container2">
                     <div class="search-container">
-                        <input type="text" id="codigo" class="input-field" placeholder="* Código do Produto" required disabled readonly>
-                        <button type="button" class="search-button" id="search-product-button" disabled>
+                        <input type="text" id="fornecedorText" class="input-field" placeholder="* Fornecedor" required disabled readonly>
+                        <input type="hidden" id="fornecedor" required>
+                        <button type="button" class="search-button" id="search-fornecedor-button" disabled>
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
-                    
-                    <input type="text" id="produto" class="input-field" placeholder="* Produto" required disabled readonly>
-                    
-                    <div class="container2">
-                        <div class="search-container">
-                            <input type="text" id="fornecedorText" class="input-field" placeholder="* Fornecedor" required disabled readonly>
-                            <input type="hidden" id="fornecedor" required>
-                            <button type="button" class="search-button" id="search-fornecedor-button" disabled>
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </div>
-                        
-                        <input type="text" id="razaoSocial" class="input-field" placeholder="Razão Social" disabled readonly>
-                        
-                        <input type="number" id="quantidade" step="1" class="input-field" placeholder="* Quantidade" required disabled>
-                        
-                        <input type="number" id="precoCusto" step="0.01" class="input-field" placeholder="* Preço de Custo" required disabled>
-                        
-                        <input type="number" id="precoVenda" step="0.01" class="input-field" placeholder="Preço de Venda" disabled>
-                        
-                        <input type="date" id="dataEntrada" class="input-field" disabled>
-                    </div>
-                    
-                    <div class="buttons-edit" id="edit-buttons" style="display: none;">
-                        <button class="edit" type="submit">
-                            <i class="fas fa-save"></i> Salvar
-                        </button>
-                    </div>
-                </form>
-                
-                <div id="mensagemSucesso" style="display: none;"></div>
-                <div id="mensagemErro" style="display: none;"></div>
-            </div>
-        </div>
-        
-        <table id="resultadoTabela" style="display: none;">
-            <thead>
-                <tr>
-                    <th>Foto</th>
-                    <th>Produto</th>
-                    <th>Fornecedor</th>
-                    <th>QTD</th>
-                    <th>Custo</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        
-        <div class="buttons-search" id="clear-button" style="display: none; margin-top: 15px;">
-            <button class="clear" onclick="limparTabela()">
-                <i class="fas fa-trash-alt"></i> Limpar Tabela
-            </button>
+                    <input type="text" id="razaoSocial" class="input-field" placeholder="Razão Social" disabled readonly>
+                    <input type="number" id="quantidade" step="1" class="input-field" placeholder="* Quantidade" required disabled>
+                    <input type="number" id="precoCusto" step="0.01" class="input-field" placeholder="* Preço de Custo" required disabled>
+                    <input type="number" id="precoVenda" step="0.01" class="input-field" placeholder="Preço de Venda" disabled>
+                    <input type="date" id="dataEntrada" class="input-field" disabled>
+                </div>
+                <div class="buttons-edit" id="edit-buttons" style="display: none;">
+                    <button class="edit" type="submit">
+                        <i class="fas fa-save"></i> Salvar
+                    </button>
+                </div>
+            </form>
+            <div id="mensagemSucesso" style="display: none;"></div>
+            <div id="mensagemErro" style="display: none;"></div>
         </div>
     </div>
-
-    <footer>
-        <div class="BotoesFooter">
-            <div class="buttons-search">
-                <button class="exit" onclick="back()">
-                    <i class="fas fa-home"></i> Voltar para Home
-                </button>
-            </div>
-        </div>
-    </footer>
-    
-    <div class="logo">
-        <img src="{{ asset('images/Emporio maxx s-fundo.png') }}" alt="Empório Maxx Logo">
+    <table id="resultadoTabela" style="display: none;">
+        <thead>
+            <tr>
+                <th>Foto</th>
+                <th>Produto</th>
+                <th>Fornecedor</th>
+                <th>QTD</th>
+                <th>Custo</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <div class="buttons-search" id="clear-button" style="display: none; margin-top: 15px;">
+        <button class="clear" onclick="limparTabela()">
+            <i class="fas fa-trash-alt"></i> Limpar Tabela
+        </button>
     </div>
-    
-    <!-- Modal Detalhes do Produto -->
+    <!-- Modais -->
     <div id="produtoModal" class="modal-Produto">
         <div class="modal-content-Produto">
             <span class="close" onclick="fecharModal()">&times;</span>
             <h2>Detalhes do Produto</h2>
             <div>
                 <img id="modalImagem" src="" alt="Imagem do Produto" style="max-width: 150px; margin: 0 auto 20px; display: block; border-radius: 10px;">
-                
                 <label for="modalCodProduto">Código do Produto:</label>
                 <input id="modalCodProduto" disabled>
-                
                 <label for="modalProduto">Produto:</label>
                 <input id="modalProduto" disabled>
-                
                 <label for="modalFornecedor">Fornecedor:</label>
                 <input id="modalFornecedor" disabled>
-                
                 <label for="modalQuantidade">Quantidade:</label>
                 <input id="modalQuantidade" disabled>
-                
                 <label for="modalPrecoCusto">Preço de Custo:</label>
                 <input id="modalPrecoCusto" disabled>
-                
                 <label for="modalPrecoVenda">Preço de Venda:</label>
                 <input id="modalPrecoVenda" disabled>
             </div>
         </div>
     </div>
-    
-    <!-- Modal Busca de Produtos -->
     <div id="searchProductModal" class="modal-Produto">
         <div class="modal-content-Produto">
             <span class="close" onclick="fecharModalBuscaProduto()">&times;</span>
             <h2>Buscar Produto</h2>
-            
             <div class="search-container" style="margin-bottom: 20px;">
                 <input type="text" id="produtoSearch" class="input-field" placeholder="Digite para buscar...">
                 <button type="button" class="search-button" id="btn-search-product">
                     <i class="fas fa-search"></i>
                 </button>
             </div>
-            
             <div id="produtoSearchResults" style="max-height: 300px; overflow-y: auto;">
                 <table id="produtosTable" style="width: 100%; margin-top: 15px;">
                     <thead>
@@ -253,26 +120,21 @@
                     <tbody></tbody>
                 </table>
             </div>
-            
             <div id="searchProductMessage" style="margin-top: 15px; text-align: center; display: none;">
                 Nenhum produto encontrado.
             </div>
         </div>
     </div>
-    
-    <!-- Modal Busca de Fornecedores -->
     <div id="searchFornecedorModal" class="modal-Produto">
         <div class="modal-content-Produto">
             <span class="close" onclick="fecharModalBuscaFornecedor()">&times;</span>
             <h2>Buscar Fornecedor</h2>
-            
             <div class="search-container" style="margin-bottom: 20px;">
                 <input type="text" id="fornecedorSearch" class="input-field" placeholder="Digite para buscar...">
                 <button type="button" class="search-button" id="btn-search-fornecedor">
                     <i class="fas fa-search"></i>
                 </button>
             </div>
-            
             <div id="fornecedorSearchResults" style="max-height: 300px; overflow-y: auto;">
                 <table id="fornecedoresTable" style="width: 100%; margin-top: 15px;">
                     <thead>
@@ -285,17 +147,27 @@
                     <tbody></tbody>
                 </table>
             </div>
-            
             <div id="searchFornecedorMessage" style="margin-top: 15px; text-align: center; display: none;">
                 Nenhum fornecedor encontrado.
             </div>
         </div>
     </div>
-    
     <div id="loadingOverlay" style="display: none;">
         <div id="loadingSpinner"></div>
     </div>
+@endsection
 
+@section('footer')
+    <div class="BotoesFooter">
+        <div class="buttons-search">
+            <button class="exit" onclick="back()">
+                <i class="fas fa-home"></i> Voltar para Home
+            </button>
+        </div>
+    </div>
+@endsection
+
+@push('scripts')
     <script>
         function novo() {
             document.getElementById('default-buttons').style.display = 'none';
@@ -819,5 +691,4 @@
             }
         });
     </script>
-</body>
-</html>
+@endpush
