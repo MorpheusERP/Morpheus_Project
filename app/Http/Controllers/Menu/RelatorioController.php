@@ -360,4 +360,157 @@ class RelatorioController extends Controller
             ], 500);
         }
     }
+
+    public function saidasRelatorio()
+    {
+        return view('menu.relatorio.saida-produto-relatorio');
+    }
+
+    public function searchSaidas(Request $request)
+    {
+        try {
+            Log::info('Received saidas search request:', $request->all());
+            
+            $request->validate([
+                'start_date' => 'required|date',
+                'end_date' => 'required|date',
+                'nome_Produto' => 'nullable|string|max:255',
+                'grupo' => 'nullable|string|max:255',
+                'sub_Grupo' => 'nullable|string|max:255',
+            ]);
+            
+            // Consulta base para obter as saídas dentro do período especificado
+            $query = DB::table('saida_produtos')
+                ->select(
+                    'saida_produtos.id_Saida',
+                    DB::raw('MAX(saida_produtos.data_Saida) as data_Saida'),
+                    DB::raw('SUM(saida_produtos.preco_Custo * saida_produtos.qtd_saida) as valor_Total')
+                )
+                ->whereBetween('data_Saida', [$request->start_date, $request->end_date])
+                ->groupBy('saida_produtos.id_Saida');
+            
+            // Se tiver critérios adicionais de busca, vamos filtrar usando join com produtos
+            if ($request->filled('nome_Produto') || $request->filled('grupo') || $request->filled('sub_Grupo')) {
+                $query->join('produtos', 'saida_produtos.cod_Produto', '=', 'produtos.cod_Produto');
+                
+                // Filtrar por nome do produto
+                if ($request->filled('nome_Produto')) {
+                    $query->where('produtos.nome_Produto', 'like', '%' . $request->nome_Produto . '%');
+                }
+                
+                // Filtrar por grupo
+                if ($request->filled('grupo')) {
+                    $query->where('produtos.grupo', 'like', '%' . $request->grupo . '%');
+                }
+                
+                // Filtrar por subgrupo
+                if ($request->filled('sub_Grupo')) {
+                    $query->where('produtos.sub_Grupo', 'like', '%' . $request->sub_Grupo . '%');
+                }
+            }
+            
+            // Obter os resultados
+            $saidas = $query->get();
+            
+            Log::info('Found ' . count($saidas) . ' saidas de produtos');
+            
+            return response()->json([
+                'status' => 'success',
+
+                'saidas' => $saidas
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error in searchSaidas: ' . $e->getMessage());
+            Log::error($e->getTraceAsString());
+            
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Erro ao processar a consulta: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function detalhesSaidas(Request $request)
+    {
+        try {
+            \Log::info('Received saida details request:', $request->all());
+            $request->validate([
+                'id_Saida' => 'required|integer',
+            ]);
+
+            // Buscar informações do lote/saída
+            $lote = \DB::table('saida_produtos')
+                ->select(
+                    'saida_produtos.id_Saida',
+                    'saida_produtos.data_Saida',
+                    'saida_produtos.valor_Total',
+                    'usuarios.nome_Usuario'
+                )
+                ->join('usuarios', 'saida_produtos.id_Usuario', '=', 'usuarios.id_Usuario')
+                ->where('saida_produtos.id_Saida', $request->id_Saida)
+                ->first();
+
+            if (!$lote) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Saída não encontrada'
+                ]);
+            }
+
+            // Formatar data e valor
+            if (isset($lote->data_Saida)) {
+                $data = date_create($lote->data_Saida);
+                $lote->data_Saida = date_format($data, 'd/m/Y');
+            }
+            if (isset($lote->valor_Total)) {
+                $lote->valor_Total = number_format($lote->valor_Total, 2, ',', '.');
+            }
+
+            // Buscar produtos dessa saída
+            $produtos = \DB::table('saida_produtos')
+                ->join('produtos', 'saida_produtos.cod_Produto', '=', 'produtos.cod_Produto')
+                ->join('local_destinos', 'saida_produtos.id_Local', '=', 'local_destinos.id_Local')
+                ->where('saida_produtos.id_Saida', $request->id_Saida)
+                ->select(
+                    'saida_produtos.id_Saida',
+                    'local_destinos.id_Local',
+                    'local_destinos.nome_Local',
+                    'local_destinos.tipo_Local',
+                    'produtos.cod_Produto',
+                    'produtos.nome_Produto',
+                    'saida_produtos.qtd_saida',
+                    'produtos.tipo_Produto',
+                    'produtos.preco_Custo',
+                    'produtos.grupo',
+                    'produtos.sub_Grupo'
+                )
+                ->get();
+
+            if ($produtos->isEmpty()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Nenhum produto encontrado para esta saída'
+                ]);
+            }
+
+            // Formatar valores monetários
+            foreach ($produtos as $produto) {
+                if (isset($produto->preco_Custo)) {
+                    $produto->preco_Custo = number_format($produto->preco_Custo, 2, ',', '.');
+                }
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'lote' => $lote,
+                'produtos' => $produtos
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error in detalhesSaidas: ' . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Erro ao processar a consulta: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

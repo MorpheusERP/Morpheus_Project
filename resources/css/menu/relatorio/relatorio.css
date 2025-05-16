@@ -1,3 +1,5 @@
+@import '../../base.css';
+
 /* CSS para a página de relatórios - estilo similar à home */
 .container {
     width: 100%;

@@ -1,6 +1,8 @@
 @import '../../base.css';
 
-/* CSS for local-destino-relatorio page matching the site design pattern */
+/* CSS for entrada-produtos-relatorio page matching the site design pattern */
+
+/* Buttons */
 .buttons-footer {
     display: flex;
     justify-content: space-between;
@@ -61,6 +63,20 @@ button:hover::before {
 button:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+button:disabled:hover {
+    transform: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+button:disabled::before {
+    display: none;
 }
 
 /* Form fields */
@@ -185,6 +201,14 @@ footer {
     transition: opacity 0.3s ease;
 }
 
+.resultado-titulo {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+    text-align: center;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -193,7 +217,6 @@ table {
     overflow: hidden;
     animation: fadeIn 0.3s ease;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    table-layout: fixed;
 }
 
 thead {
@@ -202,7 +225,7 @@ thead {
 
 th {
     padding: 12px 15px;
-    text-align: center;
+    text-align: left;
     font-weight: 600;
     font-size: 14px;
     color: var(--accent-color);
@@ -216,54 +239,6 @@ td {
     font-size: 14px;
     color: var(--text-light);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    max-width: 0;
-    text-align: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    position: relative;
-}
-
-table th:nth-child(1), 
-table td:nth-child(1) {
-    width: 10%;
-}
-
-table th:nth-child(2), 
-table td:nth-child(2) {
-    width: 30%;
-}
-
-table th:nth-child(3), 
-table td:nth-child(3) {
-    width: 20%; 
-}
-
-table th:nth-child(4), 
-table td:nth-child(4) {
-    width: 40%;
-}
-
-td[data-content] {
-    cursor: pointer;
-}
-
-td[data-content]:hover::after {
-    content: attr(data-content);
-    position: absolute;
-    left: 0;
-    top: 100%;
-    z-index: 10;
-    background-color: rgba(66, 0, 255, 0.9);
-    color: var(--text-light);
-    padding: 10px;
-    border-radius: 8px;
-    white-space: normal;
-    max-width: 300px;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
-    word-wrap: break-word;
-    font-size: 13px;
-    line-height: 1.4;
 }
 
 tbody tr:last-child td {
@@ -283,8 +258,7 @@ tbody tr:hover {
 .search-button {
     position: absolute;
     right: 5px;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 5px;
     background: var(--accent-color);
     color: var(--text-dark);
     border: none;
@@ -301,7 +275,7 @@ tbody tr:hover {
 }
 
 .search-button:hover {
-    transform: translateY(-50%) scale(1.1);
+    transform: scale(1.1);
 }
 
 .search-button:focus {
@@ -310,6 +284,118 @@ tbody tr:hover {
 
 .search-button i {
     font-size: 16px;
+}
+
+/* Modal de detalhes da entrada */
+.entrada-modal-bg {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.8);
+    align-items: center;
+    justify-content: center;
+}
+.entrada-modal-bg.active {
+    display: flex;
+}
+.entrada-modal-content {
+    background-color: #2a0099e6;
+    margin: 0 auto;
+    padding: 24px 20px 20px 20px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 420px;
+    position: relative;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+    color: #fff;
+    outline: none;
+}
+.entrada-modal-close {
+    color: #FFEF0D;
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: color 0.2s;
+    line-height: 1;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.entrada-modal-close:focus {
+    outline: 2px solid #FFEF0D;
+}
+.entrada-modal-content h2 {
+    color: #FFEF0D;
+    text-align: center;
+    margin-bottom: 18px;
+}
+.entrada-modal-field {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+}
+.entrada-modal-label {
+    min-width: 110px;
+    color: #fff;
+    font-weight: 500;
+    font-size: 1rem;
+}
+.entrada-modal-input {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.3);
+    background-color: rgba(255,255,255,0.12);
+    color: #fff;
+    font-size: 1rem;
+}
+#btnDetalhesPDF {
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #FF5252;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: background 0.2s;
+}
+#btnDetalhesPDF:focus {
+    outline: 2px solid #FFEF0D;
+}
+@media (max-width: 600px) {
+    .entrada-modal-content {
+        width: 98%;
+        padding: 16px 6px 16px 6px;
+    }
+    .entrada-modal-label {
+        min-width: 90px;
+        font-size: 0.95rem;
+    }
+    #btnDetalhesPDF {
+        font-size: 0.95rem;
+    }
+    .entrada-modal-close {
+        font-size: 20px;
+        right: 6px;
+        top: 6px;
+        width: 28px;
+        height: 28px;
+    }
 }
 
 /* Media queries */
