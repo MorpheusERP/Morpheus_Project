@@ -43,7 +43,7 @@
                             <option value="Unidade">Unidades(UN)</option>
                             <option value="Saco">Sacos(SC)</option>
                         </select>
-                        <input type="number" id="pcusto" step="0.01" class="input-field" placeholder="Preço de Custo"
+                        <input type="number" id="pcusto" step="0.01" class="input-field" placeholder="* Preço de Custo"
                             required disabled>
                         <input type="text" id="grupo" class="input-field" maxlength="15" placeholder="* Grupo" required
                             disabled>
