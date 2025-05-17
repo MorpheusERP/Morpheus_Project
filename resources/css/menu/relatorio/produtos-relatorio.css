@@ -1,55 +1,6 @@
+@import '../../base.css';
+
 /* CSS for produtos-relatorio page matching the site design pattern */
-:root {
-    --primary-color: #4200FF;
-    --primary-dark: #280099;
-    --accent-color: #FFEF0D;
-    --text-light: #FFFFFF;
-    --text-dark: #333333;
-    --shadow-color: rgba(0, 0, 0, 0.2);
-    --input-bg: rgba(255, 255, 255, 0.15);
-    --input-text: #FFFFFF;
-}
-
-.header {
-    width: 100%;
-    padding: 20px;
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-.header h1 {
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--accent-color);
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.container {
-    width: 90%;
-    max-width: 480px;
-    margin: 0 auto;
-}
-
-.form {
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-.Conteudo {
-    width: 100%;
-    padding: 20px 15px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    z-index: 1;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    margin-top: 10px;
-}
 
 /* Buttons */
 .buttons-footer {
@@ -306,20 +257,25 @@ tbody tr:hover {
 
 .search-button {
     position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: transparent;
+    right: 5px;
+    top: 5px;
+    background: var(--accent-color);
+    color: var(--text-dark);
     border: none;
-    color: var(--accent-color);
-    padding: 5px;
-    box-shadow: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: all 0.3s ease;
+    padding: 0;
 }
 
 .search-button:hover {
-    transform: translateY(-50%) scale(1.1);
+    transform: scale(1.1);
 }
 
 .search-button:focus {
@@ -328,6 +284,118 @@ tbody tr:hover {
 
 .search-button i {
     font-size: 16px;
+}
+
+/* Modal de detalhes da entrada */
+.entrada-modal-bg {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.8);
+    align-items: center;
+    justify-content: center;
+}
+.entrada-modal-bg.active {
+    display: flex;
+}
+.entrada-modal-content {
+    background-color: #2a0099e6;
+    margin: 0 auto;
+    padding: 24px 20px 20px 20px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 420px;
+    position: relative;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+    color: #fff;
+    outline: none;
+}
+.entrada-modal-close {
+    color: #FFEF0D;
+    position: absolute;
+    right: 10px;
+    top: 8px;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: color 0.2s;
+    line-height: 1;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.entrada-modal-close:focus {
+    outline: 2px solid #FFEF0D;
+}
+.entrada-modal-content h2 {
+    color: #FFEF0D;
+    text-align: center;
+    margin-bottom: 18px;
+}
+.entrada-modal-field {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+}
+.entrada-modal-label {
+    min-width: 110px;
+    color: #fff;
+    font-weight: 500;
+    font-size: 1rem;
+}
+.entrada-modal-input {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.3);
+    background-color: rgba(255,255,255,0.12);
+    color: #fff;
+    font-size: 1rem;
+}
+#btnDetalhesPDF {
+    width: 100%;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #FF5252;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: background 0.2s;
+}
+#btnDetalhesPDF:focus {
+    outline: 2px solid #FFEF0D;
+}
+@media (max-width: 600px) {
+    .entrada-modal-content {
+        width: 98%;
+        padding: 16px 6px 16px 6px;
+    }
+    .entrada-modal-label {
+        min-width: 90px;
+        font-size: 0.95rem;
+    }
+    #btnDetalhesPDF {
+        font-size: 0.95rem;
+    }
+    .entrada-modal-close {
+        font-size: 20px;
+        right: 6px;
+        top: 6px;
+        width: 28px;
+        height: 28px;
+    }
 }
 
 /* Media queries */
