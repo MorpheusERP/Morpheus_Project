@@ -13,12 +13,12 @@ class SaidaProdutoController extends Controller
     {
         return view('menu.saida-produtos.saida-produtos');
     }
-    
+
     public function showBuscar()
     {
         return view('menu.saida-produtos.saida-produtos-buscar');
     }
-    
+
     public function showEditar()
     {
         return view('menu.saida-produtos.saida-produtos-editar');
@@ -76,7 +76,7 @@ class SaidaProdutoController extends Controller
                     'mensagem' => 'Registro de estoque não encontrado para este produto.'
                 ]);
             }
-            
+
             if ($estoque->qtd_Estoque < $validated['qtd_Saida']) {
                 return response()->json([
                     'status' => 'erro',
@@ -191,12 +191,12 @@ class SaidaProdutoController extends Controller
             $request->validate([
                 'id_Saida' => 'required|integer',
             ]);
-            
+
             $id_Saida = $request->input('id_Saida');
 
             // Verificar se a saída existe
             $saida = DB::table('saida_produtos')->where('id_Saida', $id_Saida)->first();
-            
+
             if (!$saida) {
                 return response()->json([
                     'status' => 'erro',
@@ -212,7 +212,7 @@ class SaidaProdutoController extends Controller
                 DB::table('estoques')
                     ->where('id_Estoque', $saida->id_Estoque)
                     ->update([
-                        'qtd_Estoque' => DB::raw('qtd_Estoque + ' . $saida->qtd_Saida),
+                        'qtd_Estoque' => DB::raw('qtd_Estoque + ' . $saida->qtd_saida),
                         'updated_at' => now()
                     ]);
 
@@ -231,7 +231,7 @@ class SaidaProdutoController extends Controller
             }
         } catch (\Exception $e) {
             \Log::error('Erro ao excluir saída de produto: ' . $e->getMessage());
-            
+
             return response()->json([
                 'status' => 'erro',
                 'mensagem' => 'Ocorreu um erro ao excluir a saída de produto: ' . $e->getMessage()
@@ -243,7 +243,7 @@ class SaidaProdutoController extends Controller
     {
         try {
             $id = $request->input('id_Saida');
-            
+
             if (!$id) {
                 return response()->json([
                     'status' => 'erro',
@@ -295,7 +295,7 @@ class SaidaProdutoController extends Controller
 
         } catch (\Exception $e) {
             \Log::error('Erro ao buscar detalhes da saída de produto: ' . $e->getMessage());
-            
+
             return response()->json([
                 'status' => 'erro',
                 'mensagem' => 'Ocorreu um erro ao buscar os detalhes da saída de produto: ' . $e->getMessage()
@@ -342,17 +342,17 @@ class SaidaProdutoController extends Controller
             $estoque = DB::table('estoques')
                 ->where('id_Estoque', $saida->id_Estoque)
                 ->first();
-            
+
             if (!$estoque) {
                 return response()->json([
                     'status' => 'erro',
                     'mensagem' => 'Registro de estoque não encontrado.'
                 ]);
             }
-            
+
             // Calcular a diferença de quantidade
             $diferenca = $validated['qtd_Saida'] - $saida->qtd_saida;
-            
+
             // Verificar disponibilidade no estoque se a nova quantidade for maior
             if ($diferenca > 0 && $estoque->qtd_Estoque < $diferenca) {
                 return response()->json([
@@ -403,7 +403,7 @@ class SaidaProdutoController extends Controller
 
         } catch (\Exception $e) {
             \Log::error('Erro ao atualizar saída de produto: ' . $e->getMessage());
-            
+
             return response()->json([
                 'status' => 'erro',
                 'mensagem' => 'Ocorreu um erro ao atualizar a saída de produto: ' . $e->getMessage()
