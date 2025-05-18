@@ -6,8 +6,15 @@ const STATIC_ASSETS = [
   '/manifest.webmanifest',
 ];
 
+//Armazena os modelos da IA em cache para diminuir o tempo de processamento da imagem ao cadastrar o produto
+const urlsToCache = [
+    '/ModelosIA/Frutas/model.json',
+    '/ModelosIA/Frutas/metadata.json',
+    '/ModelosIA/Frutas/model.weights.bin',
+];
+
 // Cache dinâmico com nome separado
-const DYNAMIC_CACHE = 'morpheus-dynamic-v1';
+const DYNAMIC_CACHE = 'morpheus-dynamic-v2';
 
 // Instalação: cache básico estático
 self.addEventListener('install', event => {

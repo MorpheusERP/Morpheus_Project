@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\Menu\Produto;
+use function PHPUnit\Framework\returnArgument;
 
 class ProdutoController extends Controller
 {
@@ -68,7 +69,29 @@ class ProdutoController extends Controller
 
     public function search(Request $request)
     {
+        //verifica se nenhum filtro foi enviado na requisição
+        if (!$request->filled('cod_Produto', 'nome_Produto', 'grupo', 'sub_Grupo')){
+            //retorna os 20 produtos com o maior código
+            $produtos = Produto::orderBy('cod_Produto', 'desc')
+                ->limit(20)
+                ->get();
+
+                foreach ($produtos as $produto){
+                    if ($produto ->imagem){
+                        $produto->imagem = base64_encode($produto->imagem);
+                    }
+                }
+
+                return response()->json([
+                    'status' => 'sucesso',
+                    'mensagem' => 'Sem filtros: exibindo os 20 produtos mais recentes.',
+                    'produtos' => $produtos
+                ]);
+        }
+
+        //Caso tenha filtros, monta a query dinamicamente
         $query = Produto::query();
+
         if ($request->filled('cod_Produto')) {
             $query->where('cod_Produto', 'like', "%{$request->cod_Produto}%");
         }
@@ -90,6 +113,22 @@ class ProdutoController extends Controller
         return response()->json([
             'status' => 'sucesso',
             'produtos' => $produtos
+        ]);
+    }
+
+    public function ultimoCodigo(){
+        $ultimo = Produto::orderBy('cod_Produto', 'desc')->first();
+
+        if (!$ultimo) {
+            return response()->json([
+                'status' => 'erro',
+                'mensagem' => 'Nenhum produto encontrado.'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'sucesso',
+            'cod_Produto' => $ultimo->cod_Produto
         ]);
     }
 

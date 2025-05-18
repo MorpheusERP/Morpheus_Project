@@ -6,6 +6,8 @@
 
 @push('styles')
     @vite(['resources/css/menu/produtos/produtos.css'])
+    @vite(['resources/js/menu/produtos/produtos-ia.js'])
+
 @endpush
 
 @section('content')
@@ -31,6 +33,17 @@
                     <img id="preview" src="{{ asset('images/defaultimg.png') }}" class="image-disabled">
                     <label for="imagem" class="botao-upload">Selecionar Imagem</label>
                 </div>
+
+                <!-- Indicador de carregamento -->
+                <div id="loading" style="display: none; margin-top: 1rem;">
+                    <span>Processando imagem...</span>
+                    <div class="loader"></div>
+                </div>
+
+                <!-- Mensagem de resultado -->
+                <p id="resultadoFruta" style="margin-top: 1rem; font-weight: bold;"></p>
+
+                <button type="button" id="auto-load" class="botao-upload" onclick="processarImagem()" style="display: none;">Cadastro Automático</button>
                 <input type="number" id="codigo" class="input-field" maxlength="5" placeholder="* Código" required disabled>
                 <input type="text" id="produto" class="input-field" maxlength="50" placeholder="* Nome do Produto" required
                     disabled>
@@ -81,12 +94,20 @@
     </div>
 @endsection
 @push('scripts')
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.2.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+
     <script>
         function novo() {
             document.getElementById('default-buttons').style.display = 'none';
+            document.getElementById('auto-load').style.display = 'flex';
             document.getElementById('new-button').style.display = 'flex';
             document.getElementById('edit-buttons').style.display = 'flex';
             habilitarCampos();
+            buscarUltimoCod();
         }
 
         function voltar() {
@@ -110,7 +131,6 @@
             document.getElementById('preview').classList.remove('image-disabled');
             document.getElementById('preview').classList.add('image-enabled');
             document.getElementById("imagem").disabled = false;
-            document.getElementById("codigo").disabled = false;
             document.getElementById("produto").disabled = false;
             document.getElementById("tipoQuantidade").disabled = false;
             document.getElementById("pcusto").disabled = false;
