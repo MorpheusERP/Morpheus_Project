@@ -289,15 +289,39 @@ footer {
 }
 
 /* Results table */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    /* Estilização da scrollbar */
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: var(--accent-color) rgba(255, 255, 255, 0.1); /* Firefox */
+}
+
+.table-responsive::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+    background-color: var(--accent-color);
+    border-radius: 10px;
+}
+
 #resultadoTabela {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
     background: rgba(255, 255, 255, 0.05);
+    -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 #resultadoTabela th {
@@ -395,30 +419,30 @@ footer {
     .header h1 {
         font-size: 20px;
     }
-    
+
     button {
         padding: 8px 15px;
         font-size: 13px;
     }
-    
+
     .input-field, select {
         height: 45px;
         font-size: 14px;
     }
-    
+
     .container2 {
         grid-template-columns: 1fr;
     }
-    
+
     .logo img {
         max-width: 140px;
     }
-    
+
     #preview {
         width: 120px;
         height: 120px;
     }
-    
+
     .modal-content-Produto {
         width: 95%;
         margin: 15% auto;
@@ -430,24 +454,24 @@ footer {
     .container {
         max-width: 600px;
     }
-    
+
     .header h1 {
         font-size: 28px;
     }
-    
+
     button {
         padding: 12px 25px;
         font-size: 15px;
     }
-    
+
     .logo {
         margin-top: 30px;
     }
-    
+
     .logo img {
         max-width: 180px;
     }
-    
+
     #preview {
         width: 180px;
         height: 180px;
@@ -490,7 +514,7 @@ footer {
 }
 
 .buttons-edit {
-    width: 100%; 
+    width: 100%;
     display: flex;
     justify-content: center;
     margin-top: 15px;
