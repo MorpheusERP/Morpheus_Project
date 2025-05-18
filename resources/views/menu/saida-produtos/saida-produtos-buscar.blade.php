@@ -129,7 +129,7 @@
             document.getElementById('search-button').addEventListener('click', function() {
                 buscarSaidas();
             });
-            
+
             // Evento de busca ao pressionar Enter no campo de busca
             document.getElementById('termoBusca').addEventListener('keypress', function(event) {
                 if (event.key === 'Enter') {
@@ -137,12 +137,12 @@
                     buscarSaidas();
                 }
             });
-            
+
             // Excluir saída
             document.getElementById('btnExcluir').addEventListener('click', function() {
                 confirmarExclusao(document.getElementById('modalCodProduto').getAttribute('data-id'));
             });
-            
+
             // Editar saída
             document.getElementById('btnEditar').addEventListener('click', function() {
                 const idSaida = document.getElementById('modalCodProduto').getAttribute('data-id');
@@ -153,7 +153,7 @@
             document.getElementById('btn-search-local').addEventListener('click', function() {
                 buscarLocais();
             });
-            
+
             document.getElementById('localSearch').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     e.preventDefault();
@@ -161,19 +161,19 @@
                 }
             });
         });
-        
+
         function buscarSaidas() {
             const termo = document.getElementById('termoBusca').value.trim();
-            
+
             if (termo === '') {
                 mostrarErro('Digite algo para buscar!');
                 return;
             }
-            
+
             document.getElementById('loadingOverlay').style.display = 'flex';
-            
+
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            
+
             fetch('/saida-produtos/search', {
                 method: 'POST',
                 headers: {
@@ -209,17 +209,17 @@
                 document.getElementById('loadingOverlay').style.display = 'none';
             });
         }
-        
+
         function exibirResultados(saidas) {
             document.getElementById("clear-button").style.display = "flex";
             const tabela = document.getElementById("resultadoTabela");
             const tbody = tabela.querySelector("tbody");
-            tbody.innerHTML = ''; 
-            tabela.style.display = 'table'; 
-            
+            tbody.innerHTML = '';
+            tabela.style.display = 'table';
+
             saidas.forEach((saida) => {
                 const row = tbody.insertRow();
-                
+
                 const cellImagem = row.insertCell(0);
                 const imgElement = document.createElement("img");
                 imgElement.src = saida.imagem ? `data:image/jpeg;base64,${saida.imagem}` : '{{ asset("images/defaultimg.png") }}';
@@ -229,47 +229,47 @@
                 imgElement.style.borderRadius = "6px";
                 imgElement.style.objectFit = "cover";
                 cellImagem.appendChild(imgElement);
-                
+
                 row.insertCell(1).textContent = saida.nome_Produto || 'Não informado';
                 row.insertCell(2).textContent = saida.nome_Local || 'Não informado';
                 row.insertCell(3).textContent = saida.qtd_saida || '0';
-                
+
                 const dataCell = row.insertCell(4);
                 const dataFormatada = formatarData(saida.data_Saida);
                 dataCell.textContent = dataFormatada;
-                
+
                 row.addEventListener('click', () => abrirModal(saida));
             });
         }
-        
+
         function formatarData(dataString) {
             if (!dataString) return 'Data não informada';
-            
-            const data = new Date(dataString);
-            return data.toLocaleDateString('pt-BR');
+            const [datePart] = dataString.split('T');
+            const [year, month, day] = datePart.split('-');
+            return `${day}/${month}/${year}`;
         }
-        
+
         function abrirModal(saida) {
             document.getElementById("modalImagem").src = saida.imagem ? `data:image/jpeg;base64,${saida.imagem}` : '{{ asset("images/defaultimg.png") }}';
-            
+
             const codProduto = document.getElementById("modalCodProduto");
             codProduto.value = saida.cod_Produto || '';
             codProduto.setAttribute('data-id', saida.id_Saida || '');
-            
+
             document.getElementById("modalProduto").value = saida.nome_Produto || '';
             document.getElementById("modalLocalDestino").value = saida.nome_Local || '';
             document.getElementById("modalTipoLocal").value = saida.tipo_Local || '';
             document.getElementById("modalQuantidade").value = saida.qtd_saida || '';
             document.getElementById("modalData").value = formatarData(saida.data_Saida);
             document.getElementById("modalObservacao").value = saida.observacao || '';
-            
+
             document.getElementById("produtoModal").style.display = "block";
         }
-        
+
         function fecharModal() {
             document.getElementById("produtoModal").style.display = "none";
         }
-        
+
         function limparTabela() {
             const tabela = document.getElementById("resultadoTabela");
             const tbody = tabela.querySelector("tbody");
@@ -277,39 +277,39 @@
             tabela.style.display = 'none';
             document.getElementById("clear-button").style.display = "none";
         }
-        
+
         function mostrarSucesso(mensagem) {
             const mensagemSucesso = document.getElementById('mensagemSucesso');
             mensagemSucesso.innerText = mensagem;
             mensagemSucesso.style.display = 'block';
             mensagemSucesso.style.backgroundColor = 'rgba(40, 167, 69, 0.8)';
             mensagemSucesso.style.color = 'white';
-            
+
             document.getElementById('mensagemErro').style.display = 'none';
         }
-        
+
         function mostrarErro(mensagem) {
             const mensagemErro = document.getElementById('mensagemErro');
             mensagemErro.innerText = mensagem;
             mensagemErro.style.display = 'block';
             mensagemErro.style.backgroundColor = 'rgba(220, 53, 69, 0.8)';
             mensagemErro.style.color = 'white';
-            
+
             document.getElementById('mensagemSucesso').style.display = 'none';
         }
-        
+
         function confirmarExclusao(idSaida) {
             if (confirm('Tem certeza que deseja excluir esta saída?')) {
                 excluirSaida(idSaida);
             }
         }
-        
+
         function excluirSaida(idSaida) {
             document.getElementById('loadingOverlay').style.display = 'flex';
-            
+
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            
-            fetch('/home/saida-produtos/destroy', {
+
+            fetch('/saida-produtos/destroy', {
                 method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': token,
@@ -327,7 +327,7 @@
                 if (data.status === 'sucesso') {
                     mostrarSucesso(data.mensagem);
                     fecharModal();
-                    
+
                     // Refazer a busca para atualizar a tabela
                     setTimeout(() => {
                         buscarSaidas();
@@ -344,20 +344,20 @@
                 document.getElementById('loadingOverlay').style.display = 'none';
             });
         }
-        
+
         function buscarLocais() {
             const termo = document.getElementById('localSearch').value.trim();
             document.getElementById('loadingOverlay').style.display = 'flex';
             document.getElementById('searchLocalMessage').style.display = 'none';
-            
+
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            
+
             console.log('Enviando busca de locais com termo:', termo);
-            
+
             // Criando FormData para enviar no formato esperado pelo controller
             const formData = new FormData();
             formData.append('nome_Local', termo);
-            
+
             fetch('{{ route("menu.local-destino.search") }}', {
                 method: 'POST',
                 headers: {
@@ -373,7 +373,7 @@
             })
             .then(data => {
                 console.log('Resposta da API de locais:', data);
-                
+
                 if (data.status === 'sucesso' || (data.resultados && data.resultados.length > 0)) {
                     exibirLocaisTabela(data.resultados);
                 } else {
@@ -391,57 +391,57 @@
                 document.getElementById('loadingOverlay').style.display = 'none';
             });
         }
-        
+
         function exibirLocaisTabela(locais) {
             const tbody = document.querySelector('#locaisTable tbody');
             tbody.innerHTML = '';
-            
+
             if (!locais.length) {
                 document.getElementById('searchLocalMessage').style.display = 'block';
                 document.getElementById('searchLocalMessage').textContent = 'Nenhum local encontrado.';
                 return;
             }
-            
+
             document.getElementById('searchLocalMessage').style.display = 'none';
-            
+
             locais.forEach(local => {
                 const row = tbody.insertRow();
-                
+
                 const cellId = row.insertCell(0);
                 cellId.textContent = local.id_Local || '';
-                
+
                 const cellNome = row.insertCell(1);
                 cellNome.textContent = local.nome_Local || '';
-                
+
                 const cellTipo = row.insertCell(2);
                 cellTipo.textContent = local.tipo_Local || '';
-                
+
                 row.style.cursor = 'pointer';
                 row.addEventListener('click', () => {
                     selecionarLocal(local);
                 });
             });
         }
-        
+
         function selecionarLocal(local) {
             // Aqui você pode implementar o que deve acontecer quando um local é selecionado
             console.log('Local selecionado:', local);
             fecharModalBuscaLocal();
         }
-        
+
         function abrirModalBuscaLocal() {
             document.getElementById('searchLocalModal').style.display = 'block';
             document.getElementById('localSearch').focus();
-            
+
             // Carregar todos os locais automaticamente ao abrir o modal
             buscarLocais();
         }
-        
+
         function fecharModalBuscaLocal() {
             document.getElementById('searchLocalModal').style.display = 'none';
             document.getElementById('localSearch').value = '';
         }
-        
+
         // Fechar modal ao clicar fora
         window.onclick = function(event) {
             if (event.target == document.getElementById('produtoModal')) {

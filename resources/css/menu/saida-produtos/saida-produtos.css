@@ -503,23 +503,23 @@ footer {
     min-width: 500px;
 }
 
-#resultadoTabela th:nth-child(1), 
+#resultadoTabela th:nth-child(1),
 #resultadoTabela td:nth-child(1) {
     width: 15%;
 }
-#resultadoTabela th:nth-child(2), 
+#resultadoTabela th:nth-child(2),
 #resultadoTabela td:nth-child(2) {
     width: 30%;
 }
-#resultadoTabela th:nth-child(3), 
+#resultadoTabela th:nth-child(3),
 #resultadoTabela td:nth-child(3) {
     width: 30%;
 }
-#resultadoTabela th:nth-child(4), 
+#resultadoTabela th:nth-child(4),
 #resultadoTabela td:nth-child(4) {
     width: 10%;
 }
-#resultadoTabela th:nth-child(5), 
+#resultadoTabela th:nth-child(5),
 #resultadoTabela td:nth-child(5) {
     width: 15%;
 }
@@ -537,7 +537,7 @@ footer {
 
 /* Fix for edit button in editar */
 .buttons-edit {
-    width: 100%; 
+    width: 100%;
     display: flex;
     justify-content: center;
     margin-top: 15px;
@@ -559,32 +559,43 @@ footer {
 @media (max-width: 480px) {
     .header h1 {
         font-size: 20px;
+        gap: 20px;
     }
-    
+
     button {
         padding: 8px 15px;
         font-size: 13px;
     }
-    
+
     .input-field, select {
         height: 45px;
         font-size: 14px;
+        margin-bottom: 5px;
     }
-    
+
+    textarea {
+        margin-bottom: 10px;
+    }
+
     .container2 {
         flex-direction: column;
-        gap: 0;
+        gap: 15px;
     }
-    
+
+    .coluna1, .coluna2 {
+        gap: 25px;
+        margin-bottom: 10px;
+    }
+
     .logo img {
         max-width: 140px;
     }
-    
+
     #preview {
         width: 120px;
         height: 120px;
     }
-    
+
     .modal-content-Produto {
         width: 95%;
         margin: 15% auto;
@@ -596,24 +607,24 @@ footer {
     .container {
         max-width: 600px;
     }
-    
+
     .header h1 {
         font-size: 28px;
     }
-    
+
     button {
         padding: 12px 25px;
         font-size: 15px;
     }
-    
+
     .logo {
         margin-top: 30px;
     }
-    
+
     .logo img {
         max-width: 180px;
     }
-    
+
     #preview {
         width: 180px;
         height: 180px;

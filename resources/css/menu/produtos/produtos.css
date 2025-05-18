@@ -274,13 +274,35 @@ footer {
 }
 
 /* Search results (Table) */
+.resultado-container {
+    width: 100%;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    margin-top: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.resultado-titulo {
+    color: var(--accent-color);
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
 #resultadoTabela {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
     background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
@@ -313,31 +335,65 @@ footer {
     border-bottom: none;
 }
 
+/* Tabela responsiva com scrollbar horizontal */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin-bottom: 15px;
+    border-radius: 12px;
+}
+
+#resultadoTabela {
+    min-width: 500px;
+}
+
+#resultadoTabela th:nth-child(1),
+#resultadoTabela td:nth-child(1) {
+    width: 15%;
+}
+#resultadoTabela th:nth-child(2),
+#resultadoTabela td:nth-child(2) {
+    width: 30%;
+}
+#resultadoTabela th:nth-child(3),
+#resultadoTabela td:nth-child(3) {
+    width: 20%;
+}
+#resultadoTabela th:nth-child(4),
+#resultadoTabela td:nth-child(4) {
+    width: 20%;
+}
+#resultadoTabela th:nth-child(5),
+#resultadoTabela td:nth-child(5) {
+    width: 15%;
+}
+
 /* Media queries */
 @media (max-width: 480px) {
     .header h1 {
         font-size: 20px;
     }
-    
+
     button {
         padding: 8px 15px;
         font-size: 13px;
     }
-    
+
     .input-field, select {
         height: 45px;
         font-size: 14px;
     }
-    
+
     .container2 {
         flex-direction: column;
-        gap: 0;
+        gap: 15px;
     }
-    
+
     .logo img {
         max-width: 140px;
     }
-    
+
     #preview {
         width: 120px;
         height: 120px;
@@ -348,24 +404,24 @@ footer {
     .container {
         max-width: 600px;
     }
-    
+
     .header h1 {
         font-size: 28px;
     }
-    
+
     button {
         padding: 12px 25px;
         font-size: 15px;
     }
-    
+
     .logo {
         margin-top: 30px;
     }
-    
+
     .logo img {
         max-width: 180px;
     }
-    
+
     #preview {
         width: 180px;
         height: 180px;

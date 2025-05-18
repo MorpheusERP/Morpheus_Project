@@ -59,16 +59,18 @@
                 </button>
             </div>
             <div id="fornecedorSearchResults" style="max-height: 300px; overflow-y: auto;">
-                <table id="fornecedoresTable" style="width: 100%; margin-top: 15px;">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nome</th>
-                            <th>Grupo</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="table-responsive">
+                    <table id="fornecedoresTable" style="width: 100%; margin-top: 15px;">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Grupo</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
             <div id="searchFornecedorMessage" style="margin-top: 15px; text-align: center; display: none;">
                 Nenhum fornecedor encontrado.
@@ -95,7 +97,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Carregar dados da entrada pelo ID na URL
             carregarEntrada();
-            
+
             // Configurar eventos
             document.getElementById('entradaForm').addEventListener('submit', atualizarEntrada);
             document.getElementById('search-fornecedor-button').addEventListener('click', abrirModalBuscaFornecedor);
@@ -111,16 +113,16 @@
         function carregarEntrada() {
             const urlParams = new URLSearchParams(window.location.search);
             const id = urlParams.get('id');
-            
+
             if (!id) {
                 mostrarErro('ID da entrada não fornecido.');
                 return;
             }
-            
+
             document.getElementById('loadingOverlay').style.display = 'flex';
-            
+
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            
+
             fetch('/entrada-produtos/find', {
                 method: 'POST',
                 headers: {
@@ -151,7 +153,7 @@
                 document.getElementById('loadingOverlay').style.display = 'none';
             });
         }
-        
+
         function preencherFormulario(entrada) {
             document.getElementById('id_Entrada').value = entrada.id_Entrada;
             document.getElementById('cod_Produto').value = entrada.cod_Produto;
@@ -159,17 +161,17 @@
             document.getElementById('fornecedorText').value = entrada.nome_Fantasia || entrada.razao_Social;
             document.getElementById('fornecedor').value = entrada.id_Fornecedor;
             document.getElementById('razaoSocial').value = entrada.razao_Social || '';
-            
+
             // Certifique-se de que os valores numéricos são preenchidos corretamente
             document.getElementById('quantidade').value = parseFloat(entrada.qtd_Entrada) || '';
-            
+
             // Tratar preços de custo e venda - removendo formatação e convertendo para números
             if (typeof entrada.preco_Custo === 'string') {
                 document.getElementById('precoCusto').value = entrada.preco_Custo.replace(/[^\d,.-]/g, '').replace(',', '.');
             } else {
                 document.getElementById('precoCusto').value = entrada.preco_Custo || '';
             }
-            
+
             if (entrada.preco_Venda) {
                 if (typeof entrada.preco_Venda === 'string') {
                     document.getElementById('precoVenda').value = entrada.preco_Venda.replace(/[^\d,.-]/g, '').replace(',', '.');
@@ -179,7 +181,7 @@
             } else {
                 document.getElementById('precoVenda').value = '';
             }
-            
+
             // Formatar a data para o formato esperado pelo input date
             if (entrada.data_Entrada) {
                 const data = new Date(entrada.data_Entrada);
@@ -188,7 +190,7 @@
                 const dia = String(data.getDate()).padStart(2, '0');
                 document.getElementById('dataEntrada').value = `${ano}-${mes}-${dia}`;
             }
-            
+
             // Exibir imagem
             if (entrada.imagem) {
                 document.getElementById('preview').src = `data:image/jpeg;base64,${entrada.imagem}`;
@@ -196,26 +198,26 @@
                 document.getElementById('preview').src = "{{ asset('images/defaultimg.png') }}";
             }
         }
-        
+
         function atualizarEntrada(event) {
             event.preventDefault();
-            
+
             const idEntrada = document.getElementById('id_Entrada').value;
             const idFornecedor = document.getElementById('fornecedor').value;
             const quantidade = document.getElementById('quantidade').value;
             const precoCusto = document.getElementById('precoCusto').value;
             const precoVenda = document.getElementById('precoVenda').value;
             const dataEntrada = document.getElementById('dataEntrada').value;
-            
+
             if (!idEntrada || !idFornecedor || !quantidade || !precoCusto || !dataEntrada) {
                 mostrarErro('Preencha todos os campos obrigatórios.');
                 return;
             }
-            
+
             document.getElementById('loadingOverlay').style.display = 'flex';
-            
+
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            
+
             fetch('/entrada-produtos/update', {
                 method: 'POST',
                 headers: {
@@ -256,22 +258,22 @@
                 document.getElementById('loadingOverlay').style.display = 'none';
             });
         }
-        
+
         function abrirModalBuscaFornecedor() {
             document.getElementById('searchFornecedorModal').style.display = 'block';
             document.getElementById('fornecedorSearch').focus();
-            
+
             // Carregar todos os fornecedores automaticamente ao abrir o modal
             buscarFornecedores();
         }
-        
+
         function buscarFornecedores() {
             const termo = document.getElementById('fornecedorSearch').value.trim();
             document.getElementById('loadingOverlay').style.display = 'flex';
             document.getElementById('searchFornecedorMessage').style.display = 'none';
-            
+
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            
+
             fetch('{{ route("entrada-produtos.fornecedores") }}', {
                 method: 'POST',
                 headers: {
@@ -305,57 +307,57 @@
                 document.getElementById('loadingOverlay').style.display = 'none';
             });
         }
-        
+
         function exibirFornecedoresTabela(fornecedores) {
             const tbody = document.querySelector('#fornecedoresTable tbody');
             tbody.innerHTML = '';
-            
+
             fornecedores.forEach(fornecedor => {
                 const row = tbody.insertRow();
-                
+
                 row.insertCell(0).textContent = fornecedor.id_Fornecedor;
                 row.insertCell(1).textContent = fornecedor.nome_Fantasia || fornecedor.razao_Social;
                 row.insertCell(2).textContent = fornecedor.grupo || 'N/A';
-                
+
                 row.style.cursor = 'pointer';
                 row.addEventListener('click', () => {
                     selecionarFornecedor(fornecedor);
                 });
             });
         }
-        
+
         function selecionarFornecedor(fornecedor) {
             document.getElementById('fornecedorText').value = fornecedor.nome_Fantasia || fornecedor.razao_Social;
             document.getElementById('fornecedor').value = fornecedor.id_Fornecedor;
             document.getElementById('razaoSocial').value = fornecedor.razao_Social;
-            
+
             fecharModalBuscaFornecedor();
         }
-        
+
         function fecharModalBuscaFornecedor() {
             document.getElementById('searchFornecedorModal').style.display = 'none';
         }
-        
+
         function mostrarSucesso(mensagem) {
             const mensagemSucesso = document.getElementById('mensagemSucesso');
             mensagemSucesso.innerText = mensagem;
             mensagemSucesso.style.display = 'block';
             mensagemSucesso.style.backgroundColor = 'rgba(40, 167, 69, 0.8)';
             mensagemSucesso.style.color = 'white';
-            
+
             document.getElementById('mensagemErro').style.display = 'none';
         }
-        
+
         function mostrarErro(mensagem) {
             const mensagemErro = document.getElementById('mensagemErro');
             mensagemErro.innerText = mensagem;
             mensagemErro.style.display = 'block';
             mensagemErro.style.backgroundColor = 'rgba(220, 53, 69, 0.8)';
             mensagemErro.style.color = 'white';
-            
+
             document.getElementById('mensagemSucesso').style.display = 'none';
         }
-        
+
         // Fechar modal ao clicar fora
         window.onclick = function(event) {
             if (event.target == document.getElementById('searchFornecedorModal')) {

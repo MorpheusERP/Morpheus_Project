@@ -59,18 +59,20 @@
             <div id="mensagemErro" style="display: none;"></div>
         </div>
     </div>
-    <table id="resultadoTabela" style="display: none;">
-        <thead>
-            <tr>
-                <th>Foto</th>
-                <th>Produto</th>
-                <th>Fornecedor</th>
-                <th>QTD</th>
-                <th>Custo</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+    <div class="table-responsive">
+        <table id="resultadoTabela" style="display: none;">
+            <thead>
+                <tr>
+                    <th>Foto</th>
+                    <th>Produto</th>
+                    <th>Fornecedor</th>
+                    <th>QTD</th>
+                    <th>Custo</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
     <div class="buttons-search" id="clear-button" style="display: none; margin-top: 15px;">
         <button class="clear" onclick="limparTabela()">
             <i class="fas fa-trash-alt"></i> Limpar Tabela
@@ -109,16 +111,18 @@
                 </button>
             </div>
             <div id="produtoSearchResults" style="max-height: 300px; overflow-y: auto;">
-                <table id="produtosTable" style="width: 100%; margin-top: 15px;">
-                    <thead>
-                        <tr>
-                            <th>Código</th>
-                            <th>Produto</th>
-                            <th>Grupo</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="table-responsive">
+                    <table id="produtosTable" style="width: 100%; margin-top: 15px;">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Produto</th>
+                                <th>Grupo</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
             <div id="searchProductMessage" style="margin-top: 15px; text-align: center; display: none;">
                 Nenhum produto encontrado.
@@ -136,16 +140,18 @@
                 </button>
             </div>
             <div id="fornecedorSearchResults" style="max-height: 300px; overflow-y: auto;">
-                <table id="fornecedoresTable" style="width: 100%; margin-top: 15px;">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Nome</th>
-                            <th>Grupo</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+                <div class="table-responsive">
+                    <table id="fornecedoresTable" style="width: 100%; margin-top: 15px;">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Grupo</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
             <div id="searchFornecedorMessage" style="margin-top: 15px; text-align: center; display: none;">
                 Nenhum fornecedor encontrado.
@@ -176,21 +182,21 @@
             habilitarCampos();
         }
 
-        function voltar() { 
+        function voltar() {
             document.getElementById('new-button').style.display = 'none';
             document.getElementById('default-buttons').style.display = 'flex';
             document.getElementById('edit-buttons').style.display = 'none';
             desabilitarCampos();
-            
+
             document.getElementById('entradaForm').reset();
             document.getElementById('preview').src = "{{ asset('images/defaultimg.png') }}";
             document.getElementById('preview').classList.remove('image-enabled');
             document.getElementById('preview').classList.add('image-disabled');
-            
+
             document.getElementById('mensagemSucesso').style.display = 'none';
             document.getElementById('mensagemErro').style.display = 'none';
         }
-        
+
         function habilitarCampos() {
             document.getElementById('preview').classList.remove('image-disabled');
             document.getElementById('preview').classList.add('image-enabled');
@@ -200,12 +206,12 @@
             document.getElementById('precoCusto').disabled = false;
             document.getElementById('precoVenda').disabled = false;
             document.getElementById('dataEntrada').disabled = false;
-            
+
             // Definir data padrão
             const hoje = new Date();
             const dataFormatada = hoje.toISOString().split('T')[0];
             document.getElementById('dataEntrada').value = dataFormatada;
-            
+
             // Produto e fornecedor permanecem readonly, mas visualmente ativos
             document.getElementById('codigo').classList.remove('image-disabled');
             document.getElementById('produto').classList.remove('image-disabled');
@@ -222,52 +228,52 @@
             document.getElementById('precoCusto').disabled = true;
             document.getElementById('precoVenda').disabled = true;
             document.getElementById('dataEntrada').disabled = true;
-            
+
             // Adicionar visual de desabilitado
             document.getElementById('codigo').classList.add('image-disabled');
             document.getElementById('produto').classList.add('image-disabled');
             document.getElementById('fornecedorText').classList.add('image-disabled');
             document.getElementById('razaoSocial').classList.add('image-disabled');
         }
-        
+
         function recarregarPagina() {
             location.reload();
         }
-        
+
         function mostrarSucesso(mensagem) {
             const mensagemSucesso = document.getElementById('mensagemSucesso');
             mensagemSucesso.innerText = mensagem;
             mensagemSucesso.style.display = 'block';
             mensagemSucesso.style.backgroundColor = 'rgba(40, 167, 69, 0.8)';
             mensagemSucesso.style.color = 'white';
-            
+
             document.getElementById('mensagemErro').style.display = 'none';
         }
-        
+
         function mostrarErro(mensagem) {
             const mensagemErro = document.getElementById('mensagemErro');
             mensagemErro.innerText = mensagem;
             mensagemErro.style.display = 'block';
             mensagemErro.style.backgroundColor = 'rgba(220, 53, 69, 0.8)';
             mensagemErro.style.color = 'white';
-            
+
             document.getElementById('mensagemSucesso').style.display = 'none';
         }
-        
+
         // Busca de produtos
         document.getElementById('search-product-button').addEventListener('click', function() {
             document.getElementById('searchProductModal').style.display = 'block';
             document.getElementById('produtoSearch').focus();
-            
+
             // Carregar todos os produtos automaticamente ao abrir o modal
             buscarProdutos('');
         });
-        
+
         document.getElementById('btn-search-product').addEventListener('click', function() {
             const termo = document.getElementById('produtoSearch').value.trim();
             buscarProdutos(termo);
         });
-        
+
         document.getElementById('produtoSearch').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
@@ -275,13 +281,13 @@
                 buscarProdutos(termo);
             }
         });
-        
+
         function buscarProdutos(termo) {
             document.getElementById('loadingOverlay').style.display = 'flex';
             document.getElementById('searchProductMessage').style.display = 'none';
-            
+
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            
+
             fetch('{{ route("entrada-produtos.produtos") }}', {
                 method: 'POST',
                 headers: {
@@ -299,7 +305,7 @@
             })
             .then(data => {
                 console.log('Resposta da API:', data); // Para debugging
-                
+
                 if (data.status === 'sucesso' && Array.isArray(data.produtos) && data.produtos.length > 0) {
                     exibirProdutosTabela(data.produtos);
                 } else {
@@ -317,17 +323,17 @@
                 document.getElementById('loadingOverlay').style.display = 'none';
             });
         }
-        
+
         function exibirProdutosTabela(produtos) {
             const tbody = document.querySelector('#produtosTable tbody');
             tbody.innerHTML = '';
-            
+
             if (!produtos.length) {
                 document.getElementById('searchProductMessage').style.display = 'block';
                 document.getElementById('searchProductMessage').textContent = 'Nenhum produto encontrado.';
                 return;
             }
-            
+
             const thead = document.querySelector('#produtosTable thead tr');
             if (thead.children.length === 3) {
                 const thPrecoCusto = document.createElement('th');
@@ -336,71 +342,71 @@
             } else if (thead.children.length > 3) {
                 thead.children[3].textContent = 'Preço Custo';
             }
-            
+
             produtos.forEach(produto => {
                 const row = tbody.insertRow();
-                
+
                 const cellCodigo = row.insertCell(0);
                 cellCodigo.textContent = produto.cod_Produto || 'N/D';
-                
+
                 const cellNome = row.insertCell(1);
                 cellNome.textContent = produto.nome_Produto || 'N/D';
-                
+
                 const cellGrupo = row.insertCell(2);
                 cellGrupo.textContent = produto.grupo || 'N/D';
-                
+
                 const cellPrecoCusto = row.insertCell(3);
                 cellPrecoCusto.textContent = produto.preco_Custo ? `R$ ${produto.preco_Custo}` : 'N/A';
-                
+
                 row.style.cursor = 'pointer';
                 row.addEventListener('click', () => {
                     selecionarProduto(produto);
                 });
             });
         }
-        
+
         function selecionarProduto(produto) {
             document.getElementById('codigo').value = produto.cod_Produto;
             document.getElementById('produto').value = produto.nome_Produto;
-            
+
             // Converter valores de formato brasileiro para formato de input (troca vírgula por ponto)
             if (produto.preco_Custo) {
                 let precoCusto = produto.preco_Custo.replace(/\./g, '').replace(',', '.');
                 document.getElementById('precoCusto').value = precoCusto;
             }
-            
+
             if (produto.preco_Venda) {
                 let precoVenda = produto.preco_Venda.replace(/\./g, '').replace(',', '.');
                 document.getElementById('precoVenda').value = precoVenda;
             }
-            
+
             if (produto.imagem) {
                 document.getElementById('preview').src = `data:image/jpeg;base64,${produto.imagem}`;
             } else {
                 document.getElementById('preview').src = "{{ asset('images/defaultimg.png') }}";
             }
-            
+
             fecharModalBuscaProduto();
         }
-        
+
         function fecharModalBuscaProduto() {
             document.getElementById('searchProductModal').style.display = 'none';
             document.getElementById('produtoSearch').value = '';
         }
-        
+
         // Busca de fornecedores
         document.getElementById('search-fornecedor-button').addEventListener('click', function() {
             document.getElementById('searchFornecedorModal').style.display = 'block';
             document.getElementById('fornecedorSearch').focus();
-            
+
             buscarFornecedores('');
         });
-        
+
         document.getElementById('btn-search-fornecedor').addEventListener('click', function() {
             const termo = document.getElementById('fornecedorSearch').value.trim();
             buscarFornecedores(termo);
         });
-        
+
         document.getElementById('fornecedorSearch').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
@@ -408,15 +414,15 @@
                 buscarFornecedores(termo);
             }
         });
-        
+
         function buscarFornecedores(termo) {
             document.getElementById('loadingOverlay').style.display = 'flex';
             document.getElementById('searchFornecedorMessage').style.display = 'none';
-            
+
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            
+
             console.log('Enviando busca de fornecedores com termo:', termo);
-            
+
             fetch('{{ route("entrada-produtos.fornecedores") }}', {
                 method: 'POST',
                 headers: {
@@ -434,7 +440,7 @@
             })
             .then(data => {
                 console.log('Resposta da API de fornecedores:', data);
-                
+
                 if (data.status === 'sucesso') {
                     if (Array.isArray(data.fornecedores) && data.fornecedores.length > 0) {
                         exibirFornecedoresTabela(data.fornecedores);
@@ -459,48 +465,48 @@
                 document.getElementById('loadingOverlay').style.display = 'none';
             });
         }
-        
+
         function exibirFornecedoresTabela(fornecedores) {
             const tbody = document.querySelector('#fornecedoresTable tbody');
             tbody.innerHTML = '';
-            
+
             console.log('Exibindo ' + fornecedores.length + ' fornecedores na tabela');
-            
+
             fornecedores.forEach(fornecedor => {
                 console.log('Fornecedor:', fornecedor);
                 const row = tbody.insertRow();
-                
+
                 const cellId = row.insertCell(0);
                 cellId.textContent = fornecedor.id_Fornecedor || 'N/D';
-                
+
                 const cellNome = row.insertCell(1);
                 cellNome.textContent = fornecedor.nome_Fantasia || fornecedor.razao_Social || 'N/D';
-                
+
                 const cellGrupo = row.insertCell(2);
                 cellGrupo.textContent = fornecedor.grupo || 'N/D';
-                
+
                 row.style.cursor = 'pointer';
                 row.addEventListener('click', () => {
                     selecionarFornecedor(fornecedor);
                 });
             });
         }
-        
+
         function selecionarFornecedor(fornecedor) {
             document.getElementById('fornecedorText').value = fornecedor.nome_Fantasia || fornecedor.razao_Social;
             document.getElementById('fornecedor').value = fornecedor.id_Fornecedor;
             document.getElementById('razaoSocial').value = fornecedor.razao_Social;
-            
+
             fecharModalBuscaFornecedor();
         }
-        
+
         function fecharModalBuscaFornecedor() {
             document.getElementById('searchFornecedorModal').style.display = 'none';
             document.getElementById('fornecedorSearch').value = '';
         }
-        
+
         document.getElementById('entradaForm').addEventListener('submit', function(event) {
-            event.preventDefault(); 
+            event.preventDefault();
 
             const codigo = document.getElementById('codigo').value.trim();
             const produto = document.getElementById('produto').value.trim();
@@ -514,14 +520,14 @@
                 mostrarErro('Por favor, preencha todos os campos obrigatórios.');
                 return;
             }
-    
+
             const btnSalvar = document.querySelector('.edit');
             const originalBtnText = btnSalvar.innerHTML;
             btnSalvar.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Salvando...';
             btnSalvar.disabled = true;
-            
+
             const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            
+
             const formData = new FormData();
             formData.append('cod_Produto', codigo);
             formData.append('id_Fornecedor', idFornecedor);
@@ -529,7 +535,7 @@
             formData.append('preco_Custo', precoCusto);
             formData.append('preco_Venda', precoVenda);
             formData.append('data_Entrada', dataEntrada || new Date().toISOString().split('T')[0]);
-    
+
             fetch('/entrada-produtos/store', {
                 method: 'POST',
                 headers: {
@@ -553,7 +559,7 @@
                     mostrarSucesso(data.mensagem);
                     setTimeout(() => {
                         voltar();
-                    }, 3000); 
+                    }, 3000);
                 } else if (data.status === 'erro') {
                     mostrarErro(data.mensagem);
                 }
@@ -567,14 +573,14 @@
                 btnSalvar.disabled = false;
             });
         });
-        
+
         function buscarURL() {
             const urlParams = new URLSearchParams(window.location.search);
             const id_Lote = urlParams.get("id_Lote");
-            
+
             if (id_Lote) {
                 document.getElementById('loadingOverlay').style.display = 'flex';
-                
+
                 const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
                 fetch('/home/entrada-produtos/find', {
@@ -609,13 +615,13 @@
 
             window.history.replaceState({}, document.title, window.location.pathname);
         }
-        
+
         function exibirTabelaEntradas(produtos) {
             document.getElementById("clear-button").style.display = "flex";
             const tabela = document.getElementById("resultadoTabela");
             const tbody = tabela.querySelector("tbody");
-            tbody.innerHTML = ''; 
-            tabela.style.display = 'table'; 
+            tbody.innerHTML = '';
+            tabela.style.display = 'table';
 
             produtos.forEach((produto) => {
                 const row = tbody.insertRow();
@@ -638,14 +644,14 @@
                 row.addEventListener('click', () => abrirModal(produto));
             });
         }
-        
+
         function formatarDinheiro(valor) {
             return parseFloat(valor).toLocaleString('pt-BR', {
                 style: 'currency',
                 currency: 'BRL'
             });
         }
-        
+
         function abrirModal(produto) {
             document.getElementById("modalImagem").src = produto.imagem ? `data:image/jpeg;base64,${produto.imagem}` : '{{ asset("images/defaultimg.png") }}';
             document.getElementById("modalCodProduto").value = produto.cod_Produto || '';
@@ -654,7 +660,7 @@
             document.getElementById("modalQuantidade").value = produto.qtd_Entrada || '';
             document.getElementById("modalPrecoCusto").value = produto.preco_Custo ? formatarDinheiro(produto.preco_Custo) : 'N/A';
             document.getElementById("modalPrecoVenda").value = produto.preco_Venda ? formatarDinheiro(produto.preco_Venda) : 'N/A';
-            
+
             document.getElementById("produtoModal").style.display = "block";
         }
 
@@ -669,14 +675,14 @@
             tabela.style.display = 'none';
             document.getElementById("clear-button").style.display = "none";
         }
-        
+
         function back() {
             window.location.href = "{{ route('home') }}";
         }
-        
+
         document.addEventListener("DOMContentLoaded", function() {
             buscarURL();
-            
+
             // Fechar modais ao clicar fora
             window.onclick = function(event) {
                 if (event.target == document.getElementById('produtoModal')) {
