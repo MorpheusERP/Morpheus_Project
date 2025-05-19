@@ -82,6 +82,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/store', [ProdutoController::class, 'store'])->name('produto.store');
         Route::get('/buscar', [ProdutoController::class, 'showBuscar'])->name('menu.produtos.produtos-buscar');
         Route::get('/search', [ProdutoController::class, 'search'])->name('produto.search');
+        Route::get('/ultimo-codigo', [ProdutoController::class, 'ultimoCodigo'])->name('ultimoCodigo');
         Route::get('/find', [ProdutoController::class, 'find'])->name('produto.find');
         Route::get('/editar', [ProdutoController::class, 'showEditar'])->name('menu.produtos.produtos-editar');
         Route::post('/update', [ProdutoController::class, 'update'])->name('produto.update');
