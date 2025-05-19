@@ -6,8 +6,11 @@
 
 @push('styles')
     @vite(['resources/css/menu/produtos/produtos.css'])
-    @vite(['resources/js/menu/produtos/produtos-ia.js'])
+@endpush
 
+@push('scripts')
+    @vite(['resources/js/menu/produtos/produtos-ia.js'])
+    @vite(['resources/js/menu/produtos/produtos.js'])
 @endpush
 
 @section('content')
