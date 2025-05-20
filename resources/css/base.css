@@ -90,7 +90,7 @@
     transition: all 0.6s;
 }
 
-.grid-button:hover::before, 
+.grid-button:hover::before,
 .grid-button:active::before {
     left: 100%;
 }
@@ -170,8 +170,4 @@
     }
 }
 
-@media (min-height: 700px) {
-    .Conteudo {
-        margin-top: -20px;
-    }
-}
+
