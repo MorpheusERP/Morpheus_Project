@@ -69,9 +69,7 @@ class ProdutoController extends Controller
 
     public function search(Request $request)
     {
-        //verifica se nenhum filtro foi enviado na requisição
-        if (!$request->filled('cod_Produto', 'nome_Produto', 'grupo', 'sub_Grupo')){
-            //retorna os 20 produtos com o maior código
+        if (!$request->has('cod_Produto') && !$request->has('nome_Produto') && !$request->has('grupo') && !$request->has('sub_Grupo')){
             $produtos = Produto::orderBy('cod_Produto', 'desc')
                 ->limit(20)
                 ->get();
