@@ -168,7 +168,7 @@
         }
 
         function formatarData(data) {
-            if (!data) return '';
+            if (!data) return '---';
             const partes = data.split('-');
             if (partes.length === 3) {
                 return `${partes[2]}/${partes[1]}/${partes[0]}`;
@@ -176,6 +176,7 @@
             return data;
         }
 
+        // Função para formatar valores monetários
         function formatarMoeda(valor) {
             return new Intl.NumberFormat('pt-BR', {
                 style: 'currency',
@@ -277,9 +278,9 @@
             saidas.forEach(saida => {
                 const linha = document.createElement('tr');
                 linha.innerHTML = `
-                        <td>${saida.id_Saida || ''}</td>
-                        <td>${saida.data_Saida || ''}</td>
-                        <td>${saida.valor_Total || ''}</td>
+                        <td>${saida.id_Saida || '---'}</td>
+                        <td>${formatarData(saida.data_Saida) || '---'}</td>
+                        <td>${formatarMoeda(saida.valor_Total) || '---'}</td>
                     `;
                 linha.style.cursor = 'pointer';
                 linha.addEventListener('click', () => abrirDetalhes(saida));
@@ -296,9 +297,9 @@
         // Função para abrir modal com detalhes da saída
         function abrirDetalhes(saida) {
             saidaSelecionada = saida;
-            document.getElementById('modalCodigo').value = saida.id_Saida || '';
-            document.getElementById('modalData').value = formatarData(saida.data_Saida);
-            document.getElementById('modalValor').value = formatarMoeda(saida.valor_Total);
+            document.getElementById('modalCodigo').value = saida.id_Saida || '---';
+            document.getElementById('modalData').value = formatarData(saida.data_Saida) || '---';
+            document.getElementById('modalValor').value = formatarMoeda(saida.valor_Total) || '---';
             document.getElementById('btnDetalhesPDF').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Carregando...';
             document.getElementById('btnDetalhesPDF').disabled = true;
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -422,9 +423,9 @@
 
             // Preparar dados para a tabela
             const linhas = saidas.map(saida => [
-                saida.id_Saida || '',
-                saida.data_Saida || '',
-                formatarMoeda(Number(saida.valor_Total))
+                saida.id_Saida || '---',
+                formatarData(saida.data_Saida) || '---',
+                formatarMoeda(Number(saida.valor_Total) || 0)
             ]);
 
             // Adicionar a tabela ao PDF
@@ -478,9 +479,9 @@
             // Adicionar informações da saída
             doc.setFontSize(12);
             doc.setTextColor(0, 0, 0);
-            doc.text(`Código da Saída: ${lote.id_Saida}`, 14, 25);
-            doc.text(`Data de Saída: ${lote.data_Saida}`, 14, 30);
-            doc.text(`Valor Total: ${lote.valor_Total}`, 14, 35);
+            doc.text(`Código da Saída: ${lote.id_Saida || '---'}`, 14, 25);
+            doc.text(`Data de Saída: ${formatarData(lote.data_Saida) || '---'}`, 14, 30);
+            doc.text(`Valor Total: ${formatarMoeda(lote.valor_Total || 0)}`, 14, 35);
             doc.text(`Usuário: ${lote.nome_Usuario || 'Não informado'}`, 14, 40);
 
             // Configuração da tabela
