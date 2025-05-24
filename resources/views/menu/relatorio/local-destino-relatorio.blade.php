@@ -104,10 +104,10 @@
                 doc.text(`Data de geração: ${dataAtual}`, 14, 30);
                 const headers = [['ID', 'Nome do Local', 'Tipo do Local', 'Observação']];
                 const data = resultadosLocais.map(local => [
-                    local.id_Local || '',
-                    local.nome_Local || '',
-                    local.tipo_Local || '',
-                    local.observacao || ''
+                    local.id_Local || '---',
+                    local.nome_Local || '---',
+                    local.tipo_Local || '---',
+                    local.observacao || '---'
                 ]);
                 doc.autoTable({
                     head: headers,
@@ -192,7 +192,7 @@
                 const tipoLocal = local.tipo_Local || '---';
                 const observacao = local.observacao || '---';
                 linha.innerHTML = `
-                    <td>${local.id_Local || ''}</td>
+                    <td>${local.id_Local || '---'}</td>
                     <td ${nomeLocal.length > 20 ? `data-content="${nomeLocal}"` : ''}>${nomeLocal}</td>
                     <td ${tipoLocal.length > 15 ? `data-content="${tipoLocal}"` : ''}>${tipoLocal}</td>
                     <td ${observacao.length > 30 ? `data-content="${observacao}"` : ''}>${observacao}</td>
