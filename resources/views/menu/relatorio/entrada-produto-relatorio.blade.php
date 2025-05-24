@@ -177,7 +177,7 @@
 
         // Função para formatar data para exibição
         function formatarData(data) {
-            if (!data) return '';
+            if (!data) return '---';
             const partes = data.split('-');
             if (partes.length === 3) {
                 return `${partes[2]}/${partes[1]}/${partes[0]}`;
@@ -316,9 +316,9 @@
                 const linha = document.createElement('tr');
 
                 linha.innerHTML = `
-                        <td>${entrada.id_Entrada || ''}</td>
-                        <td>${formatarData(entrada.data_Entrada)}</td>
-                        <td>${formatarMoeda(entrada.valor_Total)}</td>
+                        <td>${entrada.id_Entrada || '---'}</td>
+                        <td>${formatarData(entrada.data_Entrada) || '---'}</td>
+                        <td>${formatarMoeda(entrada.valor_Total) || '---'}</td>
                     `;
 
                 // Adicionar evento de clique para mostrar detalhes
@@ -341,9 +341,9 @@
         function abrirDetalhes(entrada) {
             entradaSelecionada = entrada;
             // Preencher os campos do modal
-            document.getElementById('modalCodigo').value = entrada.id_Entrada || '';
-            document.getElementById('modalData').value = formatarData(entrada.data_Entrada);
-            document.getElementById('modalValor').value = formatarMoeda(entrada.valor_Total);
+            document.getElementById('modalCodigo').value = entrada.id_Entrada || '---';
+            document.getElementById('modalData').value = formatarData(entrada.data_Entrada) || '---';
+            document.getElementById('modalValor').value = formatarMoeda(entrada.valor_Total) || '---';
             // Mostrar indicador de carregamento
             document.getElementById('btnDetalhesPDF').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Carregando...';
             document.getElementById('btnDetalhesPDF').disabled = true;
@@ -467,9 +467,9 @@
 
             // Preparar dados para a tabela
             const linhas = entradas.map(entrada => [
-                entrada.id_Entrada || '',
-                formatarData(entrada.data_Entrada),
-                formatarMoeda(entrada.valor_Total)
+                entrada.id_Entrada || '---',
+                formatarData(entrada.data_Entrada) || '---',
+                formatarMoeda(entrada.valor_Total || 0)
             ]);
 
             // Adicionar a tabela ao PDF
@@ -531,9 +531,10 @@
             // Adicionar informações da entrada
             doc.setFontSize(12);
             doc.setTextColor(0, 0, 0);
-            doc.text(`Código da Entrada: ${entrada.id_Entrada}`, 14, 25);
-            doc.text(`Data de Entrada: ${formatarData(entrada.data_Entrada)}`, 14, 30);
-            doc.text(`Valor Total: ${formatarMoeda(entrada.valor_Total)}`, 14, 35);
+            doc.text(`Código da Entrada: ${entrada.id_Entrada || '---'}`, 14, 25);
+            doc.text(`Data de Entrada: ${formatarData(entrada.data_Entrada) || '---'}`, 14, 30);
+            doc.text(`Valor Total: ${formatarMoeda(entrada.valor_Total || 0)}`, 14, 35);
+            doc.text(`Fornecedor: ${entrada.razao_Social || 'Não informado'}`, 14, 40);
 
             // Configuração da tabela
             const colunas = [
@@ -547,12 +548,12 @@
 
             // Preparar dados para a tabela
             const linhas = produtos.map(produto => [
-                produto.cod_Produto || '',
-                produto.nome_Produto || '',
-                produto.razao_Social || '',
-                produto.qtd_Entrada || '',
-                formatarMoeda(produto.preco_Custo),
-                formatarMoeda(produto.preco_Custo * produto.qtd_Entrada)
+                produto.cod_Produto || '---',
+                produto.nome_Produto || '---',
+                produto.razao_Social || '---',
+                produto.qtd_Entrada || '---',
+                formatarMoeda(produto.preco_Custo || 0),
+                formatarMoeda((produto.preco_Custo || 0) * (produto.qtd_Entrada || 0))
             ]);
 
             // Adicionar a tabela ao PDF

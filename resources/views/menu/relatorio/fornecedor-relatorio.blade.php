@@ -119,11 +119,11 @@
                 doc.text(`Data de geração: ${dataAtual}`, 14, 30);
                 const headers = [['ID', 'Razão Social', 'Nome Fantasia', 'Grupo', 'Subgrupo']];
                 const data = resultadosFornecedores.map(fornecedor => [
-                    fornecedor.id_Fornecedor || '',
-                    fornecedor.razao_Social || '',
-                    fornecedor.nome_Fantasia || '',
-                    fornecedor.grupo || '',
-                    fornecedor.sub_Grupo || ''
+                    fornecedor.id_Fornecedor || '---',
+                    fornecedor.razao_Social || '---',
+                    fornecedor.nome_Fantasia || '---',
+                    fornecedor.grupo || '---',
+                    fornecedor.sub_Grupo || '---'
                 ]);
                 doc.autoTable({
                     head: headers,

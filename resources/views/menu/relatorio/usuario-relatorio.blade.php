@@ -134,10 +134,10 @@
                         // Preparar dados para a tabela
                         const headers = [['ID', 'Nome', 'Email', 'Tipo']];
                         const data = resultadosUsuarios.map(usuario => [
-                            usuario.id_Usuario || '',
-                            usuario.nome_Usuario || '',
-                            usuario.email || '',
-                            formatarTipoUsuario(usuario.tipo_Usuario) || ''
+                            usuario.id_Usuario || '---',
+                            usuario.nome_Usuario || '---',
+                            usuario.email || '---',
+                            formatarTipoUsuario(usuario.tipo_Usuario) || '---'
                         ]);
 
                         // Criar tabela no PDF
@@ -293,7 +293,7 @@
                 usuarios.forEach(usuario => {
                     const linha = document.createElement('tr');
 
-                    linha.innerHTML = `<td>${usuario.nome_Usuario}</td><td>${usuario.email}</td><td>${formatarTipoUsuario(usuario.tipo_Usuario)}</td>`;
+                    linha.innerHTML = `<td>${usuario.nome_Usuario || '---'}</td><td>${usuario.email || '---'}</td><td>${formatarTipoUsuario(usuario.tipo_Usuario) || '---'}</td>`;
 
                     corpoTabela.appendChild(linha);
                 });
@@ -309,6 +309,7 @@
 
             // Função para formatar o tipo de usuário de forma mais amigável
             function formatarTipoUsuario(tipo) {
+                if (!tipo) return '---';
                 if (tipo === 'admin') return 'Administrador';
                 if (tipo === 'padrao') return 'Padrão';
                 return tipo; // Retorna o valor original caso não seja nenhum dos tipos conhecidos

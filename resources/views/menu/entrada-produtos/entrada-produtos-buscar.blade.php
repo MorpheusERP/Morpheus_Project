@@ -205,9 +205,11 @@
 
         function formatarData(dataString) {
             if (!dataString) return 'Data não informada';
-
-            const data = new Date(dataString);
-            return data.toLocaleDateString('pt-BR');
+            const data = dataString.substring(0, 10).split('-');
+            if (data.length === 3) {
+                return `${data[2]}/${data[1]}/${data[0]}`;
+            }
+            return dataString;
         }
 
         function formatarDinheiro(valor) {

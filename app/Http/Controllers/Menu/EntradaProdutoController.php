@@ -12,12 +12,12 @@ class EntradaProdutoController extends Controller
     {
         return view('menu.entrada-produtos.entrada-produtos');
     }
-    
+
     public function showBuscar()
     {
         return view('menu.entrada-produtos.entrada-produtos-buscar');
     }
-    
+
     public function showEditar()
     {
         return view('menu.entrada-produtos.entrada-produtos-editar');
@@ -76,7 +76,7 @@ class EntradaProdutoController extends Controller
             }
 
             $valorTotal = $validated['preco_Custo'] * $validated['qtd_Entrada'];
-            
+
             // Se o preço de venda não foi enviado, usar o preço de venda atual do produto
             if (empty($validated['preco_Venda']) && $produto->preco_Venda) {
                 $validated['preco_Venda'] = $produto->preco_Venda;
@@ -113,7 +113,7 @@ class EntradaProdutoController extends Controller
                     'preco_Custo' => $validated['preco_Custo'],
                     'updated_at' => now()
                 ];
-                
+
                 if (!empty($validated['preco_Venda'])) {
                     $dadosAtualizacao['preco_Venda'] = $validated['preco_Venda'];
                 }
@@ -193,12 +193,12 @@ class EntradaProdutoController extends Controller
             $request->validate([
                 'id_Entrada' => 'required|integer',
             ]);
-            
+
             $id_Entrada = $request->input('id_Entrada');
 
             // Verificar se a entrada existe
             $entrada = DB::table('entrada_produtos')->where('id_Entrada', $id_Entrada)->first();
-            
+
             if (!$entrada) {
                 return response()->json([
                     'status' => 'erro',
@@ -233,7 +233,7 @@ class EntradaProdutoController extends Controller
             }
         } catch (\Exception $e) {
             \Log::error('Erro ao excluir entrada de produto: ' . $e->getMessage());
-            
+
             return response()->json([
                 'status' => 'erro',
                 'mensagem' => 'Ocorreu um erro ao excluir a entrada de produto: ' . $e->getMessage()
@@ -247,14 +247,14 @@ class EntradaProdutoController extends Controller
             // Check if we're looking for a specific entrada or a batch of entradas
             if ($request->has('id_Entrada')) {
                 $id = $request->input('id_Entrada');
-                
+
                 if (!$id) {
                     return response()->json([
                         'status' => 'erro',
                         'mensagem' => 'ID da entrada não fornecido.'
                     ]);
                 }
-                
+
                 $entrada = DB::table('entrada_produtos')
                     ->leftJoin('fornecedores', 'entrada_produtos.id_Fornecedor', '=', 'fornecedores.id_Fornecedor')
                     ->leftJoin('produtos', 'entrada_produtos.cod_Produto', '=', 'produtos.cod_Produto')
@@ -283,11 +283,11 @@ class EntradaProdutoController extends Controller
                     'status' => 'sucesso',
                     'entrada' => $entrada
                 ]);
-            } 
+            }
             // If we're looking for a batch (id_Lote)
             elseif ($request->has('id_Lote')) {
                 $id_Lote = $request->input('id_Lote');
-                
+
                 $entradas = DB::table('entrada_produtos')
                     ->leftJoin('fornecedores', 'entrada_produtos.id_Fornecedor', '=', 'fornecedores.id_Fornecedor')
                     ->leftJoin('produtos', 'entrada_produtos.cod_Produto', '=', 'produtos.cod_Produto')
@@ -331,7 +331,7 @@ class EntradaProdutoController extends Controller
                 'request' => $request->all(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             return response()->json([
                 'status' => 'erro',
                 'mensagem' => 'Ocorreu um erro ao buscar os detalhes da entrada de produto: ' . $e->getMessage()
@@ -377,21 +377,21 @@ class EntradaProdutoController extends Controller
 
             // Calcular a diferença de quantidade
             $diferenca = $validated['qtd_Entrada'] - $entrada->qtd_Entrada;
-            
+
             // Se a diferença for negativa (reduzindo quantidade), verificar se há estoque suficiente
             if ($diferenca < 0) {
                 // Buscar estoque atual
                 $estoque = DB::table('estoques')
                     ->where('id_Estoque', $entrada->id_Estoque)
                     ->first();
-                
+
                 if (!$estoque) {
                     return response()->json([
                         'status' => 'erro',
                         'mensagem' => 'Registro de estoque não encontrado.'
                     ]);
                 }
-                
+
                 // Verificar se a redução vai deixar o estoque negativo
                 if ($estoque->qtd_Estoque < abs($diferenca)) {
                     return response()->json([
@@ -400,7 +400,7 @@ class EntradaProdutoController extends Controller
                     ]);
                 }
             }
-            
+
             // Calcular novo valor total
             $valorTotal = $validated['preco_Custo'] * $validated['qtd_Entrada'];
 
@@ -444,7 +444,7 @@ class EntradaProdutoController extends Controller
 
         } catch (\Exception $e) {
             \Log::error('Erro ao atualizar entrada de produto: ' . $e->getMessage());
-            
+
             return response()->json([
                 'status' => 'erro',
                 'mensagem' => 'Ocorreu um erro ao atualizar a entrada de produto: ' . $e->getMessage()
@@ -456,14 +456,15 @@ class EntradaProdutoController extends Controller
     {
         try {
             $termo = $request->input('termo', '');
-            
+
             $query = DB::table('produtos')
                 ->leftJoin('estoques', 'produtos.cod_Produto', '=', 'estoques.cod_Produto')
-                ->select('produtos.cod_Produto', 'produtos.nome_Produto', 'produtos.preco_Custo', 
-                         'produtos.preco_Venda', 'produtos.grupo', 'produtos.sub_Grupo', 
-                         'estoques.qtd_Estoque', DB::raw('IFNULL(estoques.qtd_Estoque, 0) as estoque_atual'))
+                ->select('produtos.cod_Produto', 'produtos.nome_Produto', 'produtos.preco_Custo',
+                         'produtos.preco_Venda', 'produtos.grupo', 'produtos.sub_Grupo',
+                         'estoques.qtd_Estoque', DB::raw('IFNULL(estoques.qtd_Estoque, 0) as estoque_atual'),
+                         'produtos.imagem')
                 ->orderBy('produtos.nome_Produto');
-                
+
             if (!empty($termo)) {
                 $query->where(function($q) use ($termo) {
                     $q->where('produtos.cod_Produto', 'like', '%' . $termo . '%')
@@ -472,9 +473,9 @@ class EntradaProdutoController extends Controller
                       ->orWhere('produtos.sub_Grupo', 'like', '%' . $termo . '%');
                 });
             }
-            
+
             $produtos = $query->get();
-            
+
             // Formatar os dados para exibição
             foreach ($produtos as $produto) {
                 // Converter números para formato adequado para apresentação
@@ -483,6 +484,10 @@ class EntradaProdutoController extends Controller
                     $produto->preco_Venda = number_format($produto->preco_Venda, 2, ',', '.');
                 }
                 $produto->estoque_atual = number_format($produto->estoque_atual, 2, ',', '.');
+                // Converter imagem para base64 se existir
+                if ($produto->imagem) {
+                    $produto->imagem = base64_encode($produto->imagem);
+                }
             }
 
             return response()->json([
@@ -504,10 +509,10 @@ class EntradaProdutoController extends Controller
     {
         try {
             $termo = $request->input('termo', '');
-            
+
             $query = DB::table('fornecedores')
                 ->select('id_Fornecedor', 'razao_Social', 'nome_Fantasia', 'grupo', 'sub_Grupo');
-                
+
             if (!empty($termo)) {
                 $query->where(function($q) use ($termo) {
                     $q->where('razao_Social', 'like', '%' . $termo . '%')
@@ -516,7 +521,7 @@ class EntradaProdutoController extends Controller
                       ->orWhere('sub_Grupo', 'like', '%' . $termo . '%');
                 });
             }
-            
+
             $fornecedores = $query->orderBy('razao_Social')->get();
 
             return response()->json([

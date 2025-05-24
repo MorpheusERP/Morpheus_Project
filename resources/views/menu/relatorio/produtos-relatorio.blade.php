@@ -193,10 +193,13 @@
         document.getElementById('btnGerarPDF').addEventListener('click', function(e) {
             e.preventDefault();
             if (!resultadosProdutos.length) {
+                mostrarErro('Não há produtos para gerar o relatório');
                 return;
             }
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
+            doc.setFontSize(18);
+            doc.setTextColor(66, 0, 255);
             doc.text('Relatório de Produtos', 14, 15);
             const tableData = resultadosProdutos.map(produto => [
                 produto.cod_Produto || '---',
