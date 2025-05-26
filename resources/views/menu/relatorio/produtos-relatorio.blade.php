@@ -48,18 +48,20 @@
         </div>
         <div id="resultado-container" class="resultado-container" style="display: none;">
             <div class="resultado-titulo">Resultados da Busca</div>
-            <table id="tabelaProdutos">
-                <thead>
-                    <tr>
-                        <th>Código</th>
-                        <th>Nome</th>
-                        <th>Preço Custo</th>
-                        <th>Preço Venda</th>
-                        <th>Grupo</th>
-                    </tr>
-                </thead>
-                <tbody id="corpoTabela"></tbody>
-            </table>
+            <div class="table-responsive-scroll">
+                <table id="tabelaProdutos">
+                    <thead>
+                        <tr>
+                            <th class="col-codigo">Código</th>
+                            <th class="col-nome">Nome</th>
+                            <th class="col-preco">Preço Custo</th>
+                            <th class="col-preco">Preço Venda</th>
+                            <th class="col-grupo">Grupo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="corpoTabela"></tbody>
+                </table>
+            </div>
         </div>
     </div>
     </div>

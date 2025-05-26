@@ -203,7 +203,7 @@ thead {
 
 th {
     padding: 12px 15px;
-    text-align: left;
+    text-align: center;
     font-weight: 600;
     font-size: 14px;
     color: var(--accent-color);
@@ -214,6 +214,7 @@ th {
 
 td {
     padding: 10px 15px;
+    text-align: center;
     font-size: 14px;
     color: var(--text-light);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -265,31 +266,87 @@ tbody tr:hover {
     font-size: 16px;
 }
 
+/* Tabela Fornecedores - Novas Regras */
+.table-responsive-scroll {
+    width: 100%;
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+.col-id {
+    max-width: 70px;
+    min-width: 50px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.col-razao {
+    max-width: 180px;
+    min-width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.col-nome {
+    max-width: 160px;
+    min-width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.col-grupo {
+    max-width: 120px;
+    min-width: 80px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.col-subgrupo {
+    max-width: 120px;
+    min-width: 80px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+th, td {
+    text-align: center;
+}
+
+td, th {
+    word-break: break-word;
+}
+
+@media (max-width: 600px) {
+    .col-razao, .col-nome, .col-grupo, .col-subgrupo {
+        max-width: 90px;
+    }
+}
+
 /* Media queries */
 @media (max-width: 480px) {
     .header h1 {
         font-size: 20px;
     }
-    
+
     button {
         padding: 8px 15px;
         font-size: 13px;
     }
-    
+
     select, .input-field {
         height: 45px;
         font-size: 14px;
     }
-    
+
     .logo img {
         max-width: 140px;
     }
-    
+
     th {
         padding: 10px;
         font-size: 12px;
     }
-    
+
     td {
         padding: 8px 10px;
         font-size: 12px;
@@ -300,29 +357,29 @@ tbody tr:hover {
     .container {
         max-width: 600px;
     }
-    
+
     .header h1 {
         font-size: 28px;
     }
-    
+
     button {
         padding: 12px 25px;
         font-size: 15px;
     }
-    
+
     .logo {
         margin-top: 30px;
     }
-    
+
     .logo img {
         max-width: 180px;
     }
-    
+
     th {
         padding: 15px;
         font-size: 15px;
     }
-    
+
     td {
         padding: 12px 15px;
         font-size: 15px;

@@ -48,18 +48,20 @@
             </div>
             <div id="resultado-container" class="resultado-container" style="display: none;">
                 <div class="resultado-titulo">Resultados da Busca</div>
-                <table id="tabelaFornecedores">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Razão Social</th>
-                            <th>Nome Fantasia</th>
-                            <th>Grupo</th>
-                            <th>Subgrupo</th>
-                        </tr>
-                    </thead>
-                    <tbody id="corpoTabela"></tbody>
-                </table>
+                <div class="table-responsive-scroll">
+                    <table id="tabelaFornecedores">
+                        <thead>
+                            <tr>
+                                <th class="col-id">ID</th>
+                                <th class="col-razao">Razão Social</th>
+                                <th class="col-nome">Nome Fantasia</th>
+                                <th class="col-grupo">Grupo</th>
+                                <th class="col-subgrupo">Subgrupo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="corpoTabela"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
