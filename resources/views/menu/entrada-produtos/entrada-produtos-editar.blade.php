@@ -184,11 +184,7 @@
 
             // Formatar a data para o formato esperado pelo input date
             if (entrada.data_Entrada) {
-                const data = new Date(entrada.data_Entrada);
-                const ano = data.getFullYear();
-                const mes = String(data.getMonth() + 1).padStart(2, '0');
-                const dia = String(data.getDate()).padStart(2, '0');
-                document.getElementById('dataEntrada').value = `${ano}-${mes}-${dia}`;
+                document.getElementById('dataEntrada').value = entrada.data_Entrada.substring(0, 10);
             }
 
             // Exibir imagem

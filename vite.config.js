@@ -38,15 +38,6 @@ function getAlljsFiles(dirPath, arrayOfFiles = []) {
 const jsFiles = getAlljsFiles('resources/js');
 
 export default defineConfig({
-    /*base: '',
-    
-    server: {
-        host: true,
-        strictPort: true,
-        port: 5173,
-        allowedHosts: ['.ngrok-free.app'], 
-    },*/
-    
     plugins: [
         laravel({
             input: [
