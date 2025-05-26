@@ -40,7 +40,7 @@ Route::middleware(['auth'])->group(function () {
     // Perfil
     Route::prefix('perfil')->group(function () {
         Route::get('/', [PerfilController::class, 'index'])->name('menu.home.perfil');
-        Route::post('/atualizar', [PerfilController::class, 'update'])->name('atualizar-perfil');
+        Route::post('/atualizar', [PerfilController::class, 'update'])->name('menu.perfil.atualizar-perfil');
     });
     
     // Usuários
