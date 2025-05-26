@@ -145,7 +145,7 @@
         
             try {
                 // Envia uma requisição fetch para atualizar o perfil
-                const response = await fetch('/atualizar-perfil', {
+                const response = await fetch('{{ route("menu.perfil.atualizar-perfil") }}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
